@@ -6,7 +6,7 @@
 
 Treat them as scripts.
 
-In Emacs/Cider: Ctrl-C k
+In Emacs/Cider: C-c C-k
 
 For Emacs, turn on `IImage` mode to see inlined images.
 
