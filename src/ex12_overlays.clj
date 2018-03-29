@@ -1,6 +1,6 @@
 ;; three overlays I defined (used in my works)
 
-(ns examples.ex12-overlays
+(ns ex12-overlays
   (:require [clojure2d.core :as core]
             [clojure2d.extra.overlays :as o])
   (:import [java.awt.image BufferedImage]))

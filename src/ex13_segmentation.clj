@@ -1,4 +1,4 @@
-(ns examples.ex13-segmentations
+(ns ex13-segmentations
   (:require [clojure2d.core :as core]
             [clojure2d.pixels :as p]
             [clojure2d.color :as clr]

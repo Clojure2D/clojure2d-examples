@@ -5,7 +5,7 @@
             :url "http://unlicense.org"}
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [net.littleredcomputer/sicmutils "0.10.0"]
-                 [generateme/fastmath "0.1.0-SNAPSHOT"]
+                 [generateme/fastmath "0.1.0-RC2"]
                  [clojure2d "0.1.0-SNAPSHOT"]]
   :repl-options {:timeout 120000}
   :target-path "target/%s"

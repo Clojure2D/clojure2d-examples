@@ -1,4 +1,4 @@
-(ns examples.ex15-colorspace
+(ns ex15-colorspace
   (:require [clojure2d.core :refer :all]
             [clojure2d.pixels :as p]
             [clojure2d.color :as c])

@@ -1,6 +1,6 @@
 ;; apply analog filter on image
 
-(ns examples.ex16-analog
+(ns ex16-analog
   (:require [clojure2d.core :refer :all]
             [clojure2d.pixels :as p]
             [clojure2d.color :as c]

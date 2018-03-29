@@ -44,7 +44,7 @@
             cr (m/cnorm x 0 399 0 255) ;; map to color range
             cg (m/cnorm y 0 399 0 255)] ;; map to color range
         (with-canvas-> c
-          (background cr cg 128)) ;; set color based on mouse position
+          (set-background cr cg 128)) ;; set color based on mouse position
         (replace-canvas frame1 c))) ;; replace old canvas with new one
     nil))
 
@@ -74,7 +74,7 @@
 
 ;; delay between key and mouse events is unknown... (the same is in Processing)
 
-(show-window {:canvas (canvas 500 300)
-              :draw-fn draw-fn
-              :fps 30
-              :window-name "In-loop events"})
+(def window (show-window {:canvas (canvas 500 300)
+                          :draw-fn draw-fn
+                          :fps 30
+                          :window-name "In-loop events"}))
