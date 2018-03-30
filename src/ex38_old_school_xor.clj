@@ -27,7 +27,7 @@
     (-> canvas
         (set-background :black)
         (set-color :white)
-        (set-xor-mode :black)
+        (xor-mode :black)
         (set-stroke 20)
         (draw-rings sb cb)
         (draw-rings sa ca))))

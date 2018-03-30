@@ -72,8 +72,6 @@
 ;; click and press keys to light squares
 ;; press SPACE to display all event data
 
-;; delay between key and mouse events is unknown... (the same is in Processing)
-
 (show-window {:canvas (canvas 500 300)
               :draw-fn draw-fn
               :fps 30
