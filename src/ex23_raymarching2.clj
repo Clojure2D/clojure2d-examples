@@ -1,4 +1,4 @@
-(ns examples.ex23-raymarching2
+(ns ex23-raymarching2
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :refer :all]

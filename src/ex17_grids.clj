@@ -1,6 +1,6 @@
 ;; grids based on noise, result used in pix2line glitch sketch
 
-(ns examples.ex17-grids
+(ns ex17-grids
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]
@@ -27,7 +27,7 @@
   [canvas]
   (let [nx (r/irand 2 200)
         ny (r/irand 2 200)
-        noise (r/make-random-noise-fn)
+        noise (r/random-noise-fn)
         scale (r/irand 5)
         nnx (inc (m/round (* scale nx)))
         nny (inc (m/round (* scale ny)))
@@ -38,9 +38,9 @@
     (dotimes [y 600]
       (dotimes [x 600]
         (let [time (+ shift (int (/ (+ x (* y 600)) div)))
-              yy (* (quot x nnx) (int (* nnx (inc ^double (noise (quot x nnx) time )))))
-              xx (* (quot y nny) (int (* nny (inc ^double (noise (quot y nny) (- time))))))
-              n (< ^double (noise (quot (+ x xx) nx) (quot (+ y yy) ny)) 0.5)]
+              yy (* (quot x nnx) (int (* nnx (inc ^double (noise (+ 0.2 (quot x nnx)) time )))))
+              xx (* (quot y nny) (int (* nny (inc ^double (noise (- 0.4 (quot y nny)) (- time))))))
+              n (< ^double (noise (+ 0.4 (quot (+ x xx) nx)) (- 0.4 (quot (+ y yy) ny))) 0.5)]
           (set-awt-color canvas (if n dark light))
           (rect canvas x y 1 1))))))
 

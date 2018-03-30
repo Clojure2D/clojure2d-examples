@@ -1,4 +1,4 @@
-(ns examples.ex05-particles
+(ns ex05-particles
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]
@@ -60,7 +60,7 @@
 (binding [*skip-random-variations* true]
   (let [cnvs (canvas w h) ;; canvas
         window (show-window cnvs "particles" w h 25) ;; window
-        noise (r/make-random-noise-fn) ;; scalar field (random noise)
+        noise (r/random-noise-fn) ;; scalar field (random noise)
         field-config (make-random-configuration) ;; vector field random configuration
         field (make-combination field-config) ;; vector field
         vrand (Vec2. (r/drand -1 1) (r/drand -1 1)) ;; vector field shift

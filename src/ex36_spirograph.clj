@@ -1,4 +1,4 @@
-(ns examples.ex36-spirograph
+(ns ex36-spirograph
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.vector :as v]

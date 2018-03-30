@@ -1,4 +1,4 @@
-(ns examples.ex04-noise
+(ns ex04-noise
   "Draw various noise variants"
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
@@ -66,21 +66,21 @@
     cfg))
 
 ;; draw single octave
-(draw-random-noise r/make-single-noise)
+(draw-random-noise r/single-noise)
 
 ;; [[../results/ex04/061F9A12_000003.jpg]] [[../results/ex04/061F9A12_000004.jpg]] [[../results/ex04/061F9A12_000005.jpg]]
 
 ;; fractal brownian motion
-(draw-random-noise r/make-fbm-noise)
+(draw-random-noise r/fbm-noise)
 
 ;; [[../results/ex04/061F9A12_000006.jpg]] [[../results/ex04/061F9A12_000007.jpg]] [[../results/ex04/061F9A12_000008.jpg]]
 
 ;; billow blending
-(draw-random-noise r/make-billow-noise)
+(draw-random-noise r/billow-noise)
 
 ;; [[../results/ex04/061F9A12_000009.jpg]] [[../results/ex04/061F9A12_000010.jpg]] [[../results/ex04/061F9A12_000011.jpg]]
 
 ;; ridgedmulti blending
-(draw-random-noise r/make-ridgedmulti-noise)
+(draw-random-noise r/ridgedmulti-noise)
 
 ;; [[../results/ex04/061F9A12_000012.jpg]] [[../results/ex04/061F9A12_000013.jpg]] [[../results/ex04/061F9A12_000014.jpg]]

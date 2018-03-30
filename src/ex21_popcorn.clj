@@ -1,6 +1,6 @@
 ;; variation of the http://www.iquilezles.org/www/articles/popcorns/popcorns.htm
 
-(ns examples.ex21-popcorn
+(ns ex21-popcorn
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]
@@ -59,7 +59,7 @@
         field-config (make-random-configuration)
         field (make-combination field-config)
         vrand (Vec2. (r/drand -1 1) (r/drand -1 1))
-        noisef (r/randval 0.2 (partial get-noise (r/make-random-noise-fn)) (constantly (Vec2. 0.0 0.0)))
+        noisef (r/randval 0.2 (partial get-noise (r/random-noise-fn)) (constantly (Vec2. 0.0 0.0)))
         mv-fun (partial move-particle vrand noisef field)
         
         particles (repeatedly 15000 make-particle)

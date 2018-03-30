@@ -1,4 +1,4 @@
-(ns examples.ex41-path-fold
+(ns ex41-path-fold
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]

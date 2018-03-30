@@ -1,6 +1,6 @@
 ;; filtering and blending pixels
 
-(ns examples.ex11-pixels
+(ns ex11-pixels
   (:require [clojure2d.core :as core]
             [clojure2d.pixels :as p]
             [clojure2d.color :as c])

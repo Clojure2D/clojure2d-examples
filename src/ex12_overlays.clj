@@ -1,6 +1,6 @@
 ;; three overlays I defined (used in my works)
 
-(ns examples.ex12-overlays
+(ns ex12-overlays
   (:require [clojure2d.core :as core]
             [clojure2d.extra.overlays :as o])
   (:import [java.awt.image BufferedImage]))
@@ -32,7 +32,7 @@
   (core/image (o/render-noise img noise-overlay)))
 
 ;; spots, it's good to prepare overlay first, than apply onto the image
-q(def spots-overlay (o/make-spots (core/width img) (core/height img) {:alpha 80 :intensities [30 60 120 180 220]}))
+(def spots-overlay (o/make-spots (core/width img) (core/height img) {:alpha 80 :intensities [30 60 120 180 220]}))
 
 (core/with-canvas-> canvas
   (core/image (o/render-spots img spots-overlay)))

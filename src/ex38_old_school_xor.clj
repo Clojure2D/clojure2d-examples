@@ -1,4 +1,4 @@
-(ns examples.ex38-old-school-xor
+(ns ex38-old-school-xor
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]))
 

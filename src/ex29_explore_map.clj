@@ -1,4 +1,4 @@
-(ns examples.ex29-explore-map
+(ns ex29-explore-map
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]

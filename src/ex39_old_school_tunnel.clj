@@ -1,4 +1,4 @@
-(ns examples.ex39-old-school-tunnel
+(ns ex39-old-school-tunnel
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [clojure2d.pixels :as p]

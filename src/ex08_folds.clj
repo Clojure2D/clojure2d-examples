@@ -1,5 +1,4 @@
-
-(ns examples.ex08-folds
+(ns ex08-folds
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]
@@ -80,4 +79,5 @@
 
 (draw-folds (example-08))
 
-[[../results/ex08/1FABF63A_000013.jpg]]
+;; [[../results/ex08/1FABF63A_000013.jpg]]
+

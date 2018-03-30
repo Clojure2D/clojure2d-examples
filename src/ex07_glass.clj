@@ -1,4 +1,4 @@
-(ns examples.ex07-glass
+(ns ex07-glass
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]

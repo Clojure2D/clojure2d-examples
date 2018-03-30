@@ -1,6 +1,6 @@
 ;; https://gist.github.com/yogthos/3411106
 
-(ns examples.ex14-metaballs
+(ns ex14-metaballs
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]
@@ -91,4 +91,5 @@
 
 (save window "results/ex14/metaballs.jpg")
 
-[[../results/ex14/metaballs.jpg]]
+;; [[../results/ex14/metaballs.jpg]]
+

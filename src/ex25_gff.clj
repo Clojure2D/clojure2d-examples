@@ -2,7 +2,7 @@
 ;;
 ;; Animate kappa value from `0` to `inf`
 
-(ns examples.ex25-gff
+(ns ex25-gff
   "Gaussian Free Field" 
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]

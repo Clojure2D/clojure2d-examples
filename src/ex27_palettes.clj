@@ -1,4 +1,4 @@
-(ns example.ex27-palettes
+(ns ex27-palettes
   (:require [clojure2d.core :refer :all]
             [clojure2d.extra.glitch :as g]))
 

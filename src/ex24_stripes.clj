@@ -1,4 +1,4 @@
-(ns examples.ex24-stripes
+(ns ex24-stripes
   "Draw stripes" 
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]

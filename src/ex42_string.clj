@@ -1,4 +1,4 @@
-(ns examples.ex42-string
+(ns ex42-string
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.vector :as v]

@@ -12,7 +12,7 @@
 ;;
 ;; Click mouse to make new center point
 
-(ns examples.ex34-ducks-kalisets
+(ns ex34-ducks-kalisets
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.complex :as c]

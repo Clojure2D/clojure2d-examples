@@ -4,7 +4,7 @@
 ;;
 ;; Eats a lot of memory, rendering is run on all but one cores
 
-(ns examples.ex32-harmonograph
+(ns ex32-harmonograph
   (:require [clojure2d.core :refer :all]
             [clojure2d.pixels :as p]
             [fastmath.core :as m]
@@ -65,10 +65,10 @@
      :nscaley1 (/ (r/drand 0.05 2))
      :nscalex2 (/ (r/drand 0.05 2))
      :nscaley2 (/ (r/drand 0.05 2))
-     :n1 (r/randval 0.6 (r/make-random-noise-fn) unit-fn)
-     :n2 (r/randval 0.6 (r/make-random-noise-fn) unit-fn)
-     :n3 (r/randval 0.6 (r/make-random-noise-fn) unit-fn)
-     :n4 (r/randval 0.6 (r/make-random-noise-fn) unit-fn)
+     :n1 (r/randval 0.6 (r/random-noise-fn) unit-fn)
+     :n2 (r/randval 0.6 (r/random-noise-fn) unit-fn)
+     :n3 (r/randval 0.6 (r/random-noise-fn) unit-fn)
+     :n4 (r/randval 0.6 (r/random-noise-fn) unit-fn)
      :c1 c1
      :c2 c2
      :c3 c3

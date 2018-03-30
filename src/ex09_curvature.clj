@@ -1,6 +1,6 @@
 ;; https://generateme.wordpress.com/2016/05/04/curvature-from-noise/
 
-(ns examples.ex09-curvature
+(ns ex09-curvature
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]
@@ -47,7 +47,7 @@
   (binding [*skip-random-variations* true]
     (let [cnvs (canvas w h)
           window (show-window cnvs "curvature" 15 nil)
-          noise (r/make-random-noise-fn)
+          noise (r/random-noise-fn)
           field-config (make-random-configuration)
           field (make-combination field-config)
           vshift (Vec2. (r/drand -3 3) (r/drand -3 3))

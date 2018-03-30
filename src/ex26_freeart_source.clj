@@ -17,7 +17,7 @@
 ;;
 ;; All places which can be changed live are marked with ";;;; change!" comment
 
-(ns examples-ex26-freeart-source
+(ns ex26-freeart-source
   (:require [clojure2d.color :as c]
             [clojure2d.core :refer :all]
             [clojure2d.extra.glitch :as g]

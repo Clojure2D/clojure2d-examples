@@ -2,7 +2,7 @@
 ;; Check out accompanying video tutorials and deeper explanations on
 ;; https://www.funprogramming.org/
 
-(ns examples.funprogramming
+(ns funprogramming
   (:require [clojure2d.core :refer :all]
             [fastmath.random :as r]
             [fastmath.core :as m]
@@ -1281,7 +1281,7 @@
       from-hsb (c/make-color-converter c/from-HSB 100)
       seed (r/irand 10000000)
       ;; seed 100
-      rng (r/make-rng :mersenne seed)]
+      rng (r/rng :mersenne seed)]
 
   (println seed)
   
@@ -2089,7 +2089,7 @@
 ;; https://www.funprogramming.org/116-Reading-and-displaying-bytes-part-1.html
 
 (let [bytes (load-bytes "results/test.jpg")]
-  (bit-and 0xff (first bytes)))
+  (bit-and 0xff (second bytes)))
 
 ;; https://www.funprogramming.org/117-Reading-and-displaying-bytes-part-2.html
 

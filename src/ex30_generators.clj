@@ -1,7 +1,7 @@
 ;; Random or uniform generators
 ;; See section "Random Vectors": http://commons.apache.org/proper/commons-math/userguide/random.html
 
-(ns examples.ex30-generators
+(ns ex30-generators
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]
@@ -21,7 +21,7 @@
 (defn draw-random-rect
   "Draw random rectangle from dots from random sequence"
   [canvas s posx posy scale num]
-  (let [generator (r/make-sequence-generator s 2)
+  (let [generator (r/sequence-generator s 2)
         transformed (map #(v/mult % scale) (generator))]
     (doseq [^Vec2 v (take num transformed)]
       (ellipse canvas (+ ^double posx (.x v)) (+ ^double posy (.y v)) 3 3)))

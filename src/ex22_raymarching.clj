@@ -3,7 +3,7 @@
 
 ;; low speed cpu version
 
-(ns examples.ex22-raymarching
+(ns ex22-raymarching
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :refer :all]

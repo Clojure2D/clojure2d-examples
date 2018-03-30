@@ -1,6 +1,6 @@
 ;; http://lodev.org/cgtutor/fire.html
 
-(ns examples.ex40-old-school-fire
+(ns ex40-old-school-fire
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [clojure2d.pixels :as p]

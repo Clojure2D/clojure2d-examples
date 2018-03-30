@@ -38,7 +38,7 @@
              10 10)))
 
 ;; saving, save small version of canvas
-(save (resize-canvas my-canvas 300 300) "results/ex00/helloworld.jpg")
+(save (resize my-canvas 300 300) "results/ex00/helloworld.jpg")
 
 ;; [[../results/ex00/helloworld.jpg]]
 
@@ -67,6 +67,6 @@
 
 ;; save on space pressed (be aware that saving is not synchronized with drawing. Occassional glitches may appear.
 (defmethod key-pressed ["Rotating square" \space] [_ _] 
-  (save (resize-image (get-image window) 300 300) "results/ex00/rotating.jpg"))
+  (save (resize (get-image window) 300 300) "results/ex00/rotating.jpg"))
 
 ;; [[../results/ex00/rotating.jpg]]

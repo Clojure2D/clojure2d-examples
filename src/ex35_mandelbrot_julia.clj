@@ -18,7 +18,7 @@
 ;;
 ;; Move mouse to see Julia related to mouse position
 
-(ns examples.ex35-mandelbrot-julia
+(ns ex35-mandelbrot-julia
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]

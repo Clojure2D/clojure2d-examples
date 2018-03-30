@@ -1,4 +1,4 @@
-(ns examples.ex20-colors
+(ns ex20-colors
   (:require [clojure2d.color :as c]
             [clojure2d.core :refer :all]
             [fastmath.vector :as v]

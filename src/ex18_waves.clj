@@ -1,6 +1,6 @@
 ;; visualize wave generators
 
-(ns examples.ex18-waves
+(ns ex18-waves
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]

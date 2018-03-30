@@ -11,7 +11,7 @@
 ;; * M - modulate flip (see pages 20-26)
 ;; * B - draw shorten lines
 
-(ns examples.ex37-fractal-bestiary
+(ns ex37-fractal-bestiary
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.vector :as v]

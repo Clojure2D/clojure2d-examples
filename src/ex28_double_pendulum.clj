@@ -2,7 +2,7 @@
 ;;
 ;; https://github.com/littleredcomputer/sicmutils/blob/master/src/sicmutils/examples/double_pendulum.clj
 ;; https://mitpress.mit.edu/books/structure-and-interpretation-classical-mechanics-0
-(ns examples.ex28-double-pendulum 
+(ns ex28-double-pendulum 
   (:require [sicmutils.examples.double-pendulum :refer :all]
             [sicmutils.structure :as ss]
             [clojure2d.core :refer :all] 

@@ -1,6 +1,6 @@
 ;; Several glitch examples
 
-(ns examples.ex19-glitch
+(ns ex19-glitch
   (:require [fastmath.core :as m]
             [clojure2d.pixels :as p]
             [clojure2d.core :refer :all]
