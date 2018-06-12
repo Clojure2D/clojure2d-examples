@@ -23,21 +23,21 @@
 
 ;; dilate three times on 3 channels, skip alpha
 (p/set-canvas-pixels! canvas (->> img 
-                                  (p/filter-channels p/dilate-filter false)
-                                  (p/filter-channels p/dilate-filter false)
-                                  (p/filter-channels p/dilate-filter false)))
+                                  (p/filter-channels p/dilate)
+                                  (p/filter-channels p/dilate)
+                                  (p/filter-channels p/dilate)))
 
 ;; erode three times on 3 channels, skip alpha
 (p/set-canvas-pixels! canvas (->> img 
-                                  (p/filter-channels p/erode-filter false)
-                                  (p/filter-channels p/erode-filter false)
-                                  (p/filter-channels p/erode-filter false)))
+                                  (p/filter-channels p/erode)
+                                  (p/filter-channels p/erode)
+                                  (p/filter-channels p/erode)))
 
 ;; box blur with radius 5
 (p/set-canvas-pixels! canvas (p/filter-channels p/box-blur-5 img))
 
 ;; box blur with radius 23
-(p/set-canvas-pixels! canvas (p/filter-channels (p/make-box-blur 23) img))
+(p/set-canvas-pixels! canvas (p/filter-channels (p/box-blur 23) img))
 
 ;; gaussian blur with radius 5
 (p/set-canvas-pixels! canvas (p/filter-channels p/gaussian-blur-5 img))
@@ -46,28 +46,27 @@
 (p/set-canvas-pixels! canvas (p/filter-channels p/posterize-4 img))
 
 ;; threshold all channels but alpha (50%), custom threshold (p/make-threshold 44)
-(p/set-canvas-pixels! canvas  (p/filter-channels p/threshold-50 false img))
+(p/set-canvas-pixels! canvas  (p/filter-channels p/threshold-50 img))
 
-;; median filter five times (slow!)
+;; median filter five times
 (p/set-canvas-pixels! canvas (->> img 
-                                  (p/filter-channels p/median-filter false)
-                                  (p/filter-channels p/median-filter false)
-                                  (p/filter-channels p/median-filter false)
-                                  (p/filter-channels p/median-filter false)
-                                  (p/filter-channels p/median-filter false)))
+                                  (p/filter-channels p/median)
+                                  (p/filter-channels p/median)
+                                  (p/filter-channels p/median)
+                                  (p/filter-channels p/median)
+                                  (p/filter-channels p/median)))
 
-;; quntile filter 10 times (slow!!!), you can select quantile 0-8, 4 = median filter
-(def quantile-filter (p/make-quantile-filter 3))
-(p/set-canvas-pixels! canvas (reduce (fn [res _] (p/filter-channels quantile-filter false res)) img (range 10)))
+;; quntile filter 80 times, you can select quantile 0-8, 4 = median filter
+(p/set-canvas-pixels! canvas (reduce (fn [res _] (p/filter-channels p/quantile-3 res)) img (range 80)))
 
 ;; tint image
-(p/set-canvas-pixels! canvas (p/filter-channels (p/make-tint-filter 10 30 200) img))
+(p/set-canvas-pixels! canvas (p/filter-channels (p/tint (c/color 10 30 200)) img))
 
 ;; modulate channels (in HSB colorspace don't touch hue, lower saturation and brightness a little bit)
 (p/set-canvas-pixels! canvas (->> img
-                                  (p/filter-colors c/to-HWB)
-                                  (p/filter-channels (p/make-modulate-filter 1.0 0.5 0.5))
-                                  (p/filter-colors c/from-HWB)))
+                                  (p/filter-colors c/to-HSB*)
+                                  (p/filter-channels nil (p/modulate 0.5) (p/modulate 0.5) nil)
+                                  (p/filter-colors c/from-HSB*)))
 
 ;; let's compose some images
 
@@ -77,6 +76,6 @@
                                                  (p/load-pixels "results/ex11/1FABF63A_000039.jpg")))
 
 ;; let's make random blends
-(p/set-canvas-pixels! canvas (p/compose-channels (rand-nth c/blends-names) (rand-nth c/blends-names) (rand-nth c/blends-names) nil
+(p/set-canvas-pixels! canvas (p/compose-channels (rand-nth c/blends-list) (rand-nth c/blends-list) (rand-nth c/blends-list) nil
                                                  (p/load-pixels "results/ex11/1FABF63A_000034.jpg")
                                                  (p/load-pixels "results/ex11/1FABF63A_000039.jpg")))

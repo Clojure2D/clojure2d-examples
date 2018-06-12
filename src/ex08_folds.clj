@@ -3,7 +3,7 @@
             [fastmath.core :as m]
             [fastmath.random :as r]
             [fastmath.vector :as v]
-            [clojure2d.extra.variations :as vr]
+            [fastmath.fields :as vr]
             [clojure2d.extra.overlays :refer :all]
             [clojure.pprint :refer [pprint]])
   (:import [fastmath.vector Vec2]))
@@ -30,14 +30,14 @@
 
 (def ^:const ^double fscale 0.7)
 
-(def s60 (future (make-spots w h {:alpha 60 :intensities [60 120 180]})))
-(def n60 (future (make-noise w h {:alpha 60})))
+(def s60 (future (spots-overlay w h {:alpha 60 :intensities [60 120 180]})))
+(def n60 (future (noise-overlay w h {:alpha 60})))
 
 (defn make-me
   ""
   [canvas window]
-  (let [field-config (vr/make-random-configuration)
-        field (vr/make-combination field-config)
+  (let [field-config (vr/random-configuration)
+        field (vr/combine field-config)
         ;; field (vr/make-variation :shreadrad)
         ] 
 

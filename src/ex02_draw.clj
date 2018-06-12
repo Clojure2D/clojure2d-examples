@@ -25,9 +25,9 @@
     (-> canvas
         (set-color 45 45 41 20) ;; set color for background
         (rect 0 0 (width canvas) (height canvas)) ;; draw background with alpha, to fake motion blur
-        (p/set-canvas-pixels! (->> canvas 
-                                   p/get-canvas-pixels
-                                   (p/filter-channels p/gaussian-blur-2 false))) ;; operate on pixels directly - blur three channels (skip alpha)
+        (p/set-canvas-pixels! (->> canvas ;; take canvas
+                                   p/to-pixels ;; convert to pixels
+                                   (p/filter-channels p/gaussian-blur-2))) ;; operate on pixels directly - blur three channels (skip alpha)
 
         (set-color (- 146.0 ew) (- 199.0 cn) (- 163.0 eh)) ;; set color
         (ellipse 100 100 ew eh)))) ;; draw ellipse
@@ -36,7 +36,6 @@
                           :window-name "ellipse"             ;; name window
                           :w 400 ;; size of window (twice as canvas)
                           :h 400
-                          :fps 30
                           :hint :mid ;; hint for drawing canvas on window, mid quality (affects scalling 200 -> 400)
                           :draw-fn draw})) ;; draw callback funtion
 

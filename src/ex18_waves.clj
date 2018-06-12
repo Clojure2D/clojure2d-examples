@@ -34,11 +34,11 @@
           (recur (inc x) ny))))))
 
 ;; run several times
-(let [lst (into [] (map #(s/make-wave (rand-nth s/oscillators) (f %) (a %) (r/drand 1)) (range 1 5)))]
+(let [lst (map #(s/wave (rand-nth s/oscillators) (f %) (a %) (r/drand 1)) (range 1 5))]
   (with-canvas-> cnvs
     (set-color :white)
     (set-background :black)
-    (draw-fun (s/make-sum-wave lst)))
+    (draw-fun (apply s/sum-waves lst)))
   :done)
 
 (defn draw-fun2
@@ -61,9 +61,9 @@
       octaves (repeatedly num #(r/irand num))]
   (dotimes [y 600]
     (let [yy (/ y 600.0)
-          lst (map #(s/make-wave (nth wvs %) (f (nth octaves %)) (a (nth octaves %)) (+ (* yy ^double (nth phasemult %)) ^double (nth phases %))) (range num))]
+          lst (map #(s/wave (nth wvs %) (f (nth octaves %)) (a (nth octaves %)) (+ (* yy ^double (nth phasemult %)) ^double (nth phases %))) (range num))]
       (with-canvas-> cnvs
-        (draw-fun2 y (s/make-sum-wave lst)))))
+        (draw-fun2 y (apply s/sum-waves lst)))))
   :done)
 
 
@@ -71,6 +71,6 @@
 ;; open in Audacity as RAW 16 bit signed, mono, big-endian, 44100Hz
 (let [num 10
       amp (* 1.5 (/ 1.0 num))
-      lst (into [] (map #(s/make-wave (rand-nth s/oscillators) (* 150 ^long %) amp (r/drand 1)) (range 1 (inc num))))
-      f (s/make-sum-wave lst)]
-  (s/save-signal (s/make-signal-from-wave f 44100 10) "results/ex18/wave.raw"))
+      lst (map #(s/wave (rand-nth s/oscillators) (* 150 ^long %) amp (r/drand 1)) (range 1 (inc num)))
+      f (apply s/sum-waves lst)]
+  (s/save-signal (s/wave->signal f 44100 10) "results/ex18/wave.raw"))

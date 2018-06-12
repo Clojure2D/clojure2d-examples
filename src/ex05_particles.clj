@@ -3,7 +3,7 @@
             [fastmath.core :as m]
             [fastmath.random :as r]
             [fastmath.vector :as v]
-            [clojure2d.extra.variations :refer :all]
+            [fastmath.fields :refer :all]
             [clojure.pprint :refer [pprint]])
   (:import [fastmath.vector Vec2]))
 
@@ -19,7 +19,7 @@
 (def ^:const ^double rscale 25.0) ;; vector field scale down factor
 (def ^:const ^double angle-mult 16.0) ;; how much multiply angle taken from noise
 (def ^:const ^double point-size 0.9) ;; size of point
-(def ^:const ^int alpha 20) ;; alpha for point
+(def ^:const ^int alpha 10) ;; alpha for point
 
 (defn make-particle
   "Create random particle"
@@ -57,12 +57,12 @@
         (Vec2. nx ny))
       (make-particle))))
 
-(binding [*skip-random-variations* true]
+(binding [*skip-random-fields* true]
   (let [cnvs (canvas w h) ;; canvas
         window (show-window cnvs "particles" w h 25) ;; window
         noise (r/random-noise-fn) ;; scalar field (random noise)
-        field-config (make-random-configuration) ;; vector field random configuration
-        field (make-combination field-config) ;; vector field
+        field-config (random-configuration) ;; vector field random configuration
+        field (combine field-config) ;; vector field
         vrand (Vec2. (r/drand -1 1) (r/drand -1 1)) ;; vector field shift
         mv-fun (partial move-particle vrand (r/brand) field noise)  ;; move particle function with current config
         particles (repeatedly 25000 make-particle) ;; particle list

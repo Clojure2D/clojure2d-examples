@@ -5,7 +5,7 @@
             [clojure2d.pixels :as p]
             [clojure2d.core :refer :all]
             [clojure2d.color :as c]
-            [clojure2d.extra.variations :as v]
+            [fastmath.fields :as v]
             [clojure2d.extra.glitch :as g])
   (:import [clojure2d.pixels Pixels]))
 
@@ -24,7 +24,7 @@
 
 (let [s (g/slitscan-random-config)]
   (println s)
-  (p/set-canvas-pixels! cnvs (p/filter-channels (g/make-slitscan s) nil img)))
+  (p/set-canvas-pixels! cnvs (p/filter-channels (g/make-slitscan s) img)))
 
 ;; channel shift
 
@@ -36,14 +36,14 @@
                                               nil img))
 
 (p/set-canvas-pixels! cnvs (->> img
-                                (p/filter-colors c/to-HWB)
+                                (p/filter-colors c/to-HWB*)
                                 (p/filter-channels (g/make-shift-channels {:horizontal-shift 0.1
                                                                            :vertical-shift 0.0})
                                                    nil
                                                    (g/make-shift-channels {:horizontal-shift -0.1
                                                                            :vertical-shift 0.0})
                                                    nil)
-                                (p/filter-colors c/from-HWB)))
+                                (p/filter-colors c/from-HWB*)))
 
 ;; random shift
 (p/set-canvas-pixels! cnvs (p/filter-channels (g/make-shift-channels)
@@ -69,8 +69,8 @@
 
 ;; slitscan 2
 
-(binding [v/*skip-random-variations* true]
-  (let [field-config (v/make-random-configuration)]
+(binding [v/*skip-random-fields* true]
+  (let [field-config (v/random-configuration)]
     (binding [p/*pixels-edge* :wrap]
       (println field-config)
       (p/set-canvas-pixels! cnvs (p/filter-channels (g/make-slitscan2 {:variation field-config :r 2.03})
@@ -80,8 +80,8 @@
 
 ;; fold
 
-(binding [v/*skip-random-variations* true]
-  (let [field-config (v/make-random-configuration)]
+(binding [v/*skip-random-fields* true]
+  (let [field-config (v/random-configuration)]
     (binding [p/*pixels-edge* :wrap]
       (println field-config)
       (p/set-canvas-pixels! cnvs (p/filter-channels (g/make-fold {:variation field-config :r 2.03})

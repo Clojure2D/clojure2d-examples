@@ -45,7 +45,7 @@
   ^double [^Ball ball ^double px ^double py]
   (let [dx (- (.x ball) px)
         dy (- (.y ball) py)]
-    (/ (.radius ball) (+ m/EPSILON (m/hypot dx dy)))))
+    (/ (.radius ball) (+ m/EPSILON (m/hypot-sqrt dx dy)))))
 
 (defn compute-color
   ""
@@ -72,9 +72,7 @@
 (defn draw-balls
   ""
   [n canvas window framecount result]
-  (let [balls (if result
-                (map move result)
-                (take n (repeatedly make-ball)))]
+  (let [balls (map move (or result (take n (repeatedly make-ball))))]
     (draw canvas balls)
     balls))
 

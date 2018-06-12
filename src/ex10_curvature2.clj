@@ -6,7 +6,7 @@
             [fastmath.core :as m]
             [fastmath.random :as rr]
             [fastmath.vector :as v]
-            [clojure2d.extra.variations :refer :all]
+            [fastmath.fields :refer :all]
             [clojure.pprint :refer [pprint]])
   (:import [fastmath.vector Vec2 Vec3]))
 
@@ -50,12 +50,12 @@
 
 (defn example-10
   []
-  (binding [*skip-random-variations* true]
+  (binding [*skip-random-fields* true]
     (let [cnvs (canvas w h)
           window (show-window cnvs "curvature2" 15 nil)
           noise (rr/random-noise-fn)
-          field-config (make-random-configuration)
-          field (make-combination field-config)
+          field-config (random-configuration)
+          field (combine field-config)
           vshift (Vec2. (rr/drand -3 3) (rr/drand -3 3))
           mv-fun (partial move-particle vshift field noise)
           particles (repeatedly 500 make-particle)
@@ -76,6 +76,4 @@
         (set-stroke point-size)
         (looper)))))
 
-
 (example-10)
-

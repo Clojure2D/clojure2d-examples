@@ -27,13 +27,13 @@
   (core/image (o/render-rgb-scanlines img)))
 
 ;; noise
-(def noise-overlay (o/make-noise (core/width img) (core/height img) {:alpha 80}))
+(def noise-overlay (o/noise-overlay (core/width img) (core/height img) {:alpha 80}))
 
 (core/with-canvas-> canvas
   (core/image (o/render-noise img noise-overlay)))
 
 ;; spots, it's good to prepare overlay first, than apply onto the image
-(def spots-overlay (o/make-spots (core/width img) (core/height img) {:alpha 100 :intensities (repeatedly 10 #(r/irand 100 250))}))
+(def spots-overlay (o/spots-overlay (core/width img) (core/height img) {:alpha 100 :intensities (repeatedly 10 #(r/irand 10 250))}))
 
 (core/with-canvas-> canvas
   (core/image (o/render-spots img spots-overlay)))

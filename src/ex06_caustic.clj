@@ -3,7 +3,7 @@
             [fastmath.core :as m]
             [fastmath.random :as r]
             [fastmath.vector :as v]
-            [clojure2d.extra.variations :as vr]
+            [fastmath.fields :as vr]
             [clojure.pprint :refer [pprint]])
   (:import [fastmath.vector Vec2]))
 
@@ -20,14 +20,14 @@
 (defn draw-caustic
   ""
   [canvas window ^long width ^long height]
-  (binding [vr/*skip-random-variations* true]
+  (binding [vr/*skip-random-fields* true]
     (let [hw (long (/ width 2))
           hh (long (/ height 2))
           d shift-scale
           d2 (* d 2)
           d2- (- d2)
-          field-config (vr/make-random-configuration)
-          field (vr/make-combination field-config)]
+          field-config (vr/random-configuration)
+          field (vr/combine field-config)]
       (pprint field-config)
       (loop [x (double d2-)]
         (loop [y (double d2-)]

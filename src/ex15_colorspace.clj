@@ -17,29 +17,29 @@
 (defmethod key-pressed ["Colorspace" \space] [_ _]
   (save cnvs (next-filename "results/ex15/" ".jpg")))
 
-(p/set-canvas-pixels! cnvs (p/filter-colors c/to-OHTA img))
-(p/set-canvas-pixels! cnvs (p/filter-colors c/to-CMY img))
-(p/set-canvas-pixels! cnvs (p/filter-colors c/to-YPbPr img))
-(p/set-canvas-pixels! cnvs (p/filter-colors c/to-Gray img))
-(p/set-canvas-pixels! cnvs (p/filter-colors c/from-OHTA img))
-(p/set-canvas-pixels! cnvs (p/filter-colors c/from-YPbPr img))
+(p/set-canvas-pixels! cnvs (p/filter-colors c/to-OHTA* img))
+(p/set-canvas-pixels! cnvs (p/filter-colors c/to-CMY* img))
+(p/set-canvas-pixels! cnvs (p/filter-colors c/to-YPbPr* img))
+(p/set-canvas-pixels! cnvs (p/filter-colors c/to-Gray* img))
+(p/set-canvas-pixels! cnvs (p/filter-colors c/from-OHTA* img))
+(p/set-canvas-pixels! cnvs (p/filter-colors c/from-YPbPr* img))
 
-(p/set-canvas-pixels! cnvs (p/filter-colors (comp c/to-YPbPr c/from-OHTA c/from-YPbPr) img))
+(p/set-canvas-pixels! cnvs (p/filter-colors (comp c/to-YPbPr* c/from-OHTA* c/from-YPbPr*) img))
 
 ;; equalize histogram in YPbPr colorspace
 (p/set-canvas-pixels! cnvs (->> img
-                                (p/filter-colors c/to-YPbPr)
-                                (p/filter-channels p/equalize-filter false)
-                                (p/filter-colors c/from-YPbPr)))
+                                (p/filter-colors c/to-YPbPr*)
+                                (p/filter-channels p/equalize)
+                                (p/filter-colors c/from-YPbPr*)))
 
 
 ;; random conversion
-(let [cs1 (rand-nth c/colorspaces-names)
-      cs2 (rand-nth c/colorspaces-names)]
+(let [cs1 (rand-nth c/colorspaces-list)
+      cs2 (rand-nth c/colorspaces-list)]
   (println (str ":RGB -> " cs1 " -> " cs2 " -> :RGB"))
   (p/set-canvas-pixels! cnvs (->> img
-                                  (p/filter-colors (first (c/colorspaces cs1)))
-                                  (p/filter-channels p/normalize-filter false)
-                                  (p/filter-colors (second (c/colorspaces cs2)))
-                                  (p/filter-channels p/normalize-filter false))))
+                                  (p/filter-colors (first (c/colorspaces* cs1)))
+                                  (p/filter-channels p/normalize)
+                                  (p/filter-colors (second (c/colorspaces* cs2)))
+                                  (p/filter-channels p/normalize))))
 
