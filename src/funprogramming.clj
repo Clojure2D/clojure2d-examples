@@ -291,7 +291,7 @@
              (let [rainbow-size (r/drand 200 270)]
                (-> canvas
                    (set-stroke (r/drand 3 10))
-                   (set-color (c/from-HSB (c/color (r/drand 256) 255 255)))
+                   (set-color (c/from-HSB* (c/color (r/drand 256) 255 255)))
                    (ellipse 150 350 rainbow-size rainbow-size true))))]
   (show-window {:canvas (canvas 300 300)
                 :draw-fn draw
@@ -431,7 +431,7 @@
 
 (let [canvas (canvas 400 400 :highest)]
   (with-canvas [c canvas]
-    (set-background c (c/from-HSB (c/color (r/drand 256) (r/drand 50 100) (r/drand 50 100))))
+    (set-background c (c/from-HSB* (c/color (r/drand 256) (r/drand 50 100) (r/drand 50 100))))
     (set-color c :white 100)
     (dotimes [i 100]
       (ellipse c (+ 100 i i) (+ 100 i i) (+ 100 i) (m/abs (- 100 i i)) true)))
@@ -441,7 +441,7 @@
 
 (let [canvas (canvas 400 400)]
   (with-canvas [c canvas]
-    (set-background c (c/from-HSB (c/color (r/drand 256) (r/drand 50 100) (r/drand 50 100))))
+    (set-background c (c/from-HSB* (c/color (r/drand 256) (r/drand 50 100) (r/drand 50 100))))
     (set-color c :white 100)
     (dotimes [i 70]
       (ellipse c
@@ -787,7 +787,7 @@
       (let [x500 (/ x 500.0) 
             co (* 255.0 (r/noise x500))]
         (println x500)
-        (set-color c (c/from-HSB (c/color co 255 255)))
+        (set-color c (c/from-HSB* (c/color co 255 255)))
         (ellipse c x 100 20 20))))
   
   (show-window {:canvas canvas}))
@@ -798,7 +798,7 @@
              (doseq [^double x (range 0 (width canvas) 40)]
                (doseq [^double y (range 0 (height canvas) 40)]
                  (let [co (* 255.0 (r/noise (/ x 500.0) (/ y 500.0) z))]
-                   (set-color canvas (c/from-HSB (c/color co 255 255)))
+                   (set-color canvas (c/from-HSB* (c/color co 255 255)))
                    (ellipse canvas (+ 20.0 x) (+ 20.0 y) 60 60))))
              
              (+ z 0.005))]
@@ -833,7 +833,7 @@
              (let [x (r/drand (width canvas))]
                (-> canvas
                    (set-background :black 10)
-                   (set-color (c/from-HSB (c/color (r/irand 255) 255 255)))
+                   (set-color (c/from-HSB* (c/color (r/irand 255) 255 255)))
                    (line x 0 x (height canvas)))))]
   (show-window {:canvas (canvas 200 200)
                 :draw-fn draw}))
@@ -880,7 +880,7 @@
 ;; You can make color converter function working on different range than 0-255 (like colorMode in Processing)
 
 (let [canvas (canvas 500 300 :mid)
-      color-conv (c/make-color-converter c/from-HSB 100)]
+      color-conv (c/color-converter :HSB 100)]
 
   (with-canvas [c canvas]
     (-> c
@@ -900,7 +900,7 @@
 
 ;; https://www.funprogramming.org/46-Create-beautiful-curves-with-lots-of-sin-calls.html
 
-(let [color-conv (c/make-color-converter c/from-HSB 100)
+(let [color-conv (c/color-converter :HSB 100)
       draw (fn [canvas window frame ^double a]
              (let [x (m/norm (* (m/sin a) (m/sin (* a 0.8))) -1.0 1.0 0 (width canvas))
                    y (m/norm (* (m/sin (+ 1.5 (* a 1.1))) (m/sin (* a 3.1))) -1.0 1.0 0 (height canvas))
@@ -1020,7 +1020,7 @@
 ;; https://www.funprogramming.org/53-Create-a-pattern-by-drawing-150000-pixels.html
 
 (let [canvas (canvas 500 300 :mid)
-      color-conv (c/make-color-converter c/from-HSB 10)]
+      color-conv (c/color-converter :HSB 10)]
 
   (with-canvas [c canvas]
     (dotimes [x (width canvas)]
@@ -1278,7 +1278,7 @@
 ;; To use seed you have to create your own RNG with `make-randomizer` function. To use own RNG you have to use `[id]random` functions family. `[id]rand` is bound to default JDK RNG.
 
 (let [canvas (canvas 500 400)
-      from-hsb (c/make-color-converter c/from-HSB 100)
+      from-hsb (c/color-converter :HSB 100)
       seed (r/irand 10000000)
       ;; seed 100
       rng (r/rng :mersenne seed)]
@@ -1298,7 +1298,7 @@
 ;; https://www.funprogramming.org/67-Circular-motion-sine-and-her-cousin.html
 
 (let [canvas (canvas 500 400)
-      from-hsb (c/make-color-converter c/from-HSB 100)
+      from-hsb (c/color-converter :HSB 100)
       draw (fn [canvas window ^long frame [^double a ^double b]]
              (let [x0 (m/norm (m/sin a) -1.0 1.0 20.0 (- ^int (width canvas) 20))
                    y0 (m/norm (m/cos a) -1.0 1.0 20.0 (- ^int (height canvas) 20))
@@ -1372,7 +1372,7 @@
 
 (let [canvas (canvas 500 400)
       reset #(vector (/ ^int (width canvas) 2.0) (/ ^int (height canvas) 2.0) (r/drand m/TWO_PI) 1.0)
-      from-hsb (c/make-color-converter c/from-HSB 100)
+      from-hsb (c/color-converter :HSB 100)
       draw (fn [canvas window _ [^double oldx ^double oldy ^double a ^double w]]
              (let [newx (+ oldx (* 5.0 (m/cos a)))
                    newy (+ oldy (* 5.0 (m/sin a)))]
@@ -1499,7 +1499,7 @@
 
 (let [canvas (canvas 500 400)
       draw (fn [canvas window _ _]
-             (let [color-under-mouse (get-pixel canvas (mouse-x window) (mouse-y window))]
+             (let [color-under-mouse (p/get-color canvas (mouse-x window) (mouse-y window))]
                (set-color canvas color-under-mouse)
                (rect canvas 0 120 (width canvas) 280)))]
 
@@ -1518,7 +1518,7 @@
 ;; https://www.funprogramming.org/82-Program-a-gradient-of-colors.html
 
 (let [canvas (canvas 500 400)
-      from-hsb (c/make-color-converter c/from-HSB 100)
+      from-hsb (c/color-converter :HSB 100)
       c1 (c/color (r/drand 100) 100 100 100)
       c2 (c/color (r/drand 100) 100 30 100)]
   
@@ -1534,7 +1534,7 @@
 ;; https://www.funprogramming.org/83-Circular-gradients-can-look-like-spheres.html
 
 (let [canvas (canvas 500 400)
-      from-hsb (c/make-color-converter c/from-HSB 100)
+      from-hsb (c/color-converter :HSB 100)
       c1 (c/color (r/drand 100) 100 100 100)
       c2 (c/color (r/drand 100) 100 30 100)
       maxr 500]
@@ -1554,7 +1554,7 @@
 (let [wname "Gradients 84"
       back (load-image "results/test.jpg")
       canvas (canvas (width back) (height back))
-      from-hsb (c/make-color-converter c/from-HSB 100)
+      from-hsb (c/color-converter :HSB 100)
       draw-circ-grad (fn [canvas x y maxd]
                        (let [c1 (c/color (r/drand 100) 100 100 100)
                              c2 (c/color (r/drand 100) 100 30 100)]
@@ -1609,7 +1609,7 @@
                  [(inc ^double nd) back]
                  (if (nil? d)
                    [nil back]
-                   [nil (p/get-canvas-pixels canvas)]))))]
+                   [nil (p/to-pixels canvas)]))))]
   
   (show-window {:canvas canvas
                 :window-name wname
@@ -1646,7 +1646,7 @@
 ;; To operate on array you can use massive and parallel filter higher order functions like `filter-colors` or `filter-channels`
 
 (let [canvas (canvas 500 400)
-      pixels (p/get-canvas-pixels canvas)
+      pixels (p/to-pixels canvas)
       make-gray (fn [_] (c/gray (r/irand 256)))
       draw (fn [canvas _ _ _] (p/set-canvas-pixels! canvas (p/filter-colors make-gray pixels)))]
   (show-window {:canvas canvas 
@@ -1658,7 +1658,7 @@
       canvas (canvas (width img) (height img))
       mix-channels (fn [c] (c/color (c/green c) (c/blue c) (c/red c)))]
 
-  (p/set-canvas-pixels! canvas (p/filter-colors mix-channels (p/get-image-pixels img)))
+  (p/set-canvas-pixels! canvas (p/filter-colors mix-channels (p/to-pixels img)))
   
   (show-window {:canvas canvas}))
 
@@ -1674,7 +1674,7 @@
                              (c/to-color :white)
                              (c/to-color :black)))]
 
-  (p/set-canvas-pixels! canvas (p/filter-colors mix-channels (p/get-image-pixels img)))
+  (p/set-canvas-pixels! canvas (p/filter-colors mix-channels (p/to-pixels img)))
   
   (show-window {:canvas canvas}))
 
@@ -1682,14 +1682,14 @@
 
 (let [img (load-image "results/test.jpg")
       canvas (canvas (width img) (height img))
-      mix-channels (fn [c] (let [hsb (c/to-HSB c)
+      mix-channels (fn [c] (let [hsb (c/to-HSB* c)
                                  h (c/ch0 hsb)
                                  s (c/ch1 hsb)
                                  b (c/ch2 hsb)]
-                             ;; (c/from-HSB (c/make-color h 0 b))
+                             ;; (c/from-HSB* (c/make-color h 0 b))
                              (c/color h s b) ))]
 
-  (p/set-canvas-pixels! canvas (p/filter-colors mix-channels (p/get-image-pixels img)))
+  (p/set-canvas-pixels! canvas (p/filter-colors mix-channels (p/to-pixels img)))
   
   (show-window {:canvas canvas}))
 
@@ -1725,8 +1725,8 @@
 
 (let [wname "Draggable circle 92"
       sz 100
-      fill (c/from-HSB (c/color (r/drand 255) 100 200))
-      bgcolor (c/from-HSB (c/color (r/drand 255) 150 255))
+      fill (c/from-HSB* (c/color (r/drand 255) 100 200))
+      bgcolor (c/from-HSB* (c/color (r/drand 255) 150 255))
       stroke :white
       draw (fn [canvas window _ _]
              (let [{:keys [x y stroke-size]} (get-state window)]
@@ -1753,8 +1753,8 @@
 
 (let [wname "Draggable circle 93"
       sz 100.0
-      fill (c/from-HSB (c/color (r/drand 255) 100 200))
-      bgcolor (c/from-HSB (c/color (r/drand 255) 150 255))
+      fill (c/from-HSB* (c/color (r/drand 255) 100 200))
+      bgcolor (c/from-HSB* (c/color (r/drand 255) 150 255))
       stroke :white
       draw (fn [canvas window _ [x y current-weight target-weight current-alpha]]
              (let [[nx ny ntarget-weight target-alpha] (if (< (m/dist x y (mouse-x window) (mouse-y window)) (/ sz 2))
@@ -1790,8 +1790,8 @@
 
 (let [wname "Inside square? 95"
       sz 100.0
-      fill (c/from-HSB (c/color (r/drand 255) 100 200))
-      bgcolor (c/from-HSB (c/color (r/drand 255) 150 255))
+      fill (c/from-HSB* (c/color (r/drand 255) 100 200))
+      bgcolor (c/from-HSB* (c/color (r/drand 255) 150 255))
       stroke :white
       draw (fn [canvas window _ [^double x ^double y current-weight target-weight current-alpha]]
              (let [[nx ny ntarget-weight target-alpha] (if (bool-and (> ^int (mouse-x window) (- x (/ sz 2.0)))
@@ -1835,7 +1835,7 @@
       y2 100.0
       rw (- x2 x1)
       rh (- y2 y1)
-      from-hsb (c/make-color-converter c/from-HSB 100)
+      from-hsb (c/color-converter :HSB 100)
       new-colors #(let [h (r/drand 100)
                         bgcolor (from-hsb (c/color h 50 30 100))
                         fgcolor (from-hsb (c/color h 80 100 100))]
@@ -1864,7 +1864,7 @@
 
 (let [canvas (canvas 400 300)
       amt 50
-      from-hsb (c/make-color-converter c/from-HSB 100)
+      from-hsb (c/color-converter :HSB 100)
       bgcolor (from-hsb (c/color (r/drand 100) 30 30 100))
       draw (fn [canvas _ _ rects]
              (set-background canvas bgcolor)
@@ -1885,7 +1885,7 @@
 (let [wname "Interacting with rectangles 98"
       canvas (canvas 400 300)
       amt 50
-      from-hsb (c/make-color-converter c/from-HSB 100)
+      from-hsb (c/color-converter :HSB 100)
       bgcolor (from-hsb (c/color (r/drand 100) 30 30 100))
       random-rect #(let [x1 (r/drand (width canvas))
                          x2 (+ x1 (r/drand 20 100))
@@ -2099,7 +2099,7 @@
   (with-canvas [c canvas]
     (dotimes [i 600]
       (let [myhue (bit-and 0xff (aget bytes i))
-            stroke (c/from-HSB (c/color myhue 255 255))]
+            stroke (c/from-HSB* (c/color myhue 255 255))]
         (set-color c stroke)
         (line c i 0 i (height canvas)))))
   
@@ -2118,7 +2118,7 @@
              (let [file-pos (m/round (m/cnorm (mouse-x window) 0.0 (width window) 0.0 (- (alength bytes) ^int (width window))))]
                (dotimes [i 600]
                  (let [myhue (bit-and 0xff (aget bytes (+ i file-pos)))
-                       stroke (c/from-HSB (c/color myhue 255 255))]
+                       stroke (c/from-HSB* (c/color myhue 255 255))]
                    (set-color canvas stroke)
                    (line canvas i 0 i (height canvas))))))]
   
@@ -2174,12 +2174,12 @@
   (show-window {:canvas (canvas 400 400)
                 :draw-fn draw}))
 
-;; Or native pixels filter written in Clojure (slow)
+;; Or clojure2d pixels filter
 
 (let [draw (fn [canvas _ _ _]
              (filled-with-stroke canvas (c/color (r/drand 255) (r/drand 255) (r/drand 255)) :white ellipse
                                  (r/drand (width canvas)) (r/drand (height canvas)) 40 40)
-             (p/set-canvas-pixels! canvas (p/filter-channels p/box-blur-2 nil (p/get-canvas-pixels canvas))))]
+             (p/set-canvas-pixels! canvas (p/filter-channels p/gaussian-blur-2 (p/to-pixels canvas))))]
 
   (show-window {:canvas (canvas 400 400)
                 :draw-fn draw}))
@@ -2194,10 +2194,10 @@
                    (set-font-attributes canvas 80)
                    (text canvas (str (char (r/irand 65 90))) (- ^int (mouse-x window) 30) (+ ^int (mouse-y window) 40)))
              (p/set-canvas-pixels! canvas
-                                   (p/filter-channels p/threshold-50 (p/get-image-pixels (-> canvas
-                                                                                             (convolve :box-blur)
-                                                                                             (convolve :box-blur)
-                                                                                             (convolve :box-blur))))))]
+                                   (p/filter-channels p/threshold-50 (p/to-pixels (-> canvas
+                                                                                      (convolve :box-blur)
+                                                                                      (convolve :box-blur)
+                                                                                      (convolve :box-blur))))))]
 
   (show-window {:window-name wname
                 :canvas (canvas 400 400 :mid)

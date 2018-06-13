@@ -175,7 +175,7 @@
   (pprint config)
   (with-canvas-> cnvs
     (draw-ducks config)
-    (p/set-canvas-pixels! (p/filter-channels p/normalize-filter nil (p/get-canvas-pixels cnvs))))
+    (p/set-canvas-pixels! (p/filter-channels p/normalize (p/to-pixels cnvs))))
   (println "done!")
   config)
 

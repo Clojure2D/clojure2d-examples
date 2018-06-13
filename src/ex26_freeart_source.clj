@@ -73,8 +73,8 @@
                           :hint :mid}))
 
 ;; Prepare noise and spot overlay frames, it's slow
-(def noise-frames (vec (repeatedly number-of-frames #(o/make-noise w h {:alpha 60})))) ;;;; change!
-(def spots-frames (vec (repeatedly number-of-frames #(o/make-spots w h {:alpha 80 :intensities [30 220]})))) ;;;; change!
+(def noise-frames (vec (repeatedly number-of-frames #(o/noise-overlay w h {:alpha 60})))) ;;;; change!
+(def spots-frames (vec (repeatedly number-of-frames #(o/spots-overlay w h {:alpha 80 :intensities [30 220]})))) ;;;; change!
 
 ;; Sonification effect using DjEq filter with colorspace conversion.
 ;; Steps:
@@ -89,20 +89,20 @@
   "Sonification based on two parameters"
   [^double t1 ^double t2 pixels]
   (let [eff (s/effect :dj-eq {:lo t1 :mid (- t2) :hi t2 :peak-bw 1.3 :shelf-slope 1.5 :rate 44100.0}) ;;;; change!
-        cpx (p/filter-colors c/to-LUV pixels) ;;;; change!
-        in (s/signal-from-pixels cpx {:layout :plane ;;;; change!
-                                      :channels [0 1 2] ;;;; change!
-                                      :bits 8 ;;;; change!
-                                      :signed true ;;;; change!
-                                      :coding :none}) ;;;; change!
-        res (s/apply-effects eff in)
-        resp (s/signal-to-pixels (p/clone-pixels pixels) res {:layout :plane ;;;; change!
-                                                              :channels [0 1 2] ;;;; change!
-                                                              :bits 8 ;;;; change!
-                                                              :signed true ;;;; change!
-                                                              :coding :none}) ;;;; change!
-        respp (p/filter-colors c/from-HSB resp)] ;;;; change!
-    (p/filter-channels p/normalize nil respp)))
+        cpx (p/filter-colors c/to-Yxy* pixels) ;;;; change!
+        in (s/pixels->signal cpx {:planar? true;;;; change!
+                                  :channels [0 1 2] ;;;; change!
+                                  :bits 8 ;;;; change!
+                                  :signed? false ;;;; change!
+                                  :coding :none}) ;;;; change!
+        res (s/apply-effects in eff)
+        resp (s/signal->pixels res (p/clone-pixels pixels) {:planar? true;;;; change!
+                                                            :channels [0 1 2] ;;;; change!
+                                                            :bits 8 ;;;; change!
+                                                            :signed? true ;;;; change!
+                                                            :coding :none}) ;;;; change!
+        respp (p/filter-colors c/from-HSB* resp)] ;;;; change!
+    (p/filter-channels p/normalize respp)))
 
 
 ;; prepare random palette for color reduction
@@ -144,16 +144,17 @@
 
     (doseq [[x y size] (filter (fn [_] (r/brand 0.985)) (segments frame))] ;;;; change!
       (set-color canvas (p/get-color (images frame) x y))
-      (ellipse canvas x y size size)) ;;;; change! (use rect)
+      (rect canvas x y size size)) ;;;; change! (use rect)
     
-    (->> (p/get-canvas-pixels canvas)
-         (p/filter-channels p/box-blur-1 nil) ;;;; change!
-         (p/compose-channels :multiply false (images frame)) ;;;; change!
+    (->> (p/to-pixels canvas)
+         (p/filter-channels p/box-blur-1) ;;;; change!
+         (p/compose-channels :mburn (images frame)) ;;;; change!
 
          (sonification (* 5.0 (m/sin (/ time 45.0))) (* 5.0  (m/sin (/ time 50.0)))) ;;;; change!
          
-         ;; (g/color-reducer-machine palette) ;;;; change!
-         (p/filter-channels p/equalize-filter nil) ;;;; change!
+         (p/filter-channels p/equalize) ;;;; change!
+         (g/color-reducer-machine palette) ;;;; change!
+         (p/filter-channels p/normalize)
          (p/set-canvas-pixels! canvas))
 
     (with-canvas-> (canvases frame)

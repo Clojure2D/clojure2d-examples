@@ -2,9 +2,9 @@
   "Draw stripes" 
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
-            [clojure2d.extra.glitch :as g]
             [fastmath.random :as r]
-            [fastmath.vector :as v])
+            [fastmath.vector :as v]
+            [clojure2d.color :as c])
   (:import [fastmath.vector Vec2]))
 
 (set! *warn-on-reflection* true)
@@ -13,14 +13,14 @@
 
 (def cnvs (canvas 600 600))
 
-(def colors (:palette (g/color-reducer-machine-random-config)))
+(def colors (c/gradient :Yxy (rand-nth c/colourlovers-palettes)))
 
 (defn draw
   ""
   [canvas window fc state]
   (let [^Vec2 mpos (mouse-pos window) 
         cnt (int (m/cnorm (.x mpos) -1 600 3 100))
-        col (int (m/cnorm (.y mpos) -1 600 0 (count colors)))
+        col (m/cnorm (.y mpos) -1 600 0.0 1.0)
         step (/ m/TWO_PI cnt)
         step2 (/ step 2.0)
         vs (reduce #(let [p1x (+ 300 (* 200 (m/cos %2)))

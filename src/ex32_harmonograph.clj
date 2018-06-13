@@ -13,10 +13,8 @@
             [clojure2d.extra.glitch :as g]
             [clojure2d.color :as c]
             [clojure2d.core :as core]
-            [clojure2d.extra.variations :as var]
             [clojure.pprint :refer [pprint]])
-  (:import [clojure2d.pixels BinPixels]
-           [fastmath.vector Vec2 Vec4]))
+  (:import  [fastmath.vector Vec2 Vec4]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
@@ -24,7 +22,6 @@
 
 (def ^:const ^int w 2048)
 (def ^:const ^int h 2048)
-(def r [-1.1 1.1 -1.1 1.1])
 (def ^:const ^double step 0.003451234) ;; time step
 (def ^:const ^int first-step 500000)
 (def ^:const ^int steps-per-task 1000000)
@@ -89,7 +86,7 @@
            dampstepsx dampstepsy]}]
   (let [^int dampxc (if dampstepsx (count dampstepsx) 0)
         ^int dampyc (if dampstepsy (count dampstepsy) 0)
-        ^BinPixels bp (p/make-binpixels r w h)]
+        ^BinPixels bp (p/renderer w h :gaussian)]
     (loop [prevx (double 0.0)
            prevy (double 0.0)
            time (double start-time)
@@ -118,16 +115,15 @@
               ^Vec4 col2 (v/interpolate c3 c4 (m/abs (* s3 s4))) 
               ^Vec4 col (v/interpolate col1 col2 (m/qsin time))] 
           
-          (p/add-pixel-bilinear bp x y (.x col) (.y col) (.z col))
+          (p/set-color bp (m/norm x -1.1 1.1 0 w) (m/norm y -1.1 1.1 0 h) col)
           (recur x y (+ time step) (inc iter)))
         bp))))
 
 (defn draw-on-canvas
   "Render BinPixels to canvas."
-  [canvas ^BinPixels bp]
-  (p/set-canvas-pixels! canvas (p/to-pixels bp
-                                            (Vec4. 8 10 15 255)
-                                            {:saturation 1.5 :brightness 1.2 :alpha-gamma 0.6}))  )
+  [canvas bp]
+  (p/set-canvas-pixels!
+   canvas (p/to-pixels bp {:background (c/color 8 10 15) :saturation 1.2 :alpha-gamma 0.6}))  )
 
 ;; Create canvas, windows, binpixels, configuration and iterate until window is closed
 ;; press `space` to save
@@ -150,7 +146,7 @@
                   (if (window-active? window)
                     (do
                       (println time) 
-                      (let [newb (reduce #(p/merge-binpixels %1 (deref %2)) prev
+                      (let [newb (reduce #(p/merge-renderers %1 (deref %2)) prev
                                          (doall (map #(future (iterate-harmonograph steps-per-task (+ time (* step ^int % steps-per-task)) window config))
                                                      (range available-tasks))))] 
                         (draw-on-canvas c newb)

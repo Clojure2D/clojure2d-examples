@@ -9,7 +9,7 @@
             [fastmath.random :refer :all]
             [fastmath.vector :as v]
             [clojure2d.color :as c]
-            [clojure2d.extra.variations :as var])
+            [fastmath.fields :as f])
   (:import [fastmath.vector Vec2 Vec3]))
 
 (set! *warn-on-reflection* true)
@@ -87,8 +87,8 @@
         (recur (unchecked-inc i) newres (+ t (m/constrain h 0.02 0.5)))))))
 
 
-(def terrain-f (comp (var/make-variation :sinusoidal 1.2 {})
-                     (var/make-variation :auger 0.7 {})))
+(def terrain-f (comp (f/field :sinusoidal 1.2 {})
+                     (f/field :auger 0.7 {})))
 
 (defn terrain
   ""

@@ -2,7 +2,7 @@
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.vector :as v]
-            [clojure2d.extra.variations :as vr]
+            [fastmath.fields :as vr]
             [clojure.pprint :refer [pprint]]
             [fastmath.random :as r])
   (:import [fastmath.vector Vec2]))
@@ -58,10 +58,10 @@
 (defn new-state
   "Create new combination."
   []
-  (binding [vr/*skip-random-variations* true]
-    (let [field-config (vr/make-random-configuration 3)]
+  (binding [vr/*skip-random-fields* true]
+    (let [field-config (vr/random-configuration 3)]
       (pprint field-config)
-      (vr/make-combination field-config))))
+      (vr/combine field-config))))
 
 (close-session)
 (def window (show-window {:canvas (canvas w h)
