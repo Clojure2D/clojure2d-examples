@@ -15,8 +15,7 @@
 (def random-state (fn [] (vec (repeatedly (m/sq grid-size) #(r/irand 2)))))
 
 (defn get-neighbors [^long idx vec]
-  [
-   (get vec (dec (- idx grid-size)))
+  [(get vec (dec (- idx grid-size)))
    (get vec (- idx grid-size))
    (get vec (inc (- idx grid-size)))
 
@@ -25,8 +24,7 @@
 
    (get vec (dec (+ grid-size idx)))
    (get vec (+ grid-size idx))
-   (get vec (inc (+ grid-size idx)))
-   ])
+   (get vec (inc (+ grid-size idx)))])
 
 (defn new-status [idx itm vec]
   (let [alive-n ^long (get (frequencies (get-neighbors idx vec)) 1 0)]

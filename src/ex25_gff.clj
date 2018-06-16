@@ -66,7 +66,7 @@
         hf (/ (m/sqrt (* 8.0 (/ kappa m/PI))) 
               (- 4.0 kappa))]
     (when (== frame 200) 
-      (save window "results/ex25/gff.jpg"))
+      (comment save window "results/ex25/gff.jpg"))
     (my-draw canvas hf)))
 
 (do

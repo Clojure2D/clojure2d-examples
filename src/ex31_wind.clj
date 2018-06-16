@@ -24,8 +24,8 @@
   "Wind algorithm "
   [canvas window ^long frame state]
   (let [^double a (or state 0.0)]
-    (when (= frame 200) (binding [*jpeg-image-quality* 0.9]
-                          (save cnvs "results/ex31/wind.jpg")))
+    (comment when (= frame 200) (binding [*jpeg-image-quality* 0.9]
+                                  (save cnvs "results/ex31/wind.jpg")))
     (set-background canvas 226 210 184)
     (dotimes [j 16]
       (dotimes [i 400]

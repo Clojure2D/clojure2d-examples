@@ -10,7 +10,6 @@
             [fastmath.core :as m]
             [fastmath.random :as r]
             [fastmath.vector :as v]
-            [clojure2d.extra.glitch :as g]
             [clojure2d.color :as c]
             [clojure2d.core :as core]
             [clojure.pprint :refer [pprint]])
@@ -39,7 +38,7 @@
         a2 (r/drand (- 1.0 a1))
         a3 (r/drand)
         a4 (- 1.0 a3)
-        palseq (filter #(> 240 ^double (c/luma (first %)) 100) (repeatedly #(:palette (g/color-reducer-machine-random-config))))
+        palseq (filter #(> 240 ^double (c/luma (first %)) 100) (repeatedly c/random-palette))
         pal1 (first palseq)
         pal2 (second palseq)
         c1 (first pal1)
@@ -123,7 +122,7 @@
   "Render BinPixels to canvas."
   [canvas bp]
   (p/set-canvas-pixels!
-   canvas (p/to-pixels bp {:background (c/color 8 10 15) :saturation 1.2 :alpha-gamma 0.6}))  )
+   canvas (p/to-pixels bp {:background (c/color 8 10 15) :saturation 1.2 :alpha-gamma 0.5}))  )
 
 ;; Create canvas, windows, binpixels, configuration and iterate until window is closed
 ;; press `space` to save

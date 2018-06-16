@@ -26,6 +26,7 @@
             [clojure2d.extra.signal :as s]
             [fastmath.core :as m]
             [fastmath.random :as r]
+            [fastmath.vector :as v]
             [clojure2d.pixels :as p]))
 
 ;; turn on warnings
@@ -106,7 +107,9 @@
 
 
 ;; prepare random palette for color reduction
-(def palette (g/color-reducer-machine-random-config)) ;;;; change!
+(def palette (c/random-palette)) ;;;; change!
+(def distance (rand-nth (concat (vals v/distances) [c/delta-c c/delta-h c/delta-e-cie c/delta-e-cmc c/euclidean c/contrast-ratio])))
+
 
 ;; decompose images into segments
 (binding [p/*pixels-edge* :wrap] ;;;; change!
@@ -153,7 +156,7 @@
          (sonification (* 5.0 (m/sin (/ time 45.0))) (* 5.0  (m/sin (/ time 50.0)))) ;;;; change!
          
          (p/filter-channels p/equalize) ;;;; change!
-         (g/color-reducer-machine palette) ;;;; change!
+         (p/filter-colors (partial c/nearest-color distance palette)) ;;;; change!
          (p/filter-channels p/normalize)
          (p/set-canvas-pixels! canvas))
 

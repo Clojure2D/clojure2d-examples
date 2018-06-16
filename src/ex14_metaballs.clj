@@ -87,7 +87,7 @@
 
 (def window (example-14 (r/irand 2 6)))
 
-(save window "results/ex14/metaballs.jpg")
+(comment save window "results/ex14/metaballs.jpg")
 
 ;; [[../results/ex14/metaballs.jpg]]
 

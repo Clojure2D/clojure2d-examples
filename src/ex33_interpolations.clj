@@ -3,8 +3,7 @@
             [fastmath.core :as m]
             [fastmath.random :as r]
             [clojure2d.color :as c]
-            [fastmath.vector :as v]
-            [clojure2d.extra.glitch :as g])
+            [fastmath.vector :as v])
   (:import  [fastmath.vector Vec3]))
 
 (set! *warn-on-reflection* true)
@@ -13,7 +12,7 @@
 
 (def cnvs (canvas 600 500 :high))
 
-(def palette (first (filter #(> ^double (c/luma (first %)) 150) (repeatedly #(:palette (g/color-reducer-machine-random-config))))))
+(def palette (first (filter #(> ^double (c/luma (first %)) 150) (repeatedly c/random-palette))))
 
 (def c1 (first palette))
 (def c2 (second palette))
@@ -27,7 +26,7 @@
         d (if (zero? t) (not dir) dir)
         t' (if d t (- 1.0 t))]
 
-    (when (= fc 100) (save c "results/ex33/interpolations.jpg"))
+    (comment when (= fc 100) (save c "results/ex33/interpolations.jpg"))
     
     (-> c
         (set-background 0 0 0 100)

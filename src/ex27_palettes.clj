@@ -1,6 +1,6 @@
 (ns ex27-palettes
   (:require [clojure2d.core :refer :all]
-            [clojure2d.extra.glitch :as g]))
+            [clojure2d.color :as c]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
@@ -29,14 +29,10 @@
 (defn do-it
   ""
   []
-  (let [fpalette (g/color-reducer-machine-random-config)
-        palette (:palette fpalette)
+  (let [palette (c/random-palette)
         box-size (int (/ ww (count palette)))
         values (map-indexed (fn [^long id v] [(+ bw (* id box-size)) v])
                             palette)]
-    (println (str "Type: " (:type fpalette))) 
-    (println (str "Size: " (count palette)))
-    (println (str "Conf: " (:conf fpalette)))
     
     (with-canvas-> cnvs
       (set-color 20 20 20)
@@ -45,7 +41,7 @@
       (rect 0 halfh w halfh)
       (draw-palette values box-size))
 
-    fpalette))
+    palette))
 
 (defmethod key-pressed ["Palettes" \s] [_ _]
   (save cnvs (next-filename "results/ex27/" ".jpg")))

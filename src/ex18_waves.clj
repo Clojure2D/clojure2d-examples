@@ -19,7 +19,7 @@
   (save cnvs (next-filename "results/ex18/" ".jpg")))
 
 ;; frequencies and amplitudes
-(def f (mapv #(bit-shift-left 1 ^long %) (range 16)))
+(def f (mapv #(<< 1 ^long %) (range 16)))
 (def a (mapv #(/ 1.0 ^long %) f))
 
 (defn draw-fun

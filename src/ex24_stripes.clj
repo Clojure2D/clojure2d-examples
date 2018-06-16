@@ -13,7 +13,7 @@
 
 (def cnvs (canvas 600 600))
 
-(def colors (c/gradient :Yxy (rand-nth c/colourlovers-palettes)))
+(def colors (c/gradient :Yxy (c/random-palette)))
 
 (defn draw
   ""

@@ -24,47 +24,47 @@
 
 (let [s (g/slitscan-random-config)]
   (println s)
-  (p/set-canvas-pixels! cnvs (p/filter-channels (g/make-slitscan s) img)))
+  (p/set-canvas-pixels! cnvs (p/filter-channels (g/slitscan s) img)))
 
 ;; channel shift
 
-(p/set-canvas-pixels! cnvs (p/filter-channels (g/make-shift-channels {:horizontal-shift 0.1
-                                                                      :vertical-shift 0.1})
+(p/set-canvas-pixels! cnvs (p/filter-channels (g/shift-channels {:x-shift 0.1
+                                                                 :y-shift 0.1})
                                               nil
-                                              (g/make-shift-channels {:horizontal-shift -0.1
-                                                                      :vertical-shift -0.1})
+                                              (g/shift-channels {:x-shift -0.1
+                                                                 :y-shift -0.1})
                                               nil img))
 
 (p/set-canvas-pixels! cnvs (->> img
                                 (p/filter-colors c/to-HWB*)
-                                (p/filter-channels (g/make-shift-channels {:horizontal-shift 0.1
-                                                                           :vertical-shift 0.0})
+                                (p/filter-channels (g/shift-channels {:x-shift 0.1
+                                                                      :y-shift 0.0})
                                                    nil
-                                                   (g/make-shift-channels {:horizontal-shift -0.1
-                                                                           :vertical-shift 0.0})
+                                                   (g/shift-channels {:x-shift -0.1
+                                                                      :y-shift 0.0})
                                                    nil)
                                 (p/filter-colors c/from-HWB*)))
 
 ;; random shift
-(p/set-canvas-pixels! cnvs (p/filter-channels (g/make-shift-channels)
-                                              (g/make-shift-channels)
-                                              (g/make-shift-channels)
+(p/set-canvas-pixels! cnvs (p/filter-channels (g/shift-channels)
+                                              (g/shift-channels)
+                                              (g/shift-channels)
                                               nil img))
 
 ;; mirror image
 
-(defn make-random-mirror
+(defn random-mirror
   ""
   []
   (partial p/filter-channels 
-           (g/make-mirror (g/mirror-random-config))
-           (g/make-mirror (g/mirror-random-config))
-           (g/make-mirror (g/mirror-random-config))
+           (g/mirror (g/mirror-random-config))
+           (g/mirror (g/mirror-random-config))
+           (g/mirror (g/mirror-random-config))
            nil))
 
 (p/set-canvas-pixels! cnvs (->> img
-                                ((make-random-mirror))
-                                ((make-random-mirror))))
+                                ((random-mirror))
+                                ((random-mirror))))
 
 
 ;; slitscan 2
@@ -73,9 +73,9 @@
   (let [field-config (v/random-configuration)]
     (binding [p/*pixels-edge* :wrap]
       (println field-config)
-      (p/set-canvas-pixels! cnvs (p/filter-channels (g/make-slitscan2 {:variation field-config :r 2.03})
-                                                    (g/make-slitscan2 {:variation field-config :r 2.0})
-                                                    (g/make-slitscan2 {:variation field-config :r 1.97}) nil img)))))
+      (p/set-canvas-pixels! cnvs (p/filter-channels (g/slitscan2 {:fields field-config :r 2.03})
+                                                    (g/slitscan2 {:fields field-config :r 2.0})
+                                                    (g/slitscan2 {:fields field-config :r 1.97}) nil img)))))
 
 
 ;; fold
@@ -84,12 +84,20 @@
   (let [field-config (v/random-configuration)]
     (binding [p/*pixels-edge* :wrap]
       (println field-config)
-      (p/set-canvas-pixels! cnvs (p/filter-channels (g/make-fold {:variation field-config :r 2.03})
-                                                    (g/make-fold {:variation field-config :r 2.0})
-                                                    (g/make-fold {:variation field-config :r 1.97}) nil img)))))
+      (p/set-canvas-pixels! cnvs (p/filter-channels (g/fold {:fields field-config :r 2.03})
+                                                    (g/fold {:fields field-config :r 2.0})
+                                                    (g/fold {:fields field-config :r 1.97}) nil img)))))
 
 ;; pix2line
 
-(p/set-canvas-pixels! cnvs (p/filter-channels (g/make-pix2line (g/pix2line-random-config))
-                                              (g/make-pix2line (g/pix2line-random-config))
-                                              (g/make-pix2line (g/pix2line-random-config)) nil img))
+(p/set-canvas-pixels! cnvs (p/filter-channels (g/pix2line (g/pix2line-random-config))
+                                              (g/pix2line (g/pix2line-random-config))
+                                              (g/pix2line (g/pix2line-random-config)) nil img))
+
+
+;; blend machine
+
+(p/set-canvas-pixels! cnvs (let [blend-conf (g/blend-machine-random-config)
+                                 p2l-conf (assoc (g/pix2line-random-config) :whole true)
+                                 p2 (p/filter-channels (g/pix2line p2l-conf) img)]
+                             (g/blend-machine blend-conf img p2)))
