@@ -38,5 +38,5 @@
   state)
 
 (defmethod key-pressed [(:window-name window) \1] [_ _] (c/color 0 0 0 25))
-(defmethod key-pressed [(:window-name window) \2] [_ _] (c/from-HSB (c/color 136 255 164 25)))
-(defmethod key-pressed [(:window-name window) \3] [_ _] (c/from-HSB (c/color 37 255 182 25)))
+(defmethod key-pressed [(:window-name window) \2] [_ _] (c/from-HSB* (c/color 136 255 164 25)))
+(defmethod key-pressed [(:window-name window) \3] [_ _] (c/from-HSB* (c/color 37 255 182 25)))

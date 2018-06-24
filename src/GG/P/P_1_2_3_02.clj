@@ -26,9 +26,9 @@
   "Draw stripes"
   [canvas]
   (let [iter (make-counter)
-        colors (mapv #(c/from-HSB (if (even? %)
-                                    (v/vec4 (r/drand 256) 255 (r/drand 255) 255)
-                                    (v/vec4 138 (r/drand 255) 255 255))) (range 20))
+        colors (mapv #(c/from-HSB* (if (even? %)
+                                     (v/vec4 (r/drand 256) 255 (r/drand 255) 255)
+                                     (v/vec4 138 (r/drand 255) 255 255))) (range 20))
         row-count (r/irand 5 40) 
         row-height (/ ^int (height canvas) (double row-count))
         rows (map #(vector % (make-parts (inc ^long %))) (range row-count))]

@@ -5,7 +5,7 @@
 (def ^:const ^double step-size 1.0)
 (def ^:const ^double diameter 1.0)
 
-(def hsb-mode (c/make-color-converter c/from-HSB 360 100 100 100))
+(def hsb-mode (c/color-converter :HSB 360 100 100 100))
 
 (defn draw
   "Draw agent"

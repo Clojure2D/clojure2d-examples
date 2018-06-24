@@ -11,7 +11,7 @@
 (defn draw
   ""
   [canvas _ ^long framecount state]
-  (let [vals (or state (repeatedly (width canvas) (constantly 0.0)))
+  (let [vals (or state (repeat (width canvas) 0.0))
         xoff (* 0.01 framecount)
         n (r/simplex xoff)
         index (int (* n ^int (width canvas)))

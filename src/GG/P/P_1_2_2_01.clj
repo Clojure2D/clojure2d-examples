@@ -8,16 +8,21 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(defn make-sort-comparator
+(defn sort-comparator
   "Compare colors"
   [f]
   (fn [c1 c2]
     (> ^double (f c1) ^double (f c2))))
 
-(def hue-comparator (make-sort-comparator c/red))
-(def saturation-comparator (make-sort-comparator c/green))
-(def brightness-comparator (make-sort-comparator c/blue))
-(def luma-comparator (make-sort-comparator (comp c/luma c/from-HSB)))
+(def hue-comparator (sort-comparator c/ch0))
+(def saturation-comparator (sort-comparator c/ch1))
+(def brightness-comparator (sort-comparator c/ch2))
+(def luma-comparator (sort-comparator (comp c/luma c/from-HSB*)))
+
+(defn load-img
+  ""
+  [image-name]
+  (p/filter-colors c/to-HSB* (p/load-pixels image-name)))
 
 (defn draw
   "Draw tiles"
@@ -28,7 +33,7 @@
         grid-seq (for [^long grid-y (range tile-count)
                        ^long grid-x (range tile-count)]
                    [(* grid-x rect-size) (* grid-y rect-size)])
-        grid (map #(let [[px py] %] (p/get-color img px py)) grid-seq)
+        grid (map (fn [[px py]] (p/get-color img px py)) grid-seq)
         sgrid (case (:sort-mode (get-state window))
                 :hue (sort hue-comparator grid)
                 :saturation (sort saturation-comparator grid)
@@ -36,17 +41,17 @@
                 :grayscale (sort luma-comparator grid)
                 grid)]
     (dorun (map #(let [[px py] %1]
-                   (set-color canvas (c/from-HSB %2))
+                   (set-color canvas (c/from-HSB* %2))
                    (rect canvas px py rect-size rect-size)) grid-seq sgrid))))
 
 (def window (show-window {:canvas (canvas 600 600)
                           :window-name "P_1_2_2_01"
                           :draw-fn draw
-                          :state {:image (p/filter-colors c/to-HSB (p/load-pixels "src/GG/data/pic1.jpg"))}}))
+                          :state {:image (load-img "src/GG/data/pic1.jpg")}}))
 
-(defmethod key-released [(:window-name window) \1] [_ s] (assoc s :image (p/filter-colors c/to-HSB (p/load-pixels "src/GG/data/pic1.jpg"))))
-(defmethod key-released [(:window-name window) \2] [_ s] (assoc s :image (p/filter-colors c/to-HSB (p/load-pixels "src/GG/data/pic2.jpg"))))
-(defmethod key-released [(:window-name window) \3] [_ s] (assoc s :image (p/filter-colors c/to-HSB (p/load-pixels "src/GG/data/pic3.jpg"))))
+(defmethod key-released [(:window-name window) \1] [_ s] (assoc s :image (load-img "src/GG/data/pic1.jpg")))
+(defmethod key-released [(:window-name window) \2] [_ s] (assoc s :image (load-img "src/GG/data/pic2.jpg")))
+(defmethod key-released [(:window-name window) \3] [_ s] (assoc s :image (load-img "src/GG/data/pic3.jpg")))
 
 (defmethod key-released [(:window-name window) \4] [_ s] (assoc s :sort-mode nil))
 (defmethod key-released [(:window-name window) \5] [_ s] (assoc s :sort-mode :hue))

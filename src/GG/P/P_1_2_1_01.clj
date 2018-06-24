@@ -33,8 +33,8 @@
         (dotimes [gridx tile-count-x]
           (let [amount (m/norm gridx 0.0 (dec tile-count-x) 0.0 1.0)
                 inter-col (if-not (:interpolate-shortest state)
-                            (c/from-HSB (v/interpolate col1 col2 amount))
-                            (v/interpolate (c/from-HSB col1) (c/from-HSB col2) amount))]
+                            (c/from-HSB* (v/interpolate col1 col2 amount))
+                            (v/interpolate (c/from-HSB* col1) (c/from-HSB* col2) amount))]
             (-> canvas
                 (set-color inter-col)
                 (rect (* tile-width gridx) (* tile-height gridy) tile-width tile-height))))))))

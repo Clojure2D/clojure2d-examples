@@ -22,7 +22,7 @@
   "Draw rects"
   [canvas window _ _]
   (when (mouse-in-window? window)
-    (let [rng (r/rng :default (get-state window))
+    (let [rng (r/rng :jdk (get-state window))
           step-size (/ (int (m/abs ^int (mouse-x window))) 10)
           end-size (/ (int (m/abs ^int (mouse-y window))) 10)]
       (set-background canvas :white)

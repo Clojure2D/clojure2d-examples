@@ -13,7 +13,7 @@
   "Draw circles"
   [canvas window _ _]
   (when (mouse-in-window? window)
-    (let [rng (r/rng :default (get-state window))
+    (let [rng (r/rng :jdk (get-state window))
           ^int mx (mouse-x window)
           my (max 0.01 ^int (mouse-y window))]
       (-> canvas

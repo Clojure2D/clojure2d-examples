@@ -20,7 +20,7 @@
   "Draw rects"
   [canvas window _ _]
   (when (mouse-in-window? window)
-    (let [rng (r/rng :default (get-state window))
+    (let [rng (r/rng :jdk (get-state window))
           circle-count (inc (/ ^int (mouse-x window) 30))
           end-size (m/norm (max 2 ^int (mouse-x window)) 0 w (* 0.5 tile-width) 0)
           end-offset (m/norm (max 2 ^int (mouse-y window)) 0 h 0 (* 0.5 (- tile-width end-size)))]

@@ -14,7 +14,7 @@
   "Draw circles"
   [canvas window _ _]
   (when (mouse-in-window? window)
-    (let [rng (r/rng :default (:seed (get-state window)))
+    (let [rng (r/rng :jdk (:seed (get-state window)))
           ^int mx (mouse-x window)
           ^int my (mouse-y window)
           radius-b (:radius-b (get-state window))
@@ -47,7 +47,7 @@
 (defn from-hsb
   "Convert from hsb to rgb"
   [^double h ^double s ^double b]
-  (c/from-HSB (c/color (* 255.0 (/ h 360.0)) (* 255.0 (/ s 100.0)) (* 255.0 (/ b 100.0)))))
+  (c/from-HSB* (c/color (* 255.0 (/ h 360.0)) (* 255.0 (/ s 100.0)) (* 255.0 (/ b 100.0)))))
 
 (def window (show-window {:canvas (canvas 600 600)
                           :window-name "P_2_1_2_02"

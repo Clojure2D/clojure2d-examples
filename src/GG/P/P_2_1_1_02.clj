@@ -17,7 +17,7 @@
     (let [cap (:cap (get-state window))
           wx (max 0.1 (/ ^int (mouse-x window) 10.0))
           wy (max 0.1 (/ ^int (mouse-y window) 10.0))
-          rng (r/rng :default (:seed (get-state window)))]
+          rng (r/rng :jdk (:seed (get-state window)))]
       (set-background canvas :white)
       (set-color canvas :black)
       (doseq [^long grid-x (range 20)
@@ -50,12 +50,12 @@
 
 (defmethod key-pressed [(:window-name window) \4] [_ s]
   (if (= (c/to-color :black) (:color-left s))
-    (assoc s :color-left (c/from-HSB (c/color 230 255 197)))
+    (assoc s :color-left (c/from-HSB* (c/color 230 255 197)))
     (assoc s :color-left (c/to-color :black))))
 
 (defmethod key-pressed [(:window-name window) \5] [_ s]
   (if (= (c/to-color :black) (:color-right s))
-    (assoc s :color-right (c/from-HSB (c/color 194 187 130)))
+    (assoc s :color-right (c/from-HSB* (c/color 194 187 130)))
     (assoc s :color-right (c/to-color :black))))
 
 (defmethod key-pressed [(:window-name window) \6] [_ s]

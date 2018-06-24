@@ -21,7 +21,7 @@
         tile-width (/ ^int (width canvas) (double current-tile-count-x))
         tile-height (/ ^int (height canvas) (double current-tile-count-y))]
     (dorun (map #(let [[pos-x pos-y] %1]
-                   (set-color canvas (c/from-HSB %2))
+                   (set-color canvas (c/from-HSB* %2))
                    (rect canvas pos-x pos-y tile-width tile-height))
                 (for [^long grid-y (range tile-count-y)
                       ^long grid-x (range tile-count-x)]

@@ -16,9 +16,9 @@
       (doseq [^long grid-y (range 0 (height canvas) step-y)
               ^long grid-x (range 0 (width canvas) step-x)]
         (-> canvas
-            (set-color (c/from-HSB (c/color (* grid-x (/ 255.0 ^int (width canvas)))
-                                            (* (- ^int (height canvas) grid-y) (/ 255.0 ^int (height canvas)))
-                                            255)))
+            (set-color (c/from-HSB* (c/color (* grid-x (/ 255.0 ^int (width canvas)))
+                                             (* (- ^int (height canvas) grid-y) (/ 255.0 ^int (height canvas)))
+                                             255)))
             (rect grid-x grid-y step-x step-y))))))
 
 (show-window (canvas 800 400) "P_1_1_1_01" draw)

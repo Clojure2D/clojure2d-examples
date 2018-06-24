@@ -2,7 +2,8 @@
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]
-            [clojure2d.color :as c]))
+            [clojure2d.color :as c]
+            [clojure2d.pixels :as p]))
 
 (def ^:const ^double angle-count 7.0)
 (def ^:const ^double step-size 3.0)
@@ -36,7 +37,7 @@
                                        :else [direction false])
           px (int posx)
           py (int posy)
-          [angle posx-cross posy-cross] (if (or (< (c/luma (get-pixel canvas px py)) 255)
+          [angle posx-cross posy-cross] (if (or (< (c/luma (p/get-color canvas px py)) 255)
                                                 reached-border) 
                                           (let [angle (get-random-angle direction) 
                                                 distance (m/dist posx posy posx-cross posy-cross)]

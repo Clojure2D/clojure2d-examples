@@ -16,12 +16,12 @@
   "Draw rects"
   [canvas window _ _]
   (when (mouse-in-window? window)
-    (let [rng (r/rng :default (get-state window))
+    (let [rng (r/rng :jdk (get-state window))
           mx (/ (max 2 ^int (mouse-x window)) 20)
           my (/ (max 2 ^int (mouse-y window)) 20)]
       (-> canvas
           (set-background :white)
-          (set-color (c/from-HSB (c/color 136 255 164 154))))
+          (set-color (c/from-HSB* (c/color 136 255 164 154))))
       (doseq [^long grid-x (range tile-count)
               ^long grid-y (range tile-count)]
         (let [px (* grid-x (/ ^int (width window) tile-count))

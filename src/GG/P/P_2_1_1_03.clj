@@ -14,7 +14,7 @@
   (when (mouse-in-window? window)
     (let [tile-count (max 0.01 (int (/ ^int (mouse-y window) 15)))
           scl (/ ^int (width canvas) tile-count)
-          rng (r/rng :default (:seed (get-state window)))]
+          rng (r/rng :jdk (:seed (get-state window)))]
       (set-background canvas :white)
       (set-stroke canvas (max 0.1 (/ ^int (mouse-x window) 15)))
       (doseq [^long grid-x (range tile-count)
@@ -43,17 +43,17 @@
                           :state {:seed 0
                                   :transparent-left false
                                   :transparent-right false
-                                  :color-left (c/from-HSB (c/color 230 255 197))
+                                  :color-left (c/from-HSB* (c/color 230 255 197))
                                   :color-right (c/to-color :black)}}))
 
 (defmethod key-pressed [(:window-name window) \1] [_ s]
   (if (= (c/from-HSB (c/color 194 187 139)) (:color-left s))
-    (assoc s :color-left (c/from-HSB (c/color 230 255 197)))
-    (assoc s :color-left (c/from-HSB (c/color 194 187 139)))))
+    (assoc s :color-left (c/from-HSB* (c/color 230 255 197)))
+    (assoc s :color-left (c/from-HSB* (c/color 194 187 139)))))
 
 (defmethod key-pressed [(:window-name window) \2] [_ s]
   (if (= (c/to-color :black) (:color-right s))
-    (assoc s :color-right (c/from-HSB (c/color 136 255 164)))
+    (assoc s :color-right (c/from-HSB* (c/color 136 255 164)))
     (assoc s :color-right (c/to-color :black))))
 
 (defmethod key-pressed [(:window-name window) \3] [_ s]
@@ -65,7 +65,7 @@
 (defmethod key-pressed [(:window-name window) \0] [_ s]
   (merge s {:transparent-left false
             :transparent-right false
-            :color-left (c/from-HSB (c/color 230 255 197))
+            :color-left (c/from-HSB* (c/color 230 255 197))
             :color-right (c/to-color :black)}))
 
 (defmethod mouse-event [(:window-name window) :mouse-pressed] [_ s] (assoc s :seed (r/irand)))

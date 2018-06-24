@@ -23,7 +23,7 @@
       (set-background canvas :white)
       (doseq [[[^double angle v1 v2] [_ v3 v4]] (map #(vector %1 %2) angles (next angles))]
         (-> canvas
-            (set-color (c/from-HSB (c/color (* hue-scale angle) s b)))
+            (set-color (c/from-HSB* (c/color (* hue-scale angle) s b)))
             (triangle midx midy v1 v2 v3 v4))))))
 
 (def window (show-window {:canvas (canvas 800 800 :low)

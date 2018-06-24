@@ -31,7 +31,7 @@
 (defn draw
   ""
   [canvas window framecount state]
-  (let [random-counts (or state (repeatedly 20 (constantly 0)))
+  (let [random-counts (or state (repeat 20 0))
         l (int (count random-counts))
         index (int (* ^double (acceptreject) l))
         w (int (/ ^int (width canvas) l))]

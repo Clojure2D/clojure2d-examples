@@ -1,10 +1,9 @@
 (ns GG.P.P-2-1-3-04
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
-            [clojure2d.color :as c]
-            [fastmath.vector :as v]))
+            [clojure2d.color :as c]))
 
-(def color-mode-fn (c/make-color-converter c/from-HSB 360 100 100))
+(def color-mode-fn (c/color-converter :HSB 360 100 100))
 
 (defn draw
   "Draw lines"
@@ -34,7 +33,7 @@
                       (scale (- 1.0 (/ 3.0 cnt)))
                       (rotate (* 0.1 para))))
               2 (dotimes [i (inc cnt)]
-                  (let [gradient (v/interpolate (c/color :black) (c/color 52 100 71) (/ i cnt))]
+                  (let [gradient (c/mix :black (c/color 52 100 71) (/ i cnt))]
                     (-> canvas
                         (set-color (color-mode-fn gradient) (* 200.0 (/ i cnt)))
                         (rotate m/QUARTER_PI)
@@ -42,7 +41,7 @@
                         (scale (- 1.0 (/ 3.0 cnt)))
                         (rotate (* 1.5 para)))))
               3 (dotimes [i (inc cnt)]
-                  (let [gradient (v/interpolate (c/color 0 130 164) (c/color :white) (/ i cnt))]
+                  (let [gradient (c/mix (c/color 0 130 164) :white (/ i cnt))]
                     (-> canvas
                         (set-color gradient 170)
 
