@@ -5,8 +5,8 @@
             :url "http://unlicense.org"}
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [net.littleredcomputer/sicmutils "0.10.0"]
-                 [generateme/fastmath "1.0.1"]
-                 [clojure2d "1.0.0-RC1"]
+                 [generateme/fastmath "1.0.2"]
+                 [clojure2d "1.0.0-RC2"]
                  [org.apache.xmlgraphics/batik-transcoder "1.10"]]
   :repl-options {:timeout 120000}
   :target-path "target/%s"

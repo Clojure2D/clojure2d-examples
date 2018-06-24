@@ -46,8 +46,8 @@
       (loop [y y1]
 
         (let [p (for [x (range x1 (+ x2 stepx) stepx)
-                      :let [nv (Vec2. x y)
-                            ^Vec2 vv (v/add nv (v/mult (v/applyf (field nv) #(m/sin (* 2.0 ^double %))) 0.3))
+                      :let [nv (v/vec2 x y)
+                            ^Vec2 vv (v/add nv (v/mult (v/applyf (field nv) #(m/sin (* 2.0 ^double %))) 0.1))
                             xx (m/norm (.x vv) x1- x2+ 0.0 w)
                             yy (m/norm (.y vv) y1- y2+ 0.0 h)]]
                   (Vec2. xx yy))]
