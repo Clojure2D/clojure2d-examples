@@ -37,7 +37,7 @@
    :add? (r/brand)
    :grad (c/random-gradient)
    :rots (r/irand 2 10)
-   :bins (p/renderer w h)})
+   :bins (p/renderer w h :gaussian)})
 
 (defn variant-1
   ""

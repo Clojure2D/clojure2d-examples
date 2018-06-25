@@ -24,7 +24,7 @@
   [canvas window ^long frame _]
   (let [z (/ frame 1000.0)
         [noise-fn field-fn] (get-state window)
-        scale (max 0.05 (* ^int (mouse-x window) 0.001))
+        scale (max 0.2 (* ^int (mouse-x window) 0.001))
         hw (/ ^int (width canvas) 2.0)
         hh (/ ^int (height canvas) 2.0)
         speed (* z (max 1.0 (m/norm (mouse-y window) hh (height canvas) 1.0 8.0)))]
