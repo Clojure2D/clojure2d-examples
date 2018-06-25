@@ -32,8 +32,8 @@
         (set-background :black 100)
         (translate hw hh)
         (rotate m/QUARTER_PI)
-        (set-color (c/gray 250) 30))
-    (dotimes [i 150000]
+        (set-color (c/gray 250) 40))
+    (dotimes [i 100000]
       (let [xx (r/drand (- scale) scale)
             yy (r/drand (- scale) scale)
             fv (sinusoidal (field-fn (v/vec2 xx yy)))
