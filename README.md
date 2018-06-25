@@ -69,6 +69,7 @@ For Emacs, turn on `IImage` mode to see inlined images.
 * ex42 - folds on strings
 * ex43 - noise forms
 * ex44 - rosettes / diatoms
+* ex45 - scalar fields from vector fields
 * NOC - [Nature of Code](https://github.com/shiffman/The-Nature-of-Code-Examples/) Clojure2d version. Most interesting:
   * ch02/attraction-many-2-7.clj
   * ch02/fluidresistance-2-5.clj
