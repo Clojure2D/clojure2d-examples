@@ -2,7 +2,6 @@
   (:require [clojure2d.core :refer :all]
             [fastmath.random :as r]
             [fastmath.core :as m]
-            [GG.common :refer :all]
             [clojure2d.color :as c]))
 
 (set! *warn-on-reflection* true)

@@ -73,7 +73,7 @@
      :dampstepsy (r/randval 0.5 (vec (range 0.6 1.2 (/ 1.0 (double (r/irand 1 8))))) nil)}))
 
 (defn iterate-harmonograph
-  "Read configuration and do `n` iterations starting at time `start-time`, store everything in `BinPixels`."
+  "Read configuration and do `n` iterations starting at time `start-time`, store everything in `renderer`."
   [n start-time window
    {:keys [^double f1 ^double f2 ^double f3 ^double f4
            ^double p1 ^double p2 ^double p3 ^double p4
@@ -145,9 +145,10 @@
                   (if (window-active? window)
                     (do
                       (println time) 
-                      (let [newb (reduce #(p/merge-renderers %1 (deref %2)) prev
-                                         (doall (map #(future (iterate-harmonograph steps-per-task (+ time (* step ^int % steps-per-task)) window config))
-                                                     (range available-tasks))))] 
+                      (let [to (+ time (* step ^int % steps-per-task))
+                            newb (apply p/merge-renderers prev
+                                        (map deref (mapv #(future (iterate-harmonograph steps-per-task to window config))
+                                                         (range available-tasks))))] 
                         (draw-on-canvas c newb)
                         (recur (+ time ^double (r/grand) (* step steps-per-task available-tasks))
                                newb)))

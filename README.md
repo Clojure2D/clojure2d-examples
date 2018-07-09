@@ -2,25 +2,11 @@
 
 200+ examples for [Clojure2d](https://github.com/Clojure2D/clojure2d) library
 
-# WARNING
-
-_Code is during refactoring to conform current Clojure2d and Fastmath releases._
-
-## Currently works:
-
-* examples 00-42
-* funprogramming
-* quil
-* NOC/introduction
-
-
 ## How to run?
 
 Treat them as scripts.
 
 In Emacs/Cider: C-c C-k
-
-For Emacs, turn on `IImage` mode to see inlined images.
 
 ## List of examples
 
