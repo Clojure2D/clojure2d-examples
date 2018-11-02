@@ -1,6 +1,6 @@
 # Examples for Clojure2D
 
-200+ examples for [Clojure2d](https://github.com/Clojure2D/clojure2d) library
+Examples for [Clojure2d](https://github.com/Clojure2D/clojure2d) library
 
 ## How to run?
 
@@ -56,6 +56,9 @@ In Emacs/Cider: C-c C-k
 * ex43 - noise forms
 * ex44 - rosettes / diatoms
 * ex45 - scalar fields from vector fields
+* ex46 - distributions
+* ex47 - nebula (https://generateme.wordpress.com/2018/10/24/smooth-rendering-log-density-mapping/)
+* ex48 - visualization of reconstruction filters used in log density renderer 
 * NOC - [Nature of Code](https://github.com/shiffman/The-Nature-of-Code-Examples/) Clojure2d version. Most interesting:
   * ch02/attraction-many-2-7.clj
   * ch02/fluidresistance-2-5.clj

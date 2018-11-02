@@ -27,7 +27,7 @@
                               :brightness 1.2
                               :gamma-alpha 0.9
                               :gamma-color 1.05
-                              :intensity 0.8})
+                              :vibrancy 0.2})
 
 (defn random-config
   ""
