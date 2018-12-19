@@ -3,7 +3,8 @@
             [clojure2d.pixels :as p]
             [clojure2d.color :as clr]
             [clojure2d.extra.segmentation :as segm]
-            [fastmath.core :as m])
+            [fastmath.core :as m]
+            [fastmath.random :as r])
   (:import [clojure2d.pixels Pixels]))
 
 (set! *warn-on-reflection* true)
@@ -57,3 +58,6 @@
 
 ;; color depends on size
 (example-13 canvas :size)
+
+(binding [segm/*sequence-generator* (r/jittered-sequence-generator :halton 2 0.5)]
+  (example-13 canvas :size))
