@@ -23,20 +23,30 @@
   [canvas generator posx posy scale num]
   (let [transformed (map #(v/mult % scale) generator)]
     (doseq [^Vec2 v (take num transformed)]
-      (ellipse canvas (+ ^double posx (.x v)) (+ ^double posy (.y v)) 2 2)))
+      (ellipse canvas (+ ^double posx (.x v)) (+ ^double posy (.y v)) 4 4)))
   canvas)
 
 (with-canvas-> cnvs
   (set-background 10 10 10)
-  (set-color 255 100 100 150)
+  (set-color 255 100 100 200)
   (draw-random-rect (r/sequence-generator :halton 2) 50 50 225 1000) ;; upper left
   (draw-random-rect (r/sequence-generator :sobol 2) 325 50 225 1000) ;; upper middle
   (draw-random-rect (r/sequence-generator :r2 2) 600 50 225 1000) ;; upper right
-  (set-color 100 100 255 150)
+  (set-color 100 100 255 200)
   (draw-random-rect (r/jittered-sequence-generator :r2 2 0.4) 600 325 225 1000) ;; middle right
   (draw-random-rect (r/jittered-sequence-generator :r2 2 1.0) 600 625 225 1000) ;; right right
-  (set-color 0 255 0 100)
+  (set-color 0 255 0 150)
   (draw-random-rect (r/sequence-generator :gaussian 2) 300 450 (/ 112.5 2) 2000) ;; middle
-  (set-color 200 200 200 150)
+  (set-color 200 200 200 200)
   (draw-random-rect (r/sequence-generator :sphere 2) 162.5 737.5 112.5 150) ;; bottom left
-  (draw-random-rect (r/sequence-generator :default 2) 325 625 225 1000)) ;; bottom middle
+  (draw-random-rect (r/sequence-generator :default 2) 325 625 225 1000) ;; bottom middle
+  (set-color :white)
+  (translate 0 -10)
+  (text "Halton" 50 50)
+  (text "Sobol" 325 50)
+  (text "R2" 600 50)
+  (text "R2 jittered (lambda=0.4)" 600 325)
+  (text "R2 jittered (lambda=1.0)" 600 625)
+  (text "Gaussian" 50 450)
+  (text "2d Sphere" 162.5 737.5)
+  (text "Uniform random" 325 625)) 
