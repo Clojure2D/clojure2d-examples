@@ -1,13 +1,12 @@
-(ns RTinWeekend.ch5-final-scene
+(ns rt-in-weekend.ch4-sphere
   (:require [clojure2d.core :refer :all]
             [clojure2d.pixels :as p]
             [clojure2d.extra.utils :as u]
             [fastmath.vector :as v]
-            [RTinWeekend.ray :refer :all]
-            [RTinWeekend.hitable :refer :all]
-            [RTinWeekend.sphere :refer :all]
+            [rt-in-weekend.ray :refer :all]
             [fastmath.core :as m])
-  (:import [fastmath.vector Vec3]))
+  (:import [fastmath.vector Vec3]
+           [rt_in_weekend.ray Ray]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
@@ -19,15 +18,20 @@
 (def ^:const horizontal (v/vec3 4.0 0.0 0.0))
 (def ^:const vertical (v/vec3 0.0 2.0 0.0))
 (def ^:const orig (v/vec3 0.0 0.0 0.0))
-(def ^:const one (v/vec3 1.0 1.0 1.0))
+(def ^:const center (v/vec3 0.0 0.0 -1.0))
 
-(def world [(->Sphere (v/vec3 0.0 0.0 -1.0) 0.5)
-            (->Sphere (v/vec3 0.0 -100.5 -1.0) 100.0)])
+(defn hit-sphere? [center ^double radius ^Ray ray]
+  (let [oc (v/sub (.origin ray) center)
+        ^double a (v/magsq (.direction ray))
+        b (* 2.0 ^double (v/dot oc (.direction ray)))
+        c (- ^double (v/dot oc oc) (* radius radius))
+        discriminant (- (* b b) (* 4 a c))]
+    (pos? discriminant)))
 
-(defn color [ray world]
-  (if-let [world-hit (hit-list world ray 0.0 Double/MAX_VALUE)]
-    (v/mult (v/add (:normal world-hit) one) 127.5)
-    (let [^Vec3 unit (v/normalize (:direction ray))
+(defn color [^Ray ray]
+  (if (hit-sphere? center 0.5 ray)
+    :red
+    (let [^Vec3 unit (v/normalize (.direction ray))
           t (* 0.5 (inc (.y unit)))]
       (v/interpolate v1 v2 t))))
 
@@ -41,8 +45,8 @@
     (let [u (/ (double i) nx)
           v (/ (double j) ny)
           r (->Ray orig (v/add lower-left-corner (v/add (v/mult horizontal u) (v/mult vertical v))))]
-      (p/set-color img i (- (dec ny) j) (color r world)))))
+      (p/set-color img i (- (dec ny) j) (color r)))))
 
 (u/show-image img)
 
-(save img "results/RTinWeekend/scene.jpg")
+;; (save img "results/rt-in-weekend/sphere.jpg")

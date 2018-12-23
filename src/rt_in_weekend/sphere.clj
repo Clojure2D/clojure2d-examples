@@ -1,20 +1,20 @@
-(ns RTinWeekend.sphere
-  (:require [RTinWeekend.ray :refer :all]
-            [RTinWeekend.hitable :refer :all]
+(ns rt-in-weekend.sphere
+  (:require [rt-in-weekend.ray :refer :all]
+            [rt-in-weekend.hitable :refer :all]
             [fastmath.vector :as v]
             [fastmath.core :as m])
-  (:import [fastmath.vector Vec3]))
+  (:import [rt_in_weekend.ray Ray]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(defrecord Sphere [^Vec3 center ^double radius]
-  Hitable
+(defrecord Sphere [center ^double radius material]
+  HitableProto
   (hit [_ r t-min t-max]
-    (let [oc (v/sub (:origin r) center)
-          ^double a (v/dot (:direction r) (:direction r))
-          b- (- ^double (v/dot oc (:direction r)))
+    (let [oc (v/sub (.origin ^Ray r) center)
+          ^double a (v/magsq (.direction ^Ray r))
+          b- (- ^double (v/dot oc (.direction ^Ray r)))
           c (- ^double (v/dot oc oc) (* radius radius))
           discriminant (- (* b- b-) (* a c))]
       (when (pos? discriminant)
@@ -23,9 +23,9 @@
           (if (and (< temp ^double t-max)
                    (> temp ^double t-min))
             (let [patp (point-at-parameter r temp)]
-              (->hit-record temp patp (v/div (v/sub patp center) radius)))
+              (->HitData temp patp (v/div (v/sub patp center) radius) material))
             (let [temp2 (/ (+ b- dsqrt) a)]
               (when (and (< temp ^double t-max)
                          (> temp ^double t-min))
                 (let [patp (point-at-parameter r temp)]
-                  (->hit-record temp patp (v/div (v/sub patp center) radius)))))))))))
+                  (->HitData temp patp (v/div (v/sub patp center) radius) material))))))))))

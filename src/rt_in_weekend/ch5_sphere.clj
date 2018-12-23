@@ -1,11 +1,12 @@
-(ns RTinWeekend.ch5-sphere
+(ns rt-in-weekend.ch5-sphere
   (:require [clojure2d.core :refer :all]
             [clojure2d.pixels :as p]
             [clojure2d.extra.utils :as u]
             [fastmath.vector :as v]
-            [RTinWeekend.ray :refer :all]
+            [rt-in-weekend.ray :refer :all]
             [fastmath.core :as m])
-  (:import [fastmath.vector Vec3]))
+  (:import [fastmath.vector Vec3]
+           [rt_in_weekend.ray Ray]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
@@ -23,17 +24,17 @@
 (def ^:const ^int nx 800)
 (def ^:const ^int ny 400)
 
-(defn hit-sphere ^double [center ^double radius ray]
-  (let [oc (v/sub (:origin ray) center)
-        ^double a (v/dot (:direction ray) (:direction ray))
-        b (* 2.0 ^double (v/dot oc (:direction ray)))
+(defn hit-sphere ^double [center ^double radius ^Ray ray]
+  (let [oc (v/sub (.origin ray) center)
+        ^double a (v/magsq (.direction ray))
+        b (* 2.0 ^double (v/dot oc (.direction ray)))
         c (- ^double (v/dot oc oc) (* radius radius))
         discriminant (- (* b b) (* 4 a c))]
     (if (neg? discriminant)
       -1.0
       (/ (- (- b) (m/sqrt discriminant)) (+ a a)))))
 
-(defn color [ray]
+(defn color [^Ray ray]
   (let [t (hit-sphere center 0.5 ray)]
     (if (pos? t)
       (-> (point-at-parameter ray t)
@@ -41,7 +42,7 @@
           (v/normalize)
           (v/add one)
           (v/mult 127.5))
-      (let [^Vec3 unit (v/normalize (:direction ray))
+      (let [^Vec3 unit (v/normalize (.direction ray))
             t (* 0.5 (inc (.y unit)))]
         (v/interpolate v1 v2 t)))))
 
@@ -56,4 +57,4 @@
 
 (u/show-image img)
 
-(save img "results/RTinWeekend/sphere2.jpg")
+;; (save img "results/rt-in-weekend/sphere2.jpg")

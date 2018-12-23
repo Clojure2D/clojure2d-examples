@@ -1,11 +1,12 @@
-(ns RTinWeekend.ch3-sky
+(ns rt-in-weekend.ch3-sky
   (:require [clojure2d.core :refer :all]
             [clojure2d.pixels :as p]
             [clojure2d.extra.utils :as u]
             [fastmath.vector :as v]
-            [RTinWeekend.ray :refer :all]
+            [rt-in-weekend.ray :refer :all]
             [fastmath.core :as m])
-  (:import [fastmath.vector Vec3]))
+  (:import [fastmath.vector Vec3]
+           [rt_in_weekend.ray Ray]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
@@ -21,8 +22,8 @@
 (def ^:const ^int nx 800)
 (def ^:const ^int ny 400)
 
-(defn color [ray]
-  (let [^Vec3 unit (v/normalize (:direction ray))
+(defn color [^Ray ray]
+  (let [^Vec3 unit (v/normalize (.direction ray))
         t (* 0.5 (inc (.y unit)))]
     (v/interpolate v1 v2 t)))
 
@@ -37,4 +38,4 @@
 
 (u/show-image img)
 
-(save img "results/RTinWeekend/sky.jpg")
+;; (save img "results/rt-in-weekend/sky.jpg")
