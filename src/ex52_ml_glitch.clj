@@ -1,3 +1,13 @@
+;; steps:
+;;
+;; * load image
+;; * k-means clustering to reduce colors
+;; * treat centroids as labels
+;; * take some banch of pixels + surroundings, construct vector and add label
+;; * train classification model
+;; * predict pixel color from the image (render progressively, so vector used in prediction consist image colors and already predicted colors)
+;; * draw an image
+
 (ns examples.ex52-ml-glitch
   (:require [clojure2d.pixels :as p]
             [clojure2d.core :refer :all]
@@ -16,7 +26,7 @@
 ;; load image
 (def img (p/load-pixels "results/test.jpg"))
 
-;; reduce colors using clustering, clasters representatives will be our labels
+;; reduce colors using clustering, clusters representatives will be our labels
 (def clusters (clust/k-means img 50))
 
 ;; labels!
