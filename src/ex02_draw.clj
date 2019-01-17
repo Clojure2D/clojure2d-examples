@@ -41,6 +41,6 @@
 
 
 ;; save to the file, it saves attached canvas not resized window content itself
-(save window "results/ex02/blob.jpg")
+(comment save window "results/ex02/blob.jpg")
 
 ;; [[../results/ex02/blob.jpg]]

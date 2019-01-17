@@ -38,7 +38,7 @@
              10 10)))
 
 ;; saving, save small version of canvas
-(save (resize my-canvas 300 300) "results/ex00/helloworld.jpg")
+(comment save (resize my-canvas 300 300) "results/ex00/helloworld.jpg")
 
 ;; [[../results/ex00/helloworld.jpg]]
 

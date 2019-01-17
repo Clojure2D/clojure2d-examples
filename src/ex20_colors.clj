@@ -21,11 +21,11 @@
   (save cnvs (next-filename "results/ex20/" ".jpg")))
 
 ;; colourlovers
-(p/set-canvas-pixels! cnvs (p/filter-colors (partial c/nearest-color (c/random-palette)) img))
+(p/set-canvas-pixels! cnvs (p/filter-colors (c/nearest-color (c/random-palette)) img))
 
 ;; generated palette with 8 colors
 (let [random-palette-8 (m/sample (c/iq-random-gradient) 8)]
-  (p/set-canvas-pixels! cnvs (p/filter-colors (partial c/nearest-color random-palette-8) img)))
+  (p/set-canvas-pixels! cnvs (p/filter-colors (c/nearest-color random-palette-8) img)))
 
 ;; different distance function
 (def random-palette-6 (c/resample 6 (c/random-palette)))
@@ -44,4 +44,4 @@
 (p/set-canvas-pixels! cnvs (p/filter-colors (partial c/nearest-color c/contrast-ratio random-palette-6) img))
 
 (let [paletton-palette (c/paletton :triad 0 {:compl true :angle 20 :preset (rand-nth c/paletton-presets-list)})]
-  (p/set-canvas-pixels! cnvs  (p/filter-colors (partial c/nearest-color paletton-palette) img)))
+  (p/set-canvas-pixels! cnvs  (p/filter-colors (c/nearest-color paletton-palette) img)))

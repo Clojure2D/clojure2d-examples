@@ -24,16 +24,15 @@
 (def ^:const ^double periodFactor 16)
 
 (defn draw [canvas window ^double frame _]
-    (let [t1 (/ frame 60.0)]
-        (-> canvas
-            (set-background :black 50)
-            (set-color :white 80))
-        (let [p (for [^double t (range 0.0 t1 tStep)]
-                  (let [theta (* t tAngleScale)
-                        r (* (+ 1 (* ampFactor (m/sin (* periodFactor theta)))) (* t tRadiusScale))]
-                    [(+ x0 (* (m/cos theta) r)) (+ y0 (* (m/sin theta) r))]
-                    ))]
-        (path canvas p))))
+  (let [t1 (/ frame 60.0)]
+    (-> canvas
+        (set-background :black 50)
+        (set-color :white 80))
+    (let [p (for [^double t (range 0.0 t1 tStep)]
+              (let [theta (* t tAngleScale)
+                    r (* (+ 1 (* ampFactor (m/sin (* periodFactor theta)))) (* t tRadiusScale))]
+                [(+ x0 (* (m/cos theta) r)) (+ y0 (* (m/sin theta) r))]))]
+      (path canvas p))))
 
 (def window (show-window {:canvas (canvas w h :highest)
                           :window-name "Archimedean spiral with an oscillating radius"

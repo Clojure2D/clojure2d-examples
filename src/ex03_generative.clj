@@ -38,7 +38,7 @@
              "clojure-canvas" ;; window name
              #(draw %1 %2 %3 %4))) ;; draw callback, wrap into fn to enable live coding (change code on the fly!)
 
-(save (resize (get-image window) 300 300)
-      "results/ex03/lines.jpg")
+(comment save (resize (get-image window) 300 300)
+         "results/ex03/lines.jpg")
 
 ;; [[../results/ex03/lines.jpg]]
