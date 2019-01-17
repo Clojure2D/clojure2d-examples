@@ -1,4 +1,4 @@
-(ns examples.52-ml-glitch
+(ns examples.ex52-ml-glitch
   (:require [clojure2d.pixels :as p]
             [clojure2d.core :refer :all]
             [fastmath.classification :as cl]
