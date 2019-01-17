@@ -87,7 +87,7 @@
                          (p/set-canvas-pixels! c p))})
 
 
-;; reconstruct image partly from guessed pixels, partly from image
+;; reconstruct image partly from guessed pixels, partly from the image
 (dotimes [y (height img)]
   (dotimes [x (width img)]
     (let [col (cl (color-vector p x y))]
