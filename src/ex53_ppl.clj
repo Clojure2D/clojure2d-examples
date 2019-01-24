@@ -65,6 +65,10 @@
       (ellipse canvas (.x p) (.y p) 8 8))
     (mapv #(change-move % spores) spores)))
 
-(show-window {:canvas (canvas csize csize)
-              :draw-fn draw
-              :draw-state (take 400 (map next-spore (range)))})
+(def window (show-window {:canvas (canvas csize csize)
+                          :draw-fn draw
+                          :draw-state (take 400 (map next-spore (range)))}))
+
+
+
+(comment save window "results/ex53/spores.jpg")
