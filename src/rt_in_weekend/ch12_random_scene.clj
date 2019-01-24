@@ -1,4 +1,4 @@
-(ns RTinWeekend.ch12-random-scene
+(ns rt-in-weekend.ch12-random-scene
   (:require [clojure2d.core :refer :all]
             [clojure2d.pixels :as p]
             [clojure2d.extra.utils :as u]
