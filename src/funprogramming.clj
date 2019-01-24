@@ -32,7 +32,8 @@
 ;; * Default window creates canvas for you, to access it use `get-canvas` function
 
 (let [window (show-window)]
-  (with-canvas-> (get-canvas window) 
+  (with-canvas-> (get-canvas window)
+    (set-background :black)
     (point 50 50)
     (point 51 50)
     (point 52 50)
@@ -81,7 +82,8 @@
              (-> canvas
                  (set-color 0 (r/irand 255) 0)
                  (line 100 100 (r/drand 200) (r/drand 200))))]
-  (show-window {:draw-fn draw}))
+  (show-window {:draw-fn draw
+                :background :black}))
 
 ;; https://www.funprogramming.org/6-Animate-white-lines-across-the-display.html
 
@@ -421,6 +423,7 @@
                           (r/drand (height canvas))
                           30 30)))]
   (show-window {:draw-fn draw
+                :background :black
                 :canvas (canvas 400 300)}))
 
 ;; https://www.funprogramming.org/23-Using-the-while-loop.html
@@ -472,6 +475,7 @@
   (show-window {:canvas canvas
                 :draw-fn draw
                 :window-name window-name
+                :background :black
                 :setup (fn [canvas _]
                          (set-background canvas 0x3355cc))}) )
 
@@ -491,6 +495,7 @@
                 :draw-fn draw
                 :fps 30
                 :window-name window-name
+                :background :black
                 :setup (fn [canvas _]
                          (set-background canvas 0x3355cc))}) )
 
@@ -572,6 +577,7 @@
   
   (show-window {:draw-fn draw
                 :canvas canvas
+                :background :black
                 :draw-state 0.0}))
 
 ;; https://www.funprogramming.org/30-Multiple-rotating-objects-and-reset-matrix.html
@@ -835,7 +841,8 @@
                    (set-background :black 10)
                    (set-color (c/from-HSB* (c/color (r/irand 255) 255 255)))
                    (line x 0 x (height canvas)))))]
-  (show-window {:canvas (canvas 200 200)
+  (show-window {:canvas (black-canvas 200 200)
+                :background :black
                 :draw-fn draw}))
 
 ;; https://www.funprogramming.org/43-Animate-using-sin-Less-math-thanks-to-map.html
@@ -913,7 +920,7 @@
              (+ a 0.03))]
 
   (show-window {:draw-fn draw
-                :canvas (canvas 500 300)
+                :canvas (black-canvas 500 300)
                 :draw-state 0.0}))
 
 ;; https://www.funprogramming.org/47-Share-your-Processing-program-with-the-world.html
@@ -1040,6 +1047,7 @@
       window (show-window)]
 
   (with-canvas-> (get-canvas window)
+    (set-background :black)
     (text (rand-nth nouns) 10 50)
     (text (rand-nth adjectives) 10 30)))
 
@@ -1241,7 +1249,7 @@
     (conj state [(mouse-x event) (mouse-y event)
                  (r/drand -1 1) (r/drand 1 3)]))
   
-  (show-window {:canvas (canvas 400 200 :mid)
+  (show-window {:canvas (black-canvas 400 200 :mid)
                 :draw-fn draw
                 :state []
                 :window-name wname}))
@@ -1533,7 +1541,7 @@
 
 ;; https://www.funprogramming.org/83-Circular-gradients-can-look-like-spheres.html
 
-(let [canvas (canvas 500 400)
+(let [canvas (black-canvas 500 400)
       from-hsb (c/color-converter :HSB 100)
       c1 (c/color (r/drand 100) 100 100 100)
       c2 (c/color (r/drand 100) 100 30 100)
@@ -2077,7 +2085,7 @@
                  (crect canvas (r/drand (width canvas)) (r/drand (height canvas)) sz sz))
                ;; (save canvas (next-filename "funprogramming/114/seq-" ".png"))
                (if (zero? (mod (inc frame) 200)) (- 255 c) c)))]
-  (show-window {:canvas (canvas 640 480)
+  (show-window {:canvas (black-canvas 640 480)
                 :fps 25
                 :draw-fn draw
                 :draw-state 255}))
@@ -2171,7 +2179,8 @@
                                (convolve :gaussian-blur-3)
                                (convolve :gaussian-blur-3))))]
 
-  (show-window {:canvas (canvas 400 400)
+  (show-window {:canvas (with-canvas-> (canvas 400 400)
+                          (set-background :black))
                 :draw-fn draw}))
 
 ;; Or clojure2d pixels filter
@@ -2181,7 +2190,8 @@
                                  (r/drand (width canvas)) (r/drand (height canvas)) 40 40)
              (p/set-canvas-pixels! canvas (p/filter-channels p/gaussian-blur-2 (p/to-pixels canvas))))]
 
-  (show-window {:canvas (canvas 400 400)
+  (show-window {:canvas (with-canvas-> (canvas 400 400)
+                          (set-background :black))
                 :draw-fn draw}))
 
 ;; https://www.funprogramming.org/128-Fun-with-filters-part-II-animated-blobs.html
@@ -2194,13 +2204,15 @@
                    (set-font-attributes canvas 80)
                    (text canvas (str (char (r/irand 65 90))) (- ^int (mouse-x window) 30) (+ ^int (mouse-y window) 40)))
              (p/set-canvas-pixels! canvas
-                                   (p/filter-channels p/threshold-50 (p/to-pixels (-> canvas
-                                                                                      (convolve :box-blur)
-                                                                                      (convolve :box-blur)
-                                                                                      (convolve :box-blur))))))]
+                                   (->> (p/to-pixels canvas)
+                                        (p/filter-channels p/box-blur-2)
+                                        (p/filter-channels p/box-blur-2)
+                                        (p/filter-channels p/box-blur-2)
+                                        (p/filter-channels p/threshold-50))))]
 
   (show-window {:window-name wname
-                :canvas (canvas 400 400 :mid)
+                :canvas (with-canvas-> (canvas 400 400 :mid)
+                          (set-background :black))
                 :draw-fn draw}))
 
 ;; 129-138 SKIPPED
@@ -2272,9 +2284,6 @@
              (image canvas letters)
              (image canvas squares))]
 
-  (with-canvas-> letters (set-background :black 0))
-  (with-canvas-> squares (set-background :black 0))
-  
   (show-window {:canvas (canvas 500 500)
                 :draw-fn draw
                 :hint :low}))
@@ -2283,7 +2292,7 @@
 
 (let [wname "Animated loops 144"
       frames 20
-      pg (vec (repeatedly frames #(canvas 500 500)))
+      pg (vec (repeatedly frames #(black-canvas 500 500)))
       draw (fn [canvas window ^long frame [pmousex pmousey]]
              (let [mousex (mouse-x window)
                    mousey (mouse-y window)
@@ -2310,7 +2319,7 @@
 
 (let [wname "Export animated loops 145"
       frames 20
-      pg (vec (repeatedly frames #(canvas 500 500)))
+      pg (vec (repeatedly frames #(black-canvas 500 500)))
       draw (fn [canvas window ^long frame [pmousex pmousey]]
              (let [mousex (mouse-x window)
                    mousey (mouse-y window)
