@@ -22,6 +22,7 @@
 
 (with-canvas [c c]
   (-> c
+      (set-background :white)
       (set-color :black)
       (set-stroke 1.5)
       (path main-path))
