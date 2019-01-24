@@ -145,9 +145,9 @@
                   (if (window-active? window)
                     (do
                       (println time) 
-                      (let [to (+ time (* step ^int % steps-per-task))
+                      (let [to #(+ time (* step ^int % steps-per-task))
                             newb (apply p/merge-renderers prev
-                                        (map deref (mapv #(future (iterate-harmonograph steps-per-task to window config))
+                                        (map deref (mapv #(future (iterate-harmonograph steps-per-task (to %) window config))
                                                          (range available-tasks))))] 
                         (draw-on-canvas c newb)
                         (recur (+ time ^double (r/grand) (* step steps-per-task available-tasks))

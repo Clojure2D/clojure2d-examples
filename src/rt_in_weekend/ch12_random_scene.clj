@@ -68,6 +68,10 @@
 (def world (random-scene))
 (def r2-seq (vec (take samples (r/jittered-sequence-generator :r2 2 0.5))))
 
+(def window (show-window {:canvas (canvas nx ny)
+                          :draw-fn (fn [c _ f _] (p/set-canvas-pixels! c img))
+                          :fps 1}))
+
 (time (dotimes [j ny]
         (println (str "Line: " j))
         (dotimes [i nx]
@@ -81,7 +85,5 @@
             (p/set-color img i (- (dec ny) j) (-> (v/div col samples)
                                                   (v/applyf #(m/sqrt %))
                                                   (v/mult 255.0)))))))
-
-(u/show-image img)
 
 ;; (save img "results/rt-in-weekend/random_scene_r2.jpg")
