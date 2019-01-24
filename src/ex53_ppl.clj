@@ -1,4 +1,7 @@
 ;; https://www.youtube.com/watch?v=makaJpLvbow
+;; http://zool33.uni-graz.at/artlife/PPS
+
+;; press mouse to add spores
 
 (ns examples.ex53-ppl
   (:require [clojure2d.core :refer :all]
@@ -14,50 +17,54 @@
 (m/use-primitive-operators)
 
 (def ^:const ^long size 200)
-(def ^:const ^long csize (* 3 size))
-(def rand-size #(r/drand size))
-(def wrapper (partial m/wrap 0 size))
-(def pal (vec (c/resample 20 (reverse (c/palette-presets :spectral-11)))))
+(def ^:const ^long scaling 4)
+(def ^:const ^long csize (* scaling size))
+(def rand-size #(r/drand (* 0.2 size) (* 0.8 size)))
+;; (def pal (vec (c/resample 35 (reverse (c/palette-presets :spectral-11)))))
+(def pal (vec (c/resample 35 [:green :yellow :red])))
 (def ^:const ^long lim (dec (count pal)))
 
-(defrecord Spore [^long id ^Vec2 pos ^double phi ^double v ^double r ^double alpha ^double beta col])
+(defrecord Spore [^long id ^Vec2 pos ^double phi ^Vec2 vvec ^double v ^double r ^double alpha ^double beta col])
 
-(defn spore [id v r alpha beta col]
-  (->Spore id (v/generate-vec2 rand-size) (r/drand m/TWO_PI) v r alpha beta col))
+(defn spore
+  "Create spore"
+  [id pos v r alpha beta col]
+  (let [phi (r/drand m/TWO_PI)
+        vvec (v/from-polar (v/vec2 v phi))]
+    (->Spore id (or pos (v/generate-vec2 rand-size)) phi vvec v r alpha beta col)))
 
 (defn prim+
   ([^long x] x)
   ([^long x ^long y] (+ x y)))
 
 (defn change-move
-  [^Spore s spores]
-  (let [in-radius (filterv #(and (not= (.id s) (.id ^Spore %)) 
-                                 (< ^double (v/dist (.pos s) (.pos ^Spore %)) (.r s))) spores)
-        cnt (count in-radius)
-        ^double delta (if (pos? cnt)
-                        (* cnt (.beta s) (m/sgn (reduce prim+ 0 (mapv #(m/sgn (v/cross (.pos s) (.pos ^Spore %))) in-radius))))
-                        0)
-        nphi (rem (+ m/TWO_PI (.phi s) (.alpha s) delta) m/TWO_PI)]
-    (->Spore (.id s)
-             (v/fmap (v/add (.pos s) (v/from-polar (v/vec2 (.v s) nphi))) wrapper)
-             nphi
-             (.v s)
-             (.r s)
-             (.alpha s)
-             (.beta s)
-             (pal (m/constrain cnt 0 lim)))))
+  [{:keys [^long id pos ^double phi vvec ^double v ^double r ^double alpha ^double beta col]} spores]
+  (let [in-radius (filterv #(and (not= id (:id %)) 
+                                 (< ^double (v/dist-sq pos (:pos %)) r)) spores) ;; select neighbours
+        cnt (count in-radius) ;; how many neihgbours
+        neighbours (mapv #(m/sgn (v/cross vvec (v/sub (:pos %) pos))) in-radius) ;; neigbours hemispheres
+        ^double delta (if (pos? cnt) (* cnt beta (m/sgn (reduce prim+ 0 neighbours))) 0) ;; calc delta
+        nphi (rem (+ m/TWO_PI phi alpha delta) m/TWO_PI) ;; change angle
+        nvvec (v/from-polar (v/vec2 v nphi))] ;; speed vector
+    (->Spore id (v/add pos nvvec) nphi nvvec v r alpha beta (pal (m/constrain cnt 0 lim))))) ;; move
 
-(def spores-init (take 1200 (map #(spore % 0.67 15.0 (m/radians 180) (m/radians 17) (first pal)) (range))))
+(defn next-spore
+  "Make next spore"
+  ([id] (next-spore id nil))
+  ([id pos] (spore id pos 0.67 (m/sq 11.0) (m/radians 180) (m/radians 17) (first pal))))
 
 (defn draw
-  [canvas _ _ spores]
-  (set-background canvas :black 100)
-  (doseq [^Spore s spores
-          :let [^Vec2 p (v/mult (.pos s) 3.0)]]
-    (set-color canvas (.col s))
-    (ellipse canvas (.x p) (.y p) 8 8))
-  (mapv #(change-move % spores) spores))
+  [canvas window _ spores]
+  (let [spores (if (mouse-pressed? window)
+                 (conj spores (next-spore (count spores) (v/div (mouse-pos window) scaling)))
+                 spores)]
+    (set-background canvas (c/color 10 10 20) 100)
+    (doseq [^Spore s spores
+            :let [^Vec2 p (v/mult (.pos s) scaling)]]
+      (set-color canvas (.col s))
+      (ellipse canvas (.x p) (.y p) 8 8))
+    (mapv #(change-move % spores) spores)))
 
 (show-window {:canvas (canvas csize csize)
               :draw-fn draw
-              :draw-state spores-init})
+              :draw-state (take 400 (map next-spore (range)))})

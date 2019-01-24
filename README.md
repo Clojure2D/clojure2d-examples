@@ -62,6 +62,8 @@ In Emacs/Cider: C-c C-k
 * ex49 - archimedian spiral with an oscillating radius
 * ex50 - grid visualization
 * ex51 - image on grid
+* ex52 - Machine Learning algorithms used to glitch image
+* ex53 - Spores simulation (https://www.youtube.com/watch?v=makaJpLvbow)
 * NOC - [Nature of Code](https://github.com/shiffman/The-Nature-of-Code-Examples/) Clojure2d version. Most interesting:
   * ch02/attraction-many-2-7.clj
   * ch02/fluidresistance-2-5.clj
