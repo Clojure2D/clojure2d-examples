@@ -49,7 +49,7 @@
 
 (def img (with-canvas-> (canvas w h)
            (set-background :white)
-           (image (with-canvas-> (canvas w h :highest) (draw-me :difference))))) ;; try other blending methods
+           (image (with-canvas-> (canvas w h :highest) (draw-me :difference))))) ;; try `:screen`
 
 (utils/show-image img)
 
