@@ -7,6 +7,8 @@
                  [net.littleredcomputer/sicmutils "0.10.0"]
                  [generateme/fastmath "1.3.0-SNAPSHOT"]
                  [clojure2d "1.2.0-SNAPSHOT"]]
+  ;; :exclusions [[ml.dmlc/xgboost4j] [asm]]
+  ;; :resource-paths ["resources/" "lib/xgboost4j-0.81-criteo-20180821_2.11-win64.jar"]
   :repl-options {:timeout 120000}
   :target-path "target/%s"
   :jvm-opts ["-Xmx4096M"]
