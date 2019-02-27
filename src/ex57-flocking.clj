@@ -5,10 +5,7 @@
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]
-          #_  [fastmath.fields :as f]
-            [fastmath.vector :as v]
-           #_ [clojure2d.color :as c]
-          )
+            [fastmath.vector :as v])
     (:import [fastmath.vector Vec2]))
 
 
@@ -140,7 +137,7 @@
              ((fn [[x y]] [x (if (> py (+ h radius)) (+ (- h) (- radius)) y)]))
              (apply v/vec2 ))]
     (if (not= (v/mag vv) 0)
-      (assoc boid :position (v/add position vv)) ;; should also update the tail
+      (assoc boid :position (v/add position vv) :path (mapv #(v/add vv %) (:path boid))) 
       boid)))
       
 
