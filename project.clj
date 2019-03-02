@@ -16,4 +16,4 @@
   :target-path "target/%s"
   :jvm-opts ["-Xmx4096M"]
   :profiles {:dev {:plugins [[refactor-nrepl "2.4.0"]
-                             [cider/cider-nrepl "0.20.0"]]}})
+                             [cider/cider-nrepl "0.21.1"]]}})
