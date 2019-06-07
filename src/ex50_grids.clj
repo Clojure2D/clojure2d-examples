@@ -23,16 +23,22 @@
   "Draw grid"
   [canvas window _ _]
   (let [g (:grid (get-state window))
-        m (mouse-pos window)]
+        m (mouse-pos window)
+        cell (grid/coords->cell g m)
+        anchor (grid/cell->anchor g cell)
+        mid (grid/coords->mid g m)]
     (when (and (pos? (int (m 0))) (pos? (int (m 1))))
       (-> canvas
           (set-background :black 50)
-          (filled-with-stroke :white :maroon grid-cell g (m 0) (m 1) 0.8)
+          (filled-with-stroke :white :maroon grid-cell g (m 0) (m 1) 1.0)
+          (set-color :green)
+          (ellipse (anchor 0) (anchor 1) 5 5)
+          (ellipse (mid 0) (mid 1) 5 5)
           (set-color :black)
           (rect 10 10 140 40)
           (set-color :white)
-          (text (str g) 15 22)
-          (text (str (grid/coords->cell g m)) 15 36)))))
+          (text g 15 22)
+          (text cell 15 36)))))
 
 (show-window {:canvas (canvas 1000 800 :highest)
               :window-name "Grids"

@@ -3,9 +3,9 @@
   :url "https://github.com/Clojure2D/clojure2d-examples"
   :license {:name "The Unlicense"
             :url "http://unlicense.org"}
-  :dependencies [[org.clojure/clojure "1.10.0"]
+  :dependencies [[org.clojure/clojure "1.10.1"]
                  [net.littleredcomputer/sicmutils "0.10.0"]
-                 [generateme/fastmath "1.3.0-SNAPSHOT"]
+                 [generateme/fastmath "1.4.0-SNAPSHOT"]
                  [clojure2d "1.2.0-SNAPSHOT"]]
   
   ;; For WINDOWS please uncomment two following lines
@@ -14,6 +14,4 @@
   
   :repl-options {:timeout 120000}
   :target-path "target/%s"
-  :jvm-opts ["-Xmx4096M"]
-  :profiles {:dev {:plugins [[refactor-nrepl "2.4.0"]
-                             [cider/cider-nrepl "0.21.1"]]}})
+  :jvm-opts ["-Xmx4096M"])
