@@ -205,7 +205,7 @@
                (assoc state :boids (vec (map-indexed
                                          (fn [i b]
                                            (let [b' (if group (arrive b (get-path-target i cb frm)) b)]
-                                           
+                                             
                                              (run-boids cvs b' state))) boids)))))
       
       wnd (show-window {:canvas canvas
@@ -213,7 +213,5 @@
                         :window-name "boids"
                         :draw-state (initial-state)})]
   (defmethod mouse-event ["boids" :mouse-pressed] [e _]
-    (set-state! wnd :change )
-    )
-  )
+    (set-state! wnd :change)))
       

@@ -17,7 +17,6 @@
 (deftype Ball [^double x ^double y ^double vx ^double vy ^double radius ^Vec3 color])
 
 (defn make-ball
-  ""
   ^Ball []
   (Ball. (r/irand SIZE)
          (r/irand SIZE)
@@ -27,28 +26,24 @@
          (Vec3. (r/drand 255) (r/drand 255) (r/drand 255))))
 
 (defn direction
-  ""
   ^double [^double p ^double v]
   (if (bool-or (> p SIZE) (neg? p))
     (- v)
     v))
 
 (defn move
-  ""
   [^Ball ball]
   (let [vx (direction (.x ball) (.vx ball))
         vy (direction (.y ball) (.vy ball))]
     (Ball. (+ (.x ball) vx) (+ (.y ball) vy) vx vy (.radius ball) (.color ball))))
 
-(defn influence 
-  ""
+(defn influence
   ^double [^Ball ball ^double px ^double py]
   (let [dx (- (.x ball) px)
         dy (- (.y ball) py)]
     (/ (.radius ball) (+ m/EPSILON (m/hypot-sqrt dx dy)))))
 
 (defn compute-color
-  ""
   ^Vec3 [x y ^Vec3 cur ^Ball ball]
   (let [infl (influence ball x y)
         ^Vec3 rgb (.color ball)]
@@ -57,27 +52,24 @@
            (+ (.z cur) (* infl (.z rgb))))))
 
 (defn draw
-  ""
   [canvas balls]
   (loop [y (int 0)]
     (loop [x (int 0)]
-    
+      
       (let [^Vec3 c (reduce (partial compute-color x y) (Vec3. 0.0 0.0 0.0) balls)]
         (set-color canvas c)
         (rect canvas x y 2 2))
-    
+      
       (when (< x (- SIZE 2)) (recur (+ 2 x))))
     (when (< y (- SIZE 2)) (recur (+ 2 y)))))
 
 (defn draw-balls
-  ""
   [n canvas window framecount result]
   (let [balls (map move (or result (take n (repeatedly make-ball))))]
     (draw canvas balls)
     balls))
 
 (defn example-14
-  ""
   [n]
   (let [c (canvas SIZE SIZE :low)]
     (show-window {:canvas c

@@ -6,9 +6,14 @@
             [clojure2d.color :as c]
             [fastmath.vector :as v]
             [clojure2d.extra.utils :as utils]
-            [clojure2d.pixels :as p]))
+            [clojure2d.pixels :as p]
+            [fastmath.core :as m]))
 
-(def ^:const len 1300)
+(set! *warn-on-reflection* true)
+(set! *unchecked-math* :warn-on-boxed)
+(m/use-primitive-operators)
+
+(def ^:const ^double len 1300.0)
 
 (def grad (c/gradient-presets :rainbow))
 
@@ -28,10 +33,10 @@
       (path main-path))
   (set-stroke c 1.0)
   (set-composite c (p/composite :multiply))
-  (doseq [[idx pos] (take-nth 2 (map-indexed vector main-path))
+  (doseq [[^long idx pos] (take-nth 2 (map-indexed vector main-path))
           :let [parts (partition-all 10 9 (take 200 (iterate next-step pos)))]]
-    (doseq [[idx2 p] (map-indexed vector parts)]
-      (set-color c (grad (/ idx len)) (* 255.0 (/ (- 20 idx2 1) 20)))
+    (doseq [[^long idx2 p] (map-indexed vector parts)]
+      (set-color c (grad (/ idx len)) (* 255.0 (/ (- 20 idx2 1) 20.0)))
       (path c p)))  )
 
 (utils/show-image c)

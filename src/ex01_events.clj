@@ -65,7 +65,7 @@
       (when (= :space (key-code w)) (println @(:events w))))
     (set-color c :darkgray))
   (rect c 300 100 100 100)
-  (set-color c :gray)
+  (set-color c :black)
   (text c "Mouse" 110 120 )
   (text c "Key" 310 120))
 

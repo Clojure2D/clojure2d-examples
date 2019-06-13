@@ -37,7 +37,9 @@
                           :w 400 ;; size of window (twice as canvas)
                           :h 400
                           :hint :mid ;; hint for drawing canvas on window, mid quality (affects scalling 200 -> 400)
-                          :draw-fn draw})) ;; draw callback funtion
+                          :draw-fn draw
+                          :setup (fn [c w]
+                                   (set-background c 45 45 41))})) ;; draw callback funtion
 
 
 ;; save to the file, it saves attached canvas not resized window content itself

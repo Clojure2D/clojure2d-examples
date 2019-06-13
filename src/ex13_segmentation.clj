@@ -59,5 +59,5 @@
 ;; color depends on size
 (example-13 canvas :size)
 
-(binding [segm/*sequence-generator* (r/jittered-sequence-generator :halton 2 0.5)]
+(binding [segm/*sequence-generator* (r/jittered-sequence-generator :r2 2 0.5)]
   (example-13 canvas :size))

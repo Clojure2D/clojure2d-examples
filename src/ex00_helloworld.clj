@@ -9,6 +9,7 @@
 ;; be sure everything is fast as possible
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
+(m/use-primitive-operators)
 
 ;; define canvas
 (def my-canvas (canvas 600 600))

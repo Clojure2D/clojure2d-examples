@@ -53,7 +53,7 @@
   [{:keys [field] :as cfg}]
   (with-canvas [c (canvas 820 820)]
     (set-background c :black)
-    (set-color c :white 20)
+    (set-color c :white 30)
     (translate c 10 10)
     (dotimes [i 1000000]
       (let [x (+ (r/grand 0.001) (r/drand (- m/PI) m/PI))
