@@ -18,8 +18,8 @@
   (let [colors (get-state window)
         current-tile-count-x (int (m/cnorm (mouse-x window) 0 (width canvas) 1 tile-count-x))
         current-tile-count-y (int (m/cnorm (mouse-y window) 0 (height canvas) 1 tile-count-y))
-        tile-width (/ ^int (width canvas) (double current-tile-count-x))
-        tile-height (/ ^int (height canvas) (double current-tile-count-y))]
+        tile-width (/ (width canvas) (double current-tile-count-x))
+        tile-height (/ (height canvas) (double current-tile-count-y))]
     (dorun (map #(let [[pos-x pos-y] %1]
                    (set-color canvas (c/from-HSB* %2))
                    (rect canvas pos-x pos-y tile-width tile-height))

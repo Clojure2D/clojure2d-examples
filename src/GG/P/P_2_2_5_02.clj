@@ -21,13 +21,13 @@
   [canvas window _ lda] 
   (let [{:keys [^double mouse-rect freeze? show-line? show-svg? show-circle?]} (get-state window)
         [new-x new-y ^double new-r] (if (mouse-pressed? window)
-                                      [(r/drand (- ^int (mouse-x window) (/ mouse-rect 2.0))
-                                                (+ ^int (mouse-x window) (/ mouse-rect 2.0)))
-                                       (r/drand (- ^int (mouse-y window) (/ mouse-rect 2.0))
-                                                (+ ^int (mouse-y window) (/ mouse-rect 2.0)))
+                                      [(r/drand (- (mouse-x window) (/ mouse-rect 2.0))
+                                                (+ (mouse-x window) (/ mouse-rect 2.0)))
+                                       (r/drand (- (mouse-y window) (/ mouse-rect 2.0))
+                                                (+ (mouse-y window) (/ mouse-rect 2.0)))
                                        1.0]
-                                      [(r/drand max-radius, (- ^int (width canvas) max-radius))
-                                       (r/drand max-radius, (- ^int (height canvas) max-radius))
+                                      [(r/drand max-radius, (- (width canvas) max-radius))
+                                       (r/drand max-radius, (- (height canvas) max-radius))
                                        min-radius])
         intersect? (or freeze? (some #(let [[x y ^double r] %
                                             d (m/dist new-x new-y x y)]

@@ -14,8 +14,8 @@
   [canvas window _ _]
   (when (mouse-in-window? window)
     (let [rng (r/rng :jdk (get-state window))
-          ^int mx (mouse-x window)
-          my (max 0.01 ^int (mouse-y window))]
+          mx (mouse-x window)
+          my (max 0.01 (mouse-y window))]
       (-> canvas
           (set-background :white)
           (set-color 0 0 0 180)
@@ -25,8 +25,8 @@
               ^long grid-x (range 20)]
         (let [px (* scl grid-x)
               py (* scl grid-y) 
-              shift-x (/ ^double (r/drandom rng (- mx) mx) 20)
-              shift-y (/ ^double (r/drandom rng (- mx) mx) 20)]
+              shift-x (/ (r/drandom rng (- mx) mx) 20)
+              shift-y (/ (r/drandom rng (- mx) mx) 20)]
           (ellipse canvas (+ px shift-x) (+ py shift-y) (/ my 15) (/ my 15) true))))))
 
 (def window (show-window {:canvas (canvas 600 600 :highest)

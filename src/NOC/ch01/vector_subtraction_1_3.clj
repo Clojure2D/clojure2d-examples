@@ -10,7 +10,7 @@
  (canvas 640 360)
  "Example 1-3: Vector subtraction"
  (fn [canvas window _ _]
-   (let [center (Vec2. (/ ^int (width window) 2) (/ ^int (height window) 2))
+   (let [center (Vec2. (/ (width window) 2) (/ (height window) 2))
          ^Vec2 mouse (v/sub (mouse-pos window) center)]
 
      (-> canvas

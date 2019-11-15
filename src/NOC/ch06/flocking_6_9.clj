@@ -48,7 +48,7 @@
                                  (v/add %1))
                              %1)) (Vec2. 0.0 0.0) bs)]
 
-      (if (pos? ^double (v/mag steer))
+      (if (pos? (v/mag steer))
         (-> steer
             (v/normalize)
             (v/mult maxspeed)
@@ -59,7 +59,7 @@
 (defn make-boid
   ""
   [^double x ^double y]
-  (Boid. (Vec2. (+ x ^double (r/grand)) (+ y ^double (r/grand)))
+  (Boid. (Vec2. (+ x (r/grand)) (+ y (r/grand)))
          (Vec2. (r/grand) (r/grand))
          (r/drand 2.0 4.0)
          (r/drand 0.01 0.1)
@@ -79,7 +79,7 @@
         ^Vec2 position (v/add (.position b) velocity)
         ^Vec2 position (Vec2. (m/wrap (- r) (+ r w) (.x position))
                               (m/wrap (- r) (+ r h) (.y position)))
-        theta (+ (m/radians 90) ^double (v/heading velocity))]
+        theta (+ (m/radians 90) (v/heading velocity))]
 
     (-> canvas
         (push-matrix)

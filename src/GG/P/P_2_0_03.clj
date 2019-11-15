@@ -11,16 +11,16 @@
 (defn draw
   "Draw figures"
   [canvas window _ _]
-  (when (and (mouse-pressed? window) (pos? ^int (mouse-x window)))
-    (let [circle-res (int (m/norm (+ 100 ^int (mouse-y window)) 0 (height canvas) 2 10))
-          radius (+ 0.5 (- ^int (mouse-x window) (* 0.5 ^int (width canvas))))
+  (when (and (mouse-pressed? window) (pos? (mouse-x window)))
+    (let [circle-res (int (m/norm (+ 100 (mouse-y window)) 0 (height canvas) 2 10))
+          radius (+ 0.5 (- (mouse-x window) (* 0.5 (width canvas))))
           angle (/ m/TWO_PI circle-res)
           p (map #(v/vec2 (* radius (m/cos (* ^long % angle)))
                           (* radius (m/sin (* ^long % angle)))) (range circle-res))]
       (-> canvas
           (set-stroke 2.0)
           (set-color (get-state window))
-          (translate (* 0.5 ^int (width window)) (* 0.5 ^int (height window)))
+          (translate (* 0.5 (width window)) (* 0.5 (height window)))
           (path p true)))))
 
 (def cnvs (canvas 720 720))

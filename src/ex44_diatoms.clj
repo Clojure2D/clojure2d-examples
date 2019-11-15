@@ -9,7 +9,8 @@
             [fastmath.fields :as f]
             [fastmath.vector :as v]
             [clojure2d.color :as c]
-            [clojure2d.pixels :as p]))
+            [clojure2d.pixels :as p])
+  (:import [fastmath.vector Vec2]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
@@ -22,6 +23,12 @@
 (def ^:const ^int hh (/ w 2))
 (def ^:const ^int bw (/ w 3))
 (def ^:const ^int bh (/ w 3))
+(def ^:const ^int bw- (- bw))
+(def ^:const ^int bh- (- bh))
+(def ^:const ^double bw15 (* 1.5 bw))
+(def ^:const ^double bh15 (* 1.5 bh))
+(def ^:const ^double bw15- (- bw15))
+(def ^:const ^double bh15- (- bh15))
 
 (def ^:const renderer-config {:saturation 1.2
                               :brightness 1.2
@@ -42,14 +49,14 @@
 (defn variant-1
   ""
   [x y n ^double h]
-  (v/vec2 (m/norm (m/sin (+ ^double (n x y) h)) -1.0 1.0 (- bw) bw)
-          (m/norm (m/sin (+ ^double (n y x) h)) -1.0 1.0 (- bh) bh)))
+  (v/vec2 (m/mnorm (m/sin (+ ^double (n x y) h)) -1.0 1.0 bw- bw)
+          (m/mnorm (m/sin (+ ^double (n y x) h)) -1.0 1.0 bh- bh)))
 
 (defn variant-2
   ""
   [x y n ^double h]
-  (v/vec2 (m/norm (m/sin (* ^double (n x y) h)) -1.0 1.0 (* -1.5 bw) (* 1.5 bw))
-          (m/norm (m/sin (* ^double (n y x) h)) -1.0 1.0 (* -1.5 bh) (* 1.5 bh))))
+  (v/vec2 (m/mnorm (m/sin (* ^double (n x y) h)) -1.0 1.0 bw15- bw15)
+          (m/mnorm (m/sin (* ^double (n y x) h)) -1.0 1.0 bh15- bh15)))
 
 
 (defn draw
@@ -63,13 +70,13 @@
                     (v/mult 3.0)
                     field)
             xy (if add?
-                 (variant-1 xx yy noise (* 0.5 ^double (v/heading res)))
+                 (variant-1 xx yy noise (* 0.5 (v/heading res)))
                  (variant-2 xx yy noise (m/sin (v/heading res))))
             col (m/abs (m/sin (v/magsq res)))
             afact (/ m/TWO_PI rots)]
         (doseq [angle (map #(* ^long % afact) (range rots))]
-          (let [rot (v/rotate xy angle)]
-            (p/set-color bins (+ hw ^double (rot 0)) (+ hh ^double (rot 1)) (grad col))))))
+          (let [^Vec2 rot (v/rotate xy angle)]
+            (p/set-color! bins (+ hw (.x rot)) (+ hh (.y rot)) (grad col))))))
     (image canvas (p/to-pixels bins renderer-config))))
 
 (def cnvs (canvas w h))

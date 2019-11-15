@@ -10,11 +10,11 @@
 (defn draw
   ""
   [canvas _ _ _]
-  (let [xloc (r/grand (* 0.5 ^int (width canvas)) 60)]
+  (let [xloc (r/grand (* 0.5 (width canvas)) 60)]
 
     (-> canvas
         (set-color :black 10)
-        (ellipse xloc (* 0.5 ^int (height canvas)) 16 16))))
+        (ellipse xloc (* 0.5 (height canvas)) 16 16))))
 
 (let [canvas (canvas 640 360)]
 

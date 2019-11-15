@@ -20,10 +20,10 @@
   "Frames"
   [canvas _ ^long fps _]
   (let [t (/ fps 60.0) 
-        sa (m/norm (m/qsin (* 0.5 t)) -1.0 1.0 100 500)
-        ca (m/norm (m/qcos t) -1.0 1.0 100 500)
-        sb (m/norm (m/qsin (inc t)) -1.0 1.0 100 500)
-        cb (m/norm (m/qcos (* 2.0 (dec t))) -1.0 1.0 200 500)]
+        sa (m/mnorm (m/qsin (* 0.5 t)) -1.0 1.0 100.0 500.0)
+        ca (m/mnorm (m/qcos t) -1.0 1.0 100.0 500.0)
+        sb (m/mnorm (m/qsin (inc t)) -1.0 1.0 100.0 500.0)
+        cb (m/mnorm (m/qcos (* 2.0 (dec t))) -1.0 1.0 200.0 500.0)]
     (-> canvas
         (set-background :black)
         (set-color :white)

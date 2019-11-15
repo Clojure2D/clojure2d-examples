@@ -23,14 +23,15 @@
     :mitchell (Mitchell. radius spread m/THIRD m/THIRD)
     :cubic (Mitchell. radius spread 1.0 0.0)
     :catmull-rom (Mitchell. radius spread 0.0 0.5)
-    :blackman-harris (BlackmanHarris. radius spread)))
+    :blackman-harris (BlackmanHarris. radius spread)
+    nil))
 
 (defn draw
   ""
   [canvas window _ _]
   (let [vx (m/approx (* 0.05 (int (m/norm (mouse-x window) 0 600 0.0001 200))))
         vy (m/approx (* 0.05 (int (m/norm (mouse-y window) 0 600 0.0001 100))))
-        filter (kernel (get-state window) vx vy)]
+        ^AFilter filter (kernel (get-state window) vx vy)]
     (-> canvas
         (set-background (c/gray 15))
         (set-color :white)

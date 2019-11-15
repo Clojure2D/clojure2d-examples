@@ -13,12 +13,12 @@
 (defn draw
   ""
   [canvas window ^long framecount state]
-  (let [[position history] (or state [(v/vec2 (* 0.5 ^int (width canvas)) (* 0.5 ^int (height canvas))) ;; position
+  (let [[position history] (or state [(v/vec2 (* 0.5 (width canvas)) (* 0.5 (height canvas))) ;; position
                                       clojure.lang.PersistentQueue/EMPTY]) ;; history
         velocity (v/generate-vec2 (partial r/drand -2.0 2.0))
         ^Vec2 nposition (v/add position velocity)
-        ^Vec2 nposition (v/vec2 (m/constrain (.x nposition) 8 (- ^int (width window) 9))
-                                (m/constrain (.y nposition) 8 (- ^int (height window) 9)))
+        ^Vec2 nposition (v/vec2 (m/constrain (.x nposition) 8 (- (width window) 9))
+                                (m/constrain (.y nposition) 8 (- (height window) 9)))
         nhistory (conj history nposition)
         nhistory (if (== (count nhistory) 1001) (pop nhistory) nhistory)]
 

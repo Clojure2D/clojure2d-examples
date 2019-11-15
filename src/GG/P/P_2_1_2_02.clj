@@ -15,8 +15,8 @@
   [canvas window _ _]
   (when (mouse-in-window? window)
     (let [rng (r/rng :jdk (:seed (get-state window)))
-          ^int mx (mouse-x window)
-          ^int my (mouse-y window)
+          mx (mouse-x window)
+          my (mouse-y window)
           radius-b (:radius-b (get-state window))
           radius-f (:radius-f (get-state window))]
       (-> canvas
@@ -27,8 +27,8 @@
               ^long grid-x (range 20)]
         (let [px (* scl grid-x)
               py (* scl grid-y) 
-              shift-x (/ ^double (r/drandom rng (- mx) mx) 20)
-              shift-y (/ ^double (r/drandom rng (- my) my) 20)]
+              shift-x (/ (r/drandom rng (- mx) mx) 20)
+              shift-y (/ (r/drandom rng (- my) my) 20)]
           (-> canvas
               (set-color (c/set-alpha (:color-b (get-state window)) (:alpha-b (get-state window))))
               (ellipse (+ px shift-x) (+ py shift-y) radius-b radius-b)

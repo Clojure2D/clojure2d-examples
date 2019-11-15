@@ -80,7 +80,7 @@
         ^Vec2 nposition (v/add (.position v) nvelocity)
         ^Vec2 nposition (Vec2. (m/wrap (- r) (+ w r) (.x nposition))
                                (m/wrap (- r) (+ h r) (.y nposition)))
-        theta (+ (m/radians 90) ^double (v/heading nvelocity))
+        theta (+ (m/radians 90) (v/heading nvelocity))
         r2 (+ r r)]
 
     (-> canvas

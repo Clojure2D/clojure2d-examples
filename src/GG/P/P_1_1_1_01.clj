@@ -11,13 +11,13 @@
   "Draw rectangles"
   [canvas window _ _]
   (when (mouse-in-window? window)
-    (let [step-x (+ 2 ^int (mouse-x window))
-          step-y (+ 2 ^int (mouse-y window))]
+    (let [step-x (+ 2 (mouse-x window))
+          step-y (+ 2 (mouse-y window))]
       (doseq [^long grid-y (range 0 (height canvas) step-y)
               ^long grid-x (range 0 (width canvas) step-x)]
         (-> canvas
-            (set-color (c/from-HSB* (c/color (* grid-x (/ 255.0 ^int (width canvas)))
-                                             (* (- ^int (height canvas) grid-y) (/ 255.0 ^int (height canvas)))
+            (set-color (c/from-HSB* (c/color (* grid-x (/ 255.0 (width canvas)))
+                                             (* (- (height canvas) grid-y) (/ 255.0 (height canvas)))
                                              255)))
             (rect grid-x grid-y step-x step-y))))))
 

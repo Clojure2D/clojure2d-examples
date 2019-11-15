@@ -40,7 +40,7 @@
                       (v/add acceleration)
                       (v/limit maxspeed))
         ^Vec2 nposition (v/add position nvelocity)
-        theta (+ m/HALF_PI ^double (v/heading nvelocity))]
+        theta (+ m/HALF_PI (v/heading nvelocity))]
 
     (-> canvas
         (set-background :white)

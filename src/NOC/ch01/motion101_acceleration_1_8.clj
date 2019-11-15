@@ -36,6 +36,6 @@
 ;; run few times
 (show-window (canvas 640 360) "Motion 101 Acceleration (1.8)"
              (fn [canvas window _ mover]
-               (let [m (or mover (Mover. (Vec2. (* 0.5 ^int (width window)) (* 0.5 ^int (height window)))
+               (let [m (or mover (Mover. (Vec2. (* 0.5 (width window)) (* 0.5 (height window)))
                                          (Vec2. 0 0)))]
                  (display-mover (update-mover m (width window) (height window)) canvas))))

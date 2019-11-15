@@ -16,8 +16,8 @@
     (let [s (m/norm (mouse-x window) 0 (width window) 0.0 255.0)
           b (m/norm (mouse-y window) 0 (height window) 0.0 255.0)
           angle-step (/ 360 ^double (get-state window))
-          midx (* 0.5 ^int (width canvas))
-          midy (* 0.5 ^int (height canvas))
+          midx (* 0.5 (width canvas))
+          midy (* 0.5 (height canvas))
           angles (map #(vector % (+ midx (* 300.0 (m/cos (m/radians %))))
                                (+ midy (* 300.0 (m/sin (m/radians %))))) (range 0.0 (+ 360.0 angle-step) angle-step))]
       (set-background canvas :white)

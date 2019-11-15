@@ -52,7 +52,7 @@
   (let [^Vec2 pos (.pos node)
         dxy (v/vec2 (- (.x xy) (.x pos))
                     (- (.y xy) (.y pos)))
-        ^double d (v/mag dxy)]
+        d (v/mag dxy)]
     (if (bool-and (pos? d) (< d radius))
       (let [s (m/pow (* d rradius) (/ ramp))
             f (/ (* 9.0 s strength (+ (/ (inc s)) (/ (- s 3.0) 4.0))) d)]

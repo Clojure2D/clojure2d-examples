@@ -25,7 +25,7 @@
           (translate midw midh))
       (doseq [grid-x (range 0 (width canvas) 25)
               grid-y (range 0 (height canvas) 25)]
-        (let [^double dist (v/dist mv (v/vec2 grid-x grid-y))
+        (let [dist (v/dist mv (v/vec2 grid-x grid-y))
               scl (inc (* dist rdiag))
               diameter (* scl 40.0 (/ dist 500.0))
               ngx (* scl (- ^long grid-x midw))

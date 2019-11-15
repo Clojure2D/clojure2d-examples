@@ -24,4 +24,4 @@
 
     [(+ tx 0.01) (+ ty 0.01) nx ny]))
 
-(show-window (canvas 640 360) "Random Walk - Levy" draw)
+(show-window (black-canvas 640 360) "Random Walk - Levy" draw)

@@ -244,14 +244,14 @@
                    circle-x (+ circle-x move-x)
                    circle-y (+ circle-y move-y)
                    [ncircle-x nmove-x] (cond
-                                         (> circle-x ^int (width canvas)) (do (println "too far right")
-                                                                              [(width canvas) (- move-x)])
+                                         (> circle-x (width canvas)) (do (println "too far right")
+                                                                         [(width canvas) (- move-x)])
                                          (< circle-x 0.0) (do (println "too far left")
                                                               [0.0 (- move-x)])
                                          :else [circle-x move-x])
                    [ncircle-y nmove-y] (cond
-                                         (> circle-y ^int (height canvas)) (do (println "too far bottom")
-                                                                               [(height canvas) (- move-y)])
+                                         (> circle-y (height canvas)) (do (println "too far bottom")
+                                                                          [(height canvas) (- move-y)])
                                          (< circle-y 0.0) (do (println "too far top")
                                                               [0.0 (- move-y)])
                                          :else [circle-y move-y])] 
@@ -310,7 +310,7 @@
              (let [ncolor (if (r/brand 0.7)
                             curr-color
                             (r/randval :black :white))
-                   nx (if (>= x ^int (width canvas)) 0.0 (inc x))]
+                   nx (if (>= x (width canvas)) 0.0 (inc x))]
                (set-color canvas ncolor)
                (line canvas x 200 x 100)
                [nx ncolor]))]
@@ -331,7 +331,7 @@
              (set-color canvas curr-color)
              (line canvas x 200 x 100)
              (let [ncolor (r/randval 0.9 curr-color (change-line-color canvas x))
-                   nx (if (>= x ^int (width canvas)) 0.0 (inc x))]
+                   nx (if (>= x (width canvas)) 0.0 (inc x))]
                [nx ncolor]))]
   (show-window {:canvas (canvas 400 400 :mid)
                 :draw-fn draw
@@ -448,8 +448,8 @@
     (set-color c :white 100)
     (dotimes [i 70]
       (ellipse c
-               (+ (/ ^int (width canvas) 2) i)
-               (- (/ ^int (height canvas) 2) i)
+               (+ (/ (width canvas) 2) i)
+               (- (/ (height canvas) 2) i)
                (+ 100 (* 5 i))
                (m/abs (- 100 (* 5 i))) true)))
   (println "end")
@@ -540,7 +540,7 @@
       draw (fn [canvas window frame ^double r]
              (let [circle-size (r/drand 5 15)]
                (-> canvas
-                   (translate (/ ^int (width canvas) 2) (/ ^int (height canvas) 2))
+                   (translate (/ (width canvas) 2) (/ (height canvas) 2))
                    (set-color :white)
                    (rotate r)
                    (ellipse (+ r 100) 10 circle-size circle-size)))
@@ -736,8 +736,8 @@
 
 (let [draw (fn [canvas window frame ^double my-num]
              (let [clr (* 255.0 ^double (r/noise (+ 100.0 my-num)))
-                   x (* ^double (r/noise my-num) ^int (width canvas))
-                   y (* ^double (r/noise (+ 40.0 my-num)) ^int (height canvas))]
+                   x (* ^double (r/noise my-num) (width canvas))
+                   y (* ^double (r/noise (+ 40.0 my-num)) (height canvas))]
                (-> canvas
                    (set-background (c/gray clr))
                    (line x 0 x (height canvas))
@@ -755,8 +755,8 @@
              (-> canvas
                  (set-background 0x810c2f)
                  (set-color :white)
-                 (translate (* ^int (width canvas) ^double (r/noise (+ 80.0 my-num)))
-                            (* ^int (height canvas) ^double (r/noise (+ 100.0 my-num))))
+                 (translate (* (width canvas) ^double (r/noise (+ 80.0 my-num)))
+                            (* (height canvas) ^double (r/noise (+ 100.0 my-num))))
                  (rotate (* 10.0 (r/noise (+ 40.0 my-num))))
                  (crect 0 0 (* 200.0 (r/noise (+ 30.0 my-num)))
                         (* 200.0 (r/noise my-num))))
@@ -875,7 +875,7 @@
            a 0.0]
       (let [y (m/norm (* (m/sin a) (m/sin (* a 2.0)) (m/sin (* a 1.7))) -1.0 1.0 50 250)]
         (point c x y)
-        (when (< x ^int (width c))
+        (when (< x (width c))
           (recur (inc x) (+ a 0.03))))))
   
   (show-window {:canvas canvas}))
@@ -900,7 +900,7 @@
         (set-stroke c sz)
         (set-color c (color-conv (c/color co 100 100 100)))
         (point c x y)
-        (when (< x ^int (width c))
+        (when (< x (width c))
           (recur (inc x) (+ a 0.03))))))
   
   (show-window {:canvas canvas}))
@@ -935,7 +935,7 @@
                (set-color canvas (r/randval 0xB1FF0A 0x315500))
                (ellipse canvas 200 200 r r true))
              (let [img (get-image canvas)]
-               (image canvas img -3 -1 (+ 6 ^int (width canvas)) (+ 2 ^int (height canvas)))))]
+               (image canvas img -3 -1 (+ 6 (width canvas)) (+ 2 (height canvas)))))]
   
   (show-window {:draw-fn draw 
                 :canvas (canvas 400 400 :mid)
@@ -1010,8 +1010,8 @@
       draw (fn [canvas _ _ ^double a]
              (let [wi (int (m/norm (r/noise (+ a 30)) 0.0 1.0 50 150))
                    he (int (m/norm (r/noise (+ a 40)) 0.0 1.0 50 150))
-                   x (int (m/norm (r/noise (+ a 10)) 0.0 1.0 0 (- ^int (width photo) wi)))
-                   y (int (m/norm (r/noise (+ a 20)) 0.0 1.0 0 (- ^int (height photo) wi)))]
+                   x (int (m/norm (r/noise (+ a 10)) 0.0 1.0 0 (- (width photo) wi)))
+                   y (int (m/norm (r/noise (+ a 20)) 0.0 1.0 0 (- (height photo) wi)))]
                (-> canvas
                    (set-background 40 40 40)
                    (set-color :white)
@@ -1149,8 +1149,8 @@
              (set-color canvas :white)
              (set-stroke canvas 3)
 
-             (let [^int mx (mouse-x window)
-                   ^int my (mouse-y window)]
+             (let [mx (mouse-x window)
+                   my (mouse-y window)]
                (triangle canvas mx (- my 6) mx (+ my 6) (+ mx 30) my)
                (set-color canvas 200 200 200)
                (triangle canvas mx (- my 6) mx (+ my 6) (+ mx 30) my true))
@@ -1176,8 +1176,8 @@
 
 (let [diam 100
       draw (fn [canvas window _ ^double a]
-             (let [x (* ^int (width canvas) ^double (r/noise a 10.0))
-                   y (* ^int (height canvas) ^double (r/noise a 20.0))
+             (let [x (* (width canvas) ^double (r/noise a 10.0))
+                   y (* (height canvas) ^double (r/noise a 20.0))
                    d (m/dist x y (mouse-x window) (mouse-y window))
                    stroke (if (> d diam) 1.0 (r/drand 10))]
                (-> canvas
@@ -1234,12 +1234,12 @@
                                               ny (+ y movey)
                                               [nx nmovex] (if (neg? nx)
                                                             [0 (- movex)]
-                                                            (if (> nx ^int (width canvas))
+                                                            (if (> nx (width canvas))
                                                               [(width canvas) (- movex)]
                                                               [nx movex]))
                                               [ny nmovey] (if (neg? ny)
                                                             [0 (- movey)]
-                                                            (if (> ny ^int (height canvas))
+                                                            (if (> ny (height canvas))
                                                               [(height canvas) (- movey)] ; comment
                                                               ;; [0 movey] ; uncomment
                                                               [ny movey]))]
@@ -1295,8 +1295,8 @@
   
   (with-canvas [c canvas]
     (loop [x 0]
-      (when (< x ^int (width canvas))
-        (let [^int wi (r/irandom rng 100)]
+      (when (< x (width canvas))
+        (let [wi (r/irandom rng 100)]
           (set-color c (from-hsb (c/color (r/drandom rng 100) 80 80 100)))
           (rect c x 0 wi (height canvas))
           (recur (+ x wi))))))
@@ -1308,10 +1308,10 @@
 (let [canvas (canvas 500 400)
       from-hsb (c/color-converter :HSB 100)
       draw (fn [canvas window ^long frame [^double a ^double b]]
-             (let [x0 (m/norm (m/sin a) -1.0 1.0 20.0 (- ^int (width canvas) 20))
-                   y0 (m/norm (m/cos a) -1.0 1.0 20.0 (- ^int (height canvas) 20))
-                   x1 (m/norm (m/sin b) -1.0 1.0 20.0 (- ^int (width canvas) 20))
-                   y1 (m/norm (m/cos b) -1.0 1.0 20.0 (- ^int (height canvas) 20))]
+             (let [x0 (m/norm (m/sin a) -1.0 1.0 20.0 (- (width canvas) 20))
+                   y0 (m/norm (m/cos a) -1.0 1.0 20.0 (- (height canvas) 20))
+                   x1 (m/norm (m/sin b) -1.0 1.0 20.0 (- (width canvas) 20))
+                   y1 (m/norm (m/cos b) -1.0 1.0 20.0 (- (height canvas) 20))]
                (-> canvas
                    (set-stroke 3.0)
                    (set-color (from-hsb (c/color (mod frame 100) 80 80 20)))
@@ -1329,8 +1329,8 @@
       draw (fn [canvas window _ ^double a]
              (if (<= a m/TWO_PI)
                (let [r (r/drand 180 220)
-                     x (+ (/ ^int (width canvas) 2) (* r (m/cos a)))
-                     y (+ (/ ^int (height canvas) 2) (* r (m/sin a)))]
+                     x (+ (/ (width canvas) 2) (* r (m/cos a)))
+                     y (+ (/ (height canvas) 2) (* r (m/sin a)))]
                  (-> canvas
                      (set-color :white) 
                      (ellipse x y 10 10)
@@ -1346,8 +1346,8 @@
 ;; https://www.funprogramming.org/69-Combine-circular-and-other-motions.html
 
 (let [canvas (canvas 500 400)
-      x (/ ^int (width canvas) 2)
-      y (/ ^int (height canvas) 2)
+      x (/ (width canvas) 2)
+      y (/ (height canvas) 2)
       draw (fn [canvas window _ [^double a ^double b]]
              (let [x2 (* (m/sin a) 50)
                    y2 (* (m/cos a) 50)
@@ -1364,7 +1364,7 @@
 ;; https://www.funprogramming.org/70-Slowly-change-the-direction.html
 
 (let [canvas (canvas 500 400)
-      reset #(vector (/ ^int (width canvas) 2) (/ ^int (height canvas) 2) (r/drand m/TWO_PI))
+      reset #(vector (/ (width canvas) 2) (/ (height canvas) 2) (r/drand m/TWO_PI))
       draw (fn [canvas window _ [^double oldx ^double oldy ^double a]]
              (let [newx (+ oldx (* 5.0 (m/cos a)))
                    newy (+ oldy (* 5.0 (m/sin a)))]
@@ -1379,20 +1379,20 @@
 ;; https://www.funprogramming.org/71-Playing-with-directions.html
 
 (let [canvas (canvas 500 400)
-      reset #(vector (/ ^int (width canvas) 2.0) (/ ^int (height canvas) 2.0) (r/drand m/TWO_PI) 1.0)
+      reset #(vector (/ (width canvas) 2.0) (/ (height canvas) 2.0) (r/drand m/TWO_PI) 1.0)
       from-hsb (c/color-converter :HSB 100)
       draw (fn [canvas window _ [^double oldx ^double oldy ^double a ^double w]]
              (let [newx (+ oldx (* 5.0 (m/cos a)))
                    newy (+ oldy (* 5.0 (m/sin a)))]
                
-               (set-color canvas (from-hsb (c/color 30 100 (* 100 ^double (r/noise w a)) 100)))
+               (set-color canvas (from-hsb (c/color 30 100 (* 100 (r/noise w a)) 100)))
                (set-stroke canvas w)
                (line canvas oldx oldy newx newy)
                
                (if (bool-or (neg? newx)
                             (neg? newy)
-                            (> newx ^int (width canvas))
-                            (> newy ^int (height canvas)))
+                            (> newx (width canvas))
+                            (> newy (height canvas)))
                  (reset)
                  [newx newy (+ a (r/drand -0.4 0.2)) (+ w 0.1)])))]
   (with-canvas-> canvas (set-background :white))
@@ -1441,8 +1441,8 @@
 ;; https://www.funprogramming.org/75-Bezier-curves-are-so-beautiful.html
 
 (let [canvas (canvas 500 400)
-      ^int w (width canvas)
-      ^int h (height canvas)
+      w (width canvas)
+      h (height canvas)
       midw (/ w 2)]
 
   (with-canvas [c canvas]
@@ -1458,8 +1458,8 @@
 ;; https://www.funprogramming.org/76-Slowly-morphing-bezier-curves.html
 
 (let [canvas (canvas 500 400)
-      ^int w (width canvas)
-      ^int h (height canvas)
+      w (width canvas)
+      h (height canvas)
       midw (/ w 2)
       draw (fn [canvas _ ^long frame _]
              (let [t (/ frame 300.0)]
@@ -1468,7 +1468,7 @@
                (dotimes [i 30]
                  (bezier canvas
                          midw h
-                         midw (* ^double (r/noise 1 i t) h)
+                         midw (* (r/noise 1 i t) h)
                          (* (r/noise 2 i t) w) (* (r/noise 4 i t) h)
                          (* (r/noise 3 i t) w) (* (r/noise 5 i t) h)))))]
   
@@ -1802,10 +1802,10 @@
       bgcolor (c/from-HSB* (c/color (r/drand 255) 150 255))
       stroke :white
       draw (fn [canvas window _ [^double x ^double y current-weight target-weight current-alpha]]
-             (let [[nx ny ntarget-weight target-alpha] (if (bool-and (> ^int (mouse-x window) (- x (/ sz 2.0)))
-                                                                     (< ^int (mouse-x window) (+ x (/ sz 2.0)))
-                                                                     (> ^int (mouse-y window) (- y (/ sz 2.0)))
-                                                                     (< ^int (mouse-y window) (+ y (/ sz 2.0))))
+             (let [[nx ny ntarget-weight target-alpha] (if (bool-and (> (mouse-x window) (- x (/ sz 2.0)))
+                                                                     (< (mouse-x window) (+ x (/ sz 2.0)))
+                                                                     (> (mouse-y window) (- y (/ sz 2.0)))
+                                                                     (< (mouse-y window) (+ y (/ sz 2.0))))
                                                          (if (mouse-pressed? window)
                                                            [(m/lerp x (mouse-x window) 0.2)
                                                             (m/lerp y (mouse-y window) 0.2)
@@ -1901,10 +1901,10 @@
                          y2 (+ y1 (r/drand 20 100))]
                      [x1 y1 x2 y2 (- x2 x1) (- y2 y1)])
       inside? (fn [window [^double x1 ^double y1 ^double x2 ^double y2]]
-                (bool-and (> ^int (mouse-x window) x1)
-                          (< ^int (mouse-x window) x2)
-                          (> ^int (mouse-y window) y1)
-                          (< ^int (mouse-y window) y2)))
+                (and (> (mouse-x window) x1)
+                     (< (mouse-x window) x2)
+                     (> (mouse-y window) y1)
+                     (< (mouse-y window) y2)))
       draw (fn [canvas window _ rects]
              (set-background canvas bgcolor)
              
@@ -1982,7 +1982,7 @@
     CarProto2
     (drive2 [_ canvas speed]
       (let [nx (+ x ^double speed)
-            nx (if (> nx ^int (width canvas)) 0.0 nx)]
+            nx (if (> nx (width canvas)) 0.0 nx)]
         (set-color canvas c)
         (rect canvas nx y 40 10)
         (set-color canvas :black)
@@ -2062,8 +2062,8 @@
                   :draw-fn draw
                   :draw-state (for [iter (range l)
                                     :let [i (int iter)
-                                          x (+ (/ ^int (width canvas) 2) (* i (m/cos (/ i 2.0))))
-                                          y (+ (/ ^int (height canvas) 2) (* i (m/sin (/ i 2.0))))]]
+                                          x (+ (/ (width canvas) 2) (* i (m/cos (/ i 2.0))))
+                                          y (+ (/ (height canvas) 2) (* i (m/sin (/ i 2.0))))]]
                                 (->BugType2 x y 0.0 (+ 0.05 (/ i 1000.0))))})))
 
 ;; https://www.funprogramming.org/114-How-to-create-movies-using-Processing.html
@@ -2123,7 +2123,7 @@
 (let [^bytes bytes (load-bytes "results/test.jpg")
       canvas (canvas 600 100 :mid)
       draw (fn [canvas window _ _]
-             (let [file-pos (m/round (m/cnorm (mouse-x window) 0.0 (width window) 0.0 (- (alength bytes) ^int (width window))))]
+             (let [file-pos (m/round (m/cnorm (mouse-x window) 0.0 (width window) 0.0 (- (alength bytes) (width window))))]
                (dotimes [i 600]
                  (let [myhue (bit-and 0xff (aget bytes (+ i file-pos)))
                        stroke (c/from-HSB* (c/color myhue 255 255))]
@@ -2147,7 +2147,7 @@
                    y (* (m/cos (* k t)) (m/cos t))]
                (-> canvas
                    (push-matrix)
-                   (translate (/ ^int (width canvas) 2) (/ ^int (height canvas) 2))
+                   (translate (/ (width canvas) 2) (/ (height canvas) 2))
                    (scale 200 200)
                    (set-stroke 0.01)
                    (set-color :white)
@@ -2202,7 +2202,7 @@
                                              (set-color canvas :white)
                                              (set-color canvas :black))
                    (set-font-attributes canvas 80)
-                   (text canvas (str (char (r/irand 65 90))) (- ^int (mouse-x window) 30) (+ ^int (mouse-y window) 40)))
+                   (text canvas (str (char (r/irand 65 90))) (- (mouse-x window) 30) (+ (mouse-y window) 40)))
              (p/set-canvas-pixels! canvas
                                    (->> (p/to-pixels canvas)
                                         (p/filter-channels p/box-blur-2)
@@ -2211,30 +2211,30 @@
                                         (p/filter-channels p/threshold-50))))]
 
   (show-window {:window-name wname
-                :canvas (with-canvas-> (canvas 400 400 :mid)
-                          (set-background :black))
+                :canvas (black-canvas 400 400 :mid)
                 :draw-fn draw}))
 
 ;; 129-138 SKIPPED
 
 ;; https://www.funprogramming.org/139-Tweak-values-while-a-program-runs.html
 
-(defn draw-139
-  "Tweak values and execute (works on Emacs/Cider) while window is running."
-  [canvas _ ^long frame _]
-  (-> canvas
-      (set-background 236 211 95)
-      (set-color 224 74 40))
-  (doseq [^int y (range 42 (height canvas) 45)]
-    (doseq [^int x (range 34 (width canvas) 27)]
-      (-> canvas
-          (reset-matrix)
-          (translate x y)
-          (rotate (* m/TWO_PI (r/noise (/ x 570.5) (/ y 534.6) (/ frame 170.8))))
-          (crect 0 0 22 26)))))
+(do
+  (defn draw-139
+    "Tweak values and execute (works on Emacs/Cider) while window is running."
+    [canvas _ ^long frame _]
+    (-> canvas
+        (set-background 236 211 95)
+        (set-color 224 74 40))
+    (doseq [^int y (range 42 (height canvas) 45)]
+      (doseq [^int x (range 34 (width canvas) 27)]
+        (-> canvas
+            (reset-matrix)
+            (translate x y)
+            (rotate (* m/TWO_PI (r/noise (/ x 570.5) (/ y 534.6) (/ frame 170.8))))
+            (crect 0 0 22 26)))))
 
-(show-window {:canvas (canvas 400 400)
-              :draw-fn #(draw-139 %1 %2 %3 %4)})
+  (show-window {:canvas (canvas 400 400)
+                :draw-fn #(draw-139 %1 %2 %3 %4)}))
 
 ;; https://www.funprogramming.org/140-Recursive-graphics.html
 
@@ -2260,8 +2260,8 @@
 
   (with-canvas-> canvas
     (set-background 0x605130)
-    (recursive-thing (/ ^int (width canvas) 2)
-                     (/ ^int (height canvas) 2)
+    (recursive-thing (/ (width canvas) 2)
+                     (/ (height canvas) 2)
                      300))
   
   (show-window {:canvas canvas}))
@@ -2371,7 +2371,7 @@
              (dotimes [i 150]
                (-> canvas
                    (push-matrix)
-                   (translate (/ ^int (width canvas) 2) (/ ^int (height canvas) 2))
+                   (translate (/ (width canvas) 2) (/ (height canvas) 2))
                    (rotate i)
                    (glowing-rect (* 25 (mod i 5)) (* 15 (mod i 4)) 120 10 (mouse-pressed? window))
                    (pop-matrix))))]

@@ -53,8 +53,8 @@
 
 ;; collect samples from image
 (def samples (take 800 (map (fn [[^double x ^double y]]
-                              (let [x (int (* x ^int (width img)))
-                                    y (int (* y ^int (height img)))
+                              (let [x (int (* x (width img)))
+                                    y (int (* y (height img)))
                                     p (p/get-color img x y)
                                     l (labels (clusters p))]
                                 [(color-vector img x y) l])) (r/jittered-sequence-generator :r2 2 0.5))))
@@ -89,6 +89,6 @@
 (dotimes [y (height img)]
   (dotimes [x (width img)]
     (let [col (cl (color-vector p x y))]
-      (p/set-color p x y col))))
+      (p/set-color! p x y col))))
 
 (comment (save p (next-filename "results/ex52/" ".jpg")))

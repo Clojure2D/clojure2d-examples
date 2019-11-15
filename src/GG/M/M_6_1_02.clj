@@ -50,8 +50,8 @@
                                                                (v/vec2 0 0))))
         
         from-node (if (and (mouse-pressed? window)
-                           (pos? ^int (mouse-x window))
-                           (pos? ^int (mouse-y window)))
+                           (pos? (mouse-x window))
+                           (pos? (mouse-y window)))
                     (Node. (mouse-pos window) (:velocity from-node))
                     from-node)]
     

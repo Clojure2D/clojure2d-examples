@@ -30,7 +30,7 @@
   [canvas window _ state]
   (let [[position velocity history] (or state [(Vec2. 400.0 100.0) (Vec2. 0.0 -2.0) clojure.lang.PersistentQueue/EMPTY])
         [^Vec2 nposition nvelocity] (seek (mouse-pos window) position velocity)
-        theta (+ m/HALF_PI ^double (v/heading velocity))
+        theta (+ m/HALF_PI (v/heading velocity))
         nhistory (conj history nposition)
         nhistory (if (== (count nhistory) 100) (pop nhistory) nhistory)]
 

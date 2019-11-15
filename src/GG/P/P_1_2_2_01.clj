@@ -28,8 +28,8 @@
   "Draw tiles"
   [canvas window _ _]
   (let [img (:image (get-state window))
-        tile-count (/ ^int (width canvas) (max ^int (mouse-x window) 5))
-        rect-size (/ ^int (width canvas) (double tile-count))
+        tile-count (/ (width canvas) (max (mouse-x window) 5))
+        rect-size (/ (width canvas) (double tile-count))
         grid-seq (for [^long grid-y (range tile-count)
                        ^long grid-x (range tile-count)]
                    [(* grid-x rect-size) (* grid-y rect-size)])

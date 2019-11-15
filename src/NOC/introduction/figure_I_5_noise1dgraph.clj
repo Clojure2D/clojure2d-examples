@@ -12,7 +12,7 @@
   "Draw on canvas."
   [canvas window framecount state]
   (let [^double t (or state 0.0)
-        p (map #(v/vec2 % (* ^double (height window) ^double (r/noise (+ t (* 0.01 ^double %))))) (range 0 (width canvas) 2))]
+        p (map #(v/vec2 % (* (height window) (r/noise (+ t (* 0.01 ^double %))))) (range 0 (width canvas) 2))]
 
     (-> canvas
         (set-background :white)

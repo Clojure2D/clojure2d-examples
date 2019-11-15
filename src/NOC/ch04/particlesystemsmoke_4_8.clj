@@ -22,8 +22,8 @@
                                 (p/filter-channels true img)
                                 (get-image)) (range 51)))
 
-(def ^:const img-hw (* ^int (width img) 0.5))
-(def ^:const img-hh (* ^int (height img) 0.5))
+(def ^:const img-hw (* (width img) 0.5))
+(def ^:const img-hh (* (height img) 0.5))
 
 (defprotocol ParticleProto
   (run [p canvas wind]))
@@ -56,7 +56,7 @@
   (let [particles (or state [(make-particle)])
         dx (m/norm (mouse-x window) 0 w -0.2 0.2)
         wind (Vec2. dx 0.0)
-        len (* 500.0 ^double (v/mag wind))]
+        len (* 500.0 (v/mag wind))]
 
     (-> canvas ;; arrow
         (set-background :black)

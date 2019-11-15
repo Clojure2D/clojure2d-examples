@@ -22,14 +22,14 @@
   (let [random-counts (or state (repeat 20 0))
         l (int (count random-counts))
         index (r/irand l)
-        w (int (/ ^int (width canvas) l))]
+        w (int (/ (width canvas) l))]
 
     (-> canvas
         (set-background :white)
         (set-stroke 2.0))
     
     (dorun (map-indexed #(-> canvas
-                             (bar (* ^int %1 w) (- ^int (height canvas) ^int %2) (dec w) %2 :gray :black)) random-counts))
+                             (bar (* ^int %1 w) (- (height canvas) ^int %2) (dec w) %2 :gray :black)) random-counts))
     
     (map-indexed #(if (== ^int %1 index) (inc ^int %2) %2) random-counts)))
 

@@ -11,12 +11,12 @@
   ""
   [canvas _ _ state]
   (let [^double xoff (or state 0.0)
-        n (* ^int (width canvas) ^double (n/noise xoff))]
+        n (* (width canvas) (n/noise xoff))]
 
     (-> canvas
         (set-background 0 0 0 10)
         (set-color 200 200 200)
-        (ellipse n (* 0.5 ^int (height canvas)) 16 16))
+        (ellipse n (* 0.5 (height canvas)) 16 16))
 
     (+ xoff xincrement)))
 

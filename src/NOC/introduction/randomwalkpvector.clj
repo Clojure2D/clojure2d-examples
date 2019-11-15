@@ -11,12 +11,12 @@
 (defn draw
   ""
   [canvas _ _ state]
-  (let [pos (or state (Vec2. (* 0.5 ^int (width canvas))
-                             (* 0.5 ^int (height canvas))))
+  (let [pos (or state (Vec2. (* 0.5 (width canvas))
+                             (* 0.5 (height canvas))))
         vel (v/generate-vec2 (partial r/drand -2.0 2.0))
         ^Vec2 npos (v/add pos vel)
-        nx (m/constrain (.x npos) 0 ^int (width canvas))
-        ny (m/constrain (.y npos) 0 ^int (height canvas))]
+        nx (m/constrain (.x npos) 0 (width canvas))
+        ny (m/constrain (.y npos) 0 (height canvas))]
 
     (-> canvas
         (set-background :white)

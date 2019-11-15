@@ -43,7 +43,7 @@
   [canvas window _ state]
   (let [[position velocity history] (or state [(Vec2. (/ w 2) (/ h 2)) (v/mult (Vec2. 3.0 -2.0) 5.0)])
         [^Vec2 nposition nvelocity] (boundaries-and-run position velocity)
-        theta (+ m/HALF_PI ^double (v/heading velocity))]
+        theta (+ m/HALF_PI (v/heading velocity))]
 
     (-> canvas
         (set-background :white)

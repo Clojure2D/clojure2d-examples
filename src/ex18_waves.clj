@@ -4,7 +4,7 @@
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]
-            [clojure2d.extra.signal :as s]
+            [fastmath.signal :as s]
             [clojure2d.color :as c]))
 
 (set! *warn-on-reflection* true)
@@ -33,12 +33,14 @@
           (line canvas x prev (inc x) ny)
           (recur (inc x) ny))))))
 
+(def valid-oscillators (vec (disj (set s/oscillators) :constant)))
+
 ;; run several times
-(let [lst (map #(s/wave (rand-nth s/oscillators) (f %) (a %) (r/drand 1)) (range 1 5))]
+(let [lst (map #(s/oscillator (rand-nth valid-oscillators) (f %) (a %) (r/drand 1)) (range 1 5))]
   (with-canvas-> cnvs
     (set-color :white)
     (set-background :black)
-    (draw-fun (apply s/sum-waves lst)))
+    (draw-fun (apply s/oscillators-sum lst)))
   :done)
 
 (defn draw-fun2
@@ -55,15 +57,15 @@
 
 ;; try several times
 (let [num 7
-      wvs (repeatedly num #(rand-nth s/oscillators))
+      wvs (repeatedly num #(rand-nth valid-oscillators))
       phases (repeatedly num #(r/drand 1.0))
       phasemult (repeatedly num #(r/drand -3.0 3.0))
       octaves (repeatedly num #(r/irand num))]
   (dotimes [y 600]
     (let [yy (/ y 600.0)
-          lst (map #(s/wave (nth wvs %) (f (nth octaves %)) (a (nth octaves %)) (+ (* yy ^double (nth phasemult %)) ^double (nth phases %))) (range num))]
+          lst (map #(s/oscillator (nth wvs %) (f (nth octaves %)) (a (nth octaves %)) (+ (* yy ^double (nth phasemult %)) ^double (nth phases %))) (range num))]
       (with-canvas-> cnvs
-        (draw-fun2 y (apply s/sum-waves lst)))))
+        (draw-fun2 y (apply s/oscillators-sum lst)))))
   :done)
 
 
@@ -71,6 +73,6 @@
 ;; open in Audacity as RAW 16 bit signed, mono, big-endian, 44100Hz
 (let [num 10
       amp (* 1.5 (/ 1.0 num))
-      lst (map #(s/wave (rand-nth s/oscillators) (* 150 ^long %) amp (r/drand 1)) (range 1 (inc num)))
-      f (apply s/sum-waves lst)]
-  (s/save-signal (s/wave->signal f 44100 10) "results/ex18/wave.raw"))
+      lst (map #(s/oscillator (rand-nth valid-oscillators) (* 150 ^long %) amp (r/drand 1)) (range 1 (inc num)))
+      f (apply s/oscillators-sum lst)]
+  (s/save-signal (s/oscillator->signal f 44100 10) "results/ex18/wave.raw"))

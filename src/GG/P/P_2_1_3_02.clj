@@ -27,8 +27,8 @@
       (set-stroke canvas 0.5 )
       (dotimes [grid-y (inc tile-count-y)]
         (dotimes [grid-x (inc tile-count-x)]
-          (let [tile-width (/ ^int (width canvas) tile-count-x)
-                tile-height (/ ^int (height canvas) tile-count-y)
+          (let [tile-width (/ (width canvas) tile-count-x)
+                tile-height (/ (height canvas) tile-count-y)
                 pos-x (* tile-width grid-x)
                 pos-y (* tile-height grid-y)
                 x1 (* 0.5 tile-width)
@@ -61,7 +61,7 @@
                 (line canvas x1 y1 x2 y2)
                 
                 (when-let [pair (next-pair [side i])]
-                  (recur pair nx2 ny2 nline-weight nstroke-color))))
+                  (recur pair (long nx2) (long ny2) (long nline-weight) (double nstroke-color)))))
             
             (pop-matrix canvas)))))))
 

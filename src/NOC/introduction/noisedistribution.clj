@@ -14,11 +14,11 @@
   (let [vals (or state (repeat (width canvas) 0.0))
         xoff (* 0.01 framecount)
         n (r/simplex xoff)
-        index (int (* n ^int (width canvas)))
+        index (int (* n (width canvas)))
         nvals (vec (map-indexed #(if (== ^int %1 index) (inc ^double %2) %2) vals)) ;; increase hit index
-        ^double mx (v/mx nvals)
-        normalized (if (> mx ^int (height canvas))
-                     (mapv #(* ^int (height canvas) (/ ^double % mx)) nvals)
+        mx (v/mx nvals)
+        normalized (if (> mx (height canvas))
+                     (mapv #(* (height canvas) (/ ^double % mx)) nvals)
                      nvals)]
 
     (set-background canvas 100 100 100)
@@ -26,7 +26,7 @@
 
     ;; draw lines
     (dotimes [x (width canvas)]
-      (line canvas x (height canvas) x (- ^int (height canvas) ^double (normalized x))))
+      (line canvas x (height canvas) x (- (height canvas) ^double (normalized x))))
 
     nvals))
 

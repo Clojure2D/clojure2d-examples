@@ -48,7 +48,7 @@
                                             (when (>= distance min-length)
                                               (-> canvas
                                                   (set-stroke (/ distance dweight))
-                                                  (set-color (case mode
+                                                  (set-color (case (int mode)
                                                                1 :black
                                                                2 (hsb-mode (c/color 52 100 (/ distance dstroke) 100))
                                                                3 (hsb-mode (c/color 192 100 64 (/ distance dstroke)))))

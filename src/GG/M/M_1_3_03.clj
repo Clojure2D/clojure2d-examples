@@ -23,8 +23,8 @@
                                                        (let [noise-x (m/norm x 0 (width canvas) 0 nx-range)
                                                              noise-y (m/norm y 0 (height canvas) 0 ny-range)
                                                              noise-value (if first-mode?
-                                                                           (* 255.0 (noise noise-x noise-y))
-                                                                           (* 255.0 (m/frac (* 24.0 (noise noise-x noise-y)))))]
+                                                                           (* 255.0 ^double (noise noise-x noise-y))
+                                                                           (* 255.0 (m/frac (* 24.0 ^double (noise noise-x noise-y)))))]
                                                          (c/gray noise-value))) (p/to-pixels canvas)))
 
     
@@ -46,9 +46,9 @@
 (defmethod key-pressed [wname \2] [_ s] (assoc s :noise-mode 2))
 
 (defmethod key-pressed [wname virtual-key] [e s]
-  (let [falloff (get-in s [:noise-cfg :gain])
-        octaves (get-in s [:noise-cfg :octaves])
-        lacunarity (get-in s [:noise-cfg :lacunarity])
+  (let [^double falloff (get-in s [:noise-cfg :gain])
+        ^long octaves (get-in s [:noise-cfg :octaves])
+        ^double lacunarity (get-in s [:noise-cfg :lacunarity])
         ns (condp = (key-code e)
              :up (assoc-in s [:noise-cfg :gain] (m/constrain (+ falloff 0.05) 0.0 1.0))
              :down (assoc-in s [:noise-cfg :gain] (m/constrain (- falloff 0.05) 0.0 1.0))

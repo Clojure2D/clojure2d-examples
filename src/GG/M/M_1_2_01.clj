@@ -5,7 +5,7 @@
 
 (def ^:const wname "M_1_2_01")
 (def ^:const cnt 150)
-(def ^:const angle (m/radians (/ 360.0 cnt)))
+(def ^:const ^double angle (m/radians (/ 360.0 cnt)))
 
 (defn draw
   "Draw dots"
@@ -18,7 +18,7 @@
     
     (set-background canvas :white)
     (set-color canvas 0 130 164)
-    (doseq [i (range cnt)]
+    (doseq [^long i (range cnt)]
       (let [random-x (r/drandom rng (width canvas))
             random-y (r/drandom rng (height canvas))
             circle-x (+ (* 0.5 (width canvas)) (* 300.0 (m/cos (* i angle))))

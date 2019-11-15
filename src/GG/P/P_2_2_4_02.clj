@@ -13,8 +13,8 @@
   ""
   [canvas window _ lda]
   (let [r (r/drand 1 7)
-        x (r/drand r (- ^int (width canvas) r))
-        y (r/drand r (- ^int (height canvas) r))
+        x (r/drand r (- (width canvas) r))
+        y (r/drand r (- (height canvas) r))
         [_ ^double cx ^double cy ^double cr] (reduce #(let [[^double d] %1
                                                             [cx cy cr] %2
                                                             new-dist (m/dist x y cx cy)]

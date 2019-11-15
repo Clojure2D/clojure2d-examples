@@ -16,7 +16,7 @@
 (def ^:const ^int bh 200)
 (def ^:const ^int bh- (dec bh))
 
-(def palette (mapv #(c/from-HCL* (c/color (/ ^long % 3.0) 255 (min 255 (* 2.0 ^long %)))) (range 256)))
+(def palette (mapv #(c/from-HCL* (c/color (/ ^long % 3.0) 255.0 (min 255.0 (* 2.0 ^long %)))) (range 256)))
 
 (defn make-2d-getter-setter
   "2d `ints` array getter"
@@ -43,7 +43,7 @@
   [pixels [get2d _]] 
   (dotimes [x bw]
     (dotimes [y bh]
-      (p/set-color pixels x y (palette (get2d x y)))))
+      (p/set-color! pixels x y (palette (get2d x y)))))
   pixels)
 
 (defn draw

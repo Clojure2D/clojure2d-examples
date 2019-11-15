@@ -18,14 +18,14 @@
 (defn draw
   ""
   [canvas _ _ state]
-  (let [[^double x ^double y] (or state [(* 0.5 ^int (width canvas))
-                                         (* 0.5 ^int (height canvas))])
+  (let [[^double x ^double y] (or state [(* 0.5 (width canvas))
+                                         (* 0.5 (height canvas))])
         stepsize (* 50.0 ^double (first (filter pos? (repeatedly montecarlo-fn))))
         stepsize- (- stepsize)
         stepx (r/drand stepsize- stepsize)
         stepy (r/drand stepsize- stepsize) 
-        nx (m/constrain (+ x stepx) 0.0 ^double (width canvas))
-        ny (m/constrain (+ y stepy) 0.0 ^double (height canvas))]
+        nx (m/constrain (+ x stepx) 0.0 (width canvas))
+        ny (m/constrain (+ y stepy) 0.0 (height canvas))]
 
     (-> canvas
         (set-color :white)
@@ -33,5 +33,5 @@
 
     [nx ny]))
 
-(show-window (canvas 640 480) "Random Walk - Levy" draw)
+(show-window (black-canvas 640 480) "Random Walk - Levy" draw)
 

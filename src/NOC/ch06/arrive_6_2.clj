@@ -16,7 +16,7 @@
   ""
   [target [position velocity]]
   (let [desired (v/sub target position)
-        ^double d (v/mag desired)
+        d (v/mag desired)
         acceleration (-> desired 
                          (v/set-mag (if (< d 100.0)
                                       (m/norm d 0 100 0 maxspeed)
@@ -33,7 +33,7 @@
   [canvas window _ state]
   (let [vehicle (or state [(Vec2. 300.0 200.0) (Vec2. 0.0 -2.0)])
         [^Vec2 position velocity :as nvehicle] (seek (mouse-pos window) vehicle)
-        theta (+ m/HALF_PI ^double (v/heading velocity))]
+        theta (+ m/HALF_PI (v/heading velocity))]
 
     (-> canvas
         (set-background :white)

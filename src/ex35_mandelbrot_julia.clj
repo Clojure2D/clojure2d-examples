@@ -56,7 +56,7 @@
               (v/mult (Vec4. (.w m)
                              (- (.y m))
                              (- (.z m))
-                             (.x m)) (/ 1.0 ^double (det m))))})
+                             (.x m)) (/ ^double (det m))))})
 
 (defn absm
   "Return absolute value of determinant."
@@ -68,8 +68,8 @@
   [canvas make-matrix]
   (dotimes [x w]
     (dotimes [y w]
-      (let [xx (m/norm x 0 w -3 3)
-            yy (m/norm y 0 w -3 3)
+      (let [xx (m/mnorm x 0.0 w -3.0 3.0)
+            yy (m/mnorm y 0.0 w -3.0 3.0)
             sz (make-matrix 0.0 0.0)
             c (make-matrix xx yy)
             ^int idx (loop [iter (int 0)
@@ -88,8 +88,8 @@
   [canvas make-matrix c]
   (dotimes [x hw]
     (dotimes [y hw]
-      (let [xx (m/norm x 0 hw -3 3)
-            yy (m/norm y 0 hw -3 3)
+      (let [xx (m/mnorm x 0.0 hw -3.0 3.0)
+            yy (m/mnorm y 0.0 hw -3.0 3.0)
             sz (make-matrix xx yy)
             ^int idx (loop [iter (int 0)
                             z sz]
@@ -106,8 +106,8 @@
   "Returns true if matrix definition is valid (ie. reversible)"
   [matrix-creator]
   (let [generator (map #(vector %1 %2)
-                       (repeatedly #(r/drand -100 100))
-                       (repeatedly #(r/drand -100 100)))
+                       (repeatedly #(r/drand -100.0 100.0))
+                       (repeatedly #(r/drand -100.0 100.0)))
         not-zerof (filter #(not (v/is-zero? %)))
         matrix-m (map matrix-creator)
         det-m (map det)
@@ -117,17 +117,17 @@
 (defn make-matrix-maker
   "Create matrix maker. Values are result of applying some random functions or their combinations"
   []
-  (let [funs [(fn [a _] a)
-              (fn [_ b] b)
-              clojure.core/+
-              clojure.core/*
+  (let [funs [(fn ^double [^double a _] a)
+              (fn ^double [_ ^double b] b)
+              m/fast+
+              m/fast*
               clojure.core/- #(m/atan2 %1 %2) #(m/hypot %1 %2)
-              (fn [a _] (m/sin a))
-              (fn [_ b] (m/sin b))
-              (fn [a b] (r/noise a b))
-              (fn [^double a ^double b] (if (zero? b) (/ a m/EPSILON) (/ a b)))
-              (fn [^double a _] (- a))
-              (fn [_ ^double b] (- b))]
+              (fn ^double [a _] (m/sin a))
+              (fn ^double [_ b] (m/sin b))
+              (fn ^double [a b] (r/noise a b))
+              (fn ^double [^double a ^double b] (if (zero? b) (/ a m/EPSILON) (/ a b)))
+              (fn ^double [^double a _] (- a))
+              (fn ^double [_ ^double b] (- b))]
         rand-fn (repeatedly #(rand-nth funs))
         newfuns (concat funs (take 5 (map #(let [nf (first rand-fn)]
                                              (fn [a b]
@@ -144,8 +144,8 @@
 
 (defn complex-matrix
   "True Complex representation"
-  ([a b]
-   (Vec4. a (- ^double b) b a))
+  ([a ^double b]
+   (Vec4. a (- b) b a))
   ([[a b]]
    (complex-matrix a b)))
 
@@ -171,8 +171,8 @@
     (draw-mandelbrot complex-matrix)))
 
 (defmethod mouse-event ["Mandelbrot" :mouse-moved] [e matrix-maker]
-  (let [nx (m/norm (mouse-y e) 0 w -3 3)
-        ny (m/norm (mouse-x e) 0 w -3 3)]
+  (let [nx (m/mnorm (mouse-y e) 0.0 w -3.0 3.0)
+        ny (m/mnorm (mouse-x e) 0.0 w -3.0 3.0)]
     (with-canvas-> jcanvas
       (draw-julia matrix-maker (matrix-maker nx ny)))))
 

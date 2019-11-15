@@ -9,12 +9,12 @@
 (defn draw
   ""
   [canvas _ _ state]
-  (let [[^double x ^double y] (or state [(* 0.5 ^int (width canvas))
-                                         (* 0.5 ^int (height canvas))])
+  (let [[^double x ^double y] (or state [(* 0.5 (width canvas))
+                                         (* 0.5 (height canvas))])
         stepx (r/drand -1.0 1.0)
         stepy (r/drand -1.0 1.0)
-        nx (m/constrain (+ x stepx) 0 ^int (width canvas))
-        ny (m/constrain (+ y stepy) 0 ^int (height canvas))]
+        nx (m/constrain (+ x stepx) 0 (width canvas))
+        ny (m/constrain (+ y stepy) 0 (height canvas))]
 
     (-> canvas
         (set-color :white)
@@ -22,4 +22,4 @@
 
     [nx ny]))
 
-(show-window (canvas 200 200) "Random Walk - Traditional 3" draw)
+(show-window (black-canvas 200 200) "Random Walk - Traditional 3" draw)

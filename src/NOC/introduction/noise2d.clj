@@ -15,10 +15,10 @@
 
   (dotimes [x (width cnvs)]
     (dotimes [y (height cnvs)]
-      (let [xoff (m/norm x 0 (width cnvs) 0 (* 0.02 ^int (width cnvs)))
-            yoff (m/norm y 0 (height cnvs) 0 (* 0.02 ^int (height cnvs)))
-            b (* 255.0 ^double (r/noise xoff yoff))]
+      (let [xoff (m/norm x 0 (width cnvs) 0 (* 0.02 (width cnvs)))
+            yoff (m/norm y 0 (height cnvs) 0 (* 0.02 (height cnvs)))
+            b (* 255.0 (r/noise xoff yoff))]
 
-        (p/set-color pixels x y (c/gray b)))))
+        (p/set-color! pixels x y (c/gray b)))))
 
   (p/set-canvas-pixels! cnvs pixels))

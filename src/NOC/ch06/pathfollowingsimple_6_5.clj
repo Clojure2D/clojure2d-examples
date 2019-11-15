@@ -68,7 +68,7 @@
                            (v/normalize)
                            (v/mult 10.0)
                            (v/add normal-point))
-          ^double distance (v/dist predict-pos normal-point)
+          distance (v/dist predict-pos normal-point)
           acceleration (if (and (> distance radius) (not (= target position)))
                          (-> target
                              (v/sub position)
@@ -86,7 +86,7 @@
                             (Vec2. (- (.x start) r)
                                    (+ (.y start) (- (.y nposition) (.y end))))
                             nposition)
-          theta (+ (m/radians 90) ^double (v/heading nvelocity))]
+          theta (+ (m/radians 90) (v/heading nvelocity))]
 
       (when @debug
         (-> canvas

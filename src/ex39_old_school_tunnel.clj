@@ -37,11 +37,11 @@
 (defn map-texture
   "Return texture color after transformation"
   [v ^Vec2 shift]
-  (let [^double m (v/mag v)]
+  (let [m (v/mag v)]
     (if (< m 0.04)
       :black
       (let [distance (+ (.x shift) (* 100.0 (/ 0.7 m)))
-            angle (+ (.y shift) (* 100.0 (/ ^double (v/heading v) m/PI)))]
+            angle (+ (.y shift) (* 100.0 (/ (v/heading v) m/PI)))]
         (get-texture-color distance angle)))))
 
 (defn draw
@@ -54,10 +54,10 @@
           shift (v/vec2 (* 5.0 fps) (/ fps 10.0))]
       (dotimes [x hw]
         (let [x2 (+ x x)
-              xx (m/norm x2 0.0 w -1.0 1.0)]
+              xx (m/mnorm x2 0.0 w -1.0 1.0)]
           (dotimes [y hh]
             (let [y2 (+ y y)
-                  yy (m/norm y2 0.0 h -1.0 1.0)]
+                  yy (m/mnorm y2 0.0 h -1.0 1.0)]
               (set-color canvas (map-texture (v/vec2 (+ xx sa) (+ yy ca)) shift))
               (rect canvas x2 y2 2 2))))))))
 

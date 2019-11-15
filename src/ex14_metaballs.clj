@@ -13,6 +13,8 @@
 (m/use-primitive-operators)
 
 (def ^:const ^long SIZE 600)
+(def ^:const ^long SIZE-2 (- SIZE 2))
+(def ^:const zero (Vec3. 0.0 0.0 0.0))
 
 (deftype Ball [^double x ^double y ^double vx ^double vy ^double radius ^Vec3 color])
 
@@ -22,50 +24,45 @@
          (r/irand SIZE)
          (r/irand 1 7)
          (r/irand 1 7)
-         (r/irand 40 55)
-         (Vec3. (r/drand 255) (r/drand 255) (r/drand 255))))
+         (r/irand 10 65)
+         (Vec3. (r/drand 255.0) (r/drand 255.0) (r/drand 255.0))))
 
-(defn direction
-  ^double [^double p ^double v]
-  (if (bool-or (> p SIZE) (neg? p))
-    (- v)
-    v))
+(defmacro direction
+  [p v]
+  `(if (or (> ~p SIZE) (neg? ~p)) (- ~v) ~v))
 
 (defn move
-  [^Ball ball]
+  ^Ball [^Ball ball]
   (let [vx (direction (.x ball) (.vx ball))
         vy (direction (.y ball) (.vy ball))]
     (Ball. (+ (.x ball) vx) (+ (.y ball) vy) vx vy (.radius ball) (.color ball))))
 
 (defn influence
   ^double [^Ball ball ^double px ^double py]
-  (let [dx (- (.x ball) px)
-        dy (- (.y ball) py)]
-    (/ (.radius ball) (+ m/EPSILON (m/hypot-sqrt dx dy)))))
+  (/ (.radius ball) (+ m/EPSILON (m/dist (.x ball) (.y ball) px py))))
 
 (defn compute-color
   ^Vec3 [x y ^Vec3 cur ^Ball ball]
   (let [infl (influence ball x y)
-        ^Vec3 rgb (.color ball)]
-    (Vec3. (+ (.x cur) (* infl (.x rgb)))
-           (+ (.y cur) (* infl (.y rgb)))
-           (+ (.z cur) (* infl (.z rgb))))))
+        rgb (.color ball)]
+    (v/add cur (v/mult rgb infl))))
 
 (defn draw
   [canvas balls]
   (loop [y (int 0)]
     (loop [x (int 0)]
       
-      (let [^Vec3 c (reduce (partial compute-color x y) (Vec3. 0.0 0.0 0.0) balls)]
+      (let [^Vec3 c (reduce (fn [current ball]
+                              (compute-color x y current ball)) zero balls)]
         (set-color canvas c)
         (rect canvas x y 2 2))
       
-      (when (< x (- SIZE 2)) (recur (+ 2 x))))
-    (when (< y (- SIZE 2)) (recur (+ 2 y)))))
+      (when (< x SIZE-2) (recur (+ 2 x))))
+    (when (< y SIZE-2) (recur (+ 2 y)))))
 
 (defn draw-balls
   [n canvas window framecount result]
-  (let [balls (map move (or result (take n (repeatedly make-ball))))]
+  (let [balls (map move result)]
     (draw canvas balls)
     balls))
 
@@ -75,6 +72,7 @@
     (show-window {:canvas c
                   :window-name "metaballs"
                   :draw-fn (partial draw-balls n)
+                  :draw-state (repeatedly n make-ball)
                   :refresher :fast})))
 
 (def window (example-14 (r/irand 2 6)))

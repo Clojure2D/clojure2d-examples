@@ -29,7 +29,7 @@
                                         (v/div d)
                                         (v/add %1))
                                     %1)) (Vec2. 0.0 0.0) vs)
-          separate-force (v/mult (if (pos? ^double (v/magsq separate-sum))
+          separate-force (v/mult (if (pos? (v/magsq separate-sum))
                                    (-> separate-sum
                                        (v/normalize)
                                        (v/mult maxspeed)

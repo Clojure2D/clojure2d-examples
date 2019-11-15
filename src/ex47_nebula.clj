@@ -34,7 +34,7 @@
             px (+ 400.0 (* 100.0 x) nx)
             py (+ 400.0 (* 100.0 y) ny)
             t (m/sqrt (* t1 t2))]
-        (p/set-color b px py (col t))))
+        (p/set-color! b px py (col t))))
     b))
 
 (def c (canvas size size))

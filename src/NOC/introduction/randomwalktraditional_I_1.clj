@@ -9,16 +9,16 @@
 (defn draw
   ""
   [canvas _ _ state]
-  (let [[^double x ^double y] (or state [(* 0.5 ^int (width canvas))
-                                         (* 0.5 ^int (height canvas))])
+  (let [[^double x ^double y] (or state [(* 0.5 (width canvas))
+                                         (* 0.5 (height canvas))])
         choice (int (r/irand 4))
         [^double nx ^double ny] (case choice
                                   0 [(inc x) y]
                                   1 [(dec x) y]
                                   2 [x (inc y)]
                                   3 [x (dec y)])
-        nx (m/constrain nx 0 ^int (width canvas))
-        ny (m/constrain ny 0 ^int (height canvas))]
+        nx (m/constrain nx 0 (width canvas))
+        ny (m/constrain ny 0 (height canvas))]
 
     (-> canvas
         (set-color :black)

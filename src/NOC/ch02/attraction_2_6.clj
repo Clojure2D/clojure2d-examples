@@ -21,7 +21,7 @@
   (update-and-draw [_ canvas window]
     (let [att-pos (get-state window)
           force (v/sub att-pos position)
-          d (m/constrain ^double (v/mag force) 5.0 25.0)
+          d (m/constrain (v/mag force) 5.0 25.0)
           strength (/ (* amass mass) (m/sq d))
           nvelocity (v/add velocity (-> force
                                         v/normalize
@@ -47,7 +47,7 @@
     (-> canvas
         (set-background :white)
         (set-stroke 4.0)
-        (filled-with-stroke (if (< ^double (v/dist (mouse-pos window) pos) amass)
+        (filled-with-stroke (if (< (v/dist (mouse-pos window) pos) amass)
                               (c/gray 100)
                               (c/gray 175 200)) :black
                             ellipse (.x pos) (.y pos) (* 2.0 amass) (* 2.0 amass)))

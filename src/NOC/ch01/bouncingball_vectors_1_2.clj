@@ -29,4 +29,4 @@
     [nposition
      (v/emult velocity (boundary-check (width canvas) (height canvas) nposition))]))
 
-(def window (show-window (canvas 200 200) "Example 1-2: Bouncing Ball, with Vec2!" draw))
+(def window (show-window (black-canvas 200 200) "Example 1-2: Bouncing Ball, with Vec2!" draw))

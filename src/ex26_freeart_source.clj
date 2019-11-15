@@ -24,6 +24,7 @@
             [clojure2d.extra.overlays :as o]
             [clojure2d.extra.segmentation :as es]
             [clojure2d.extra.signal :as s]
+            [fastmath.signal :as fs]
             [fastmath.core :as m]
             [fastmath.random :as r]
             [fastmath.vector :as v]
@@ -47,7 +48,7 @@
 (def cnvs (canvas w h :low))
 
 ;; canvases which represent frames
-(def canvases (vec (repeatedly number-of-frames #(canvas w h :mid))))
+(def canvases (vec (repeatedly number-of-frames #(black-canvas w h :mid))))
 
 ;; pixels from images (44 frames)
 (def images (mapv #(p/load-pixels (str "src/ex26/" (format "%02d" %) ".jpg")) (range number-of-frames)))
@@ -89,14 +90,14 @@
 (defn sonification
   "Sonification based on two parameters"
   [^double t1 ^double t2 pixels]
-  (let [eff (s/effect :dj-eq {:lo t1 :mid (- t2) :hi t2 :peak-bw 1.3 :shelf-slope 1.5 :rate 44100.0}) ;;;; change!
+  (let [eff (fs/effect :dj-eq {:lo t1 :mid (- t2) :hi t2 :peak-bw 1.3 :shelf-slope 1.5 :rate 44100.0}) ;;;; change!
         cpx (p/filter-colors c/to-Yxy* pixels) ;;;; change!
         in (s/pixels->signal cpx {:planar? true;;;; change!
                                   :channels [0 1 2] ;;;; change!
                                   :bits 8 ;;;; change!
                                   :signed? false ;;;; change!
                                   :coding :none}) ;;;; change!
-        res (s/apply-effects in eff)
+        res (fs/apply-effects-raw in eff)
         resp (s/signal->pixels res (p/clone-pixels pixels) {:planar? true;;;; change!
                                                             :channels [0 1 2] ;;;; change!
                                                             :bits 8 ;;;; change!

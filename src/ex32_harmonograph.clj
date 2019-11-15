@@ -110,11 +110,11 @@
               y (* dampy (+ (* a3 s2 ^double (n3 (* prevx nscalex2) (* prevy nscaley2)))
                             (* a4 s4)))
 
-              ^Vec4 col1 (v/interpolate c1 c2 (m/abs (* s1 s2)))
-              ^Vec4 col2 (v/interpolate c3 c4 (m/abs (* s3 s4))) 
-              ^Vec4 col (v/interpolate col1 col2 (m/qsin time))] 
+              col1 (v/interpolate c1 c2 (m/abs (* s1 s2)))
+              col2 (v/interpolate c3 c4 (m/abs (* s3 s4))) 
+              col (v/interpolate col1 col2 (m/qsin time))] 
           
-          (p/set-color bp (m/norm x -1.1 1.1 0 w) (m/norm y -1.1 1.1 0 h) col)
+          (p/set-color! bp (m/mnorm x -1.1 1.1 0 w) (m/mnorm y -1.1 1.1 0 h) col)
           (recur x y (+ time step) (inc iter)))
         bp))))
 

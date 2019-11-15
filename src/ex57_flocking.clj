@@ -36,12 +36,12 @@
 
 (defn steer [this ^Vec2 target slowdown]
   (let [desired (v/sub target (:position this))
-        ^double distance (v/mag desired)
+        distance (v/mag desired)
         dl (if (and slowdown (< distance 100))
              (* ^double (:max-speed this) (/ distance 100))
              (:max-speed this))
         steer-v (v/sub (v/set-mag desired dl) (:vector this))]
-        (v/limit steer-v ^double (:max-force this))))
+    (v/limit steer-v ^double (:max-force this))))
 
 
 
@@ -56,10 +56,10 @@
 (defn align [this boids]
   (let [nd 35.0
         [s ^double c] (reduce (fn [[^Vec2 ste ^double cnt] b]
-                        (let [^double dst (v/dist (:position this) (:position b))]
-                          (if (and (pos? dst) (< dst nd) )
-                            [(v/add ste (:vector b)) (inc cnt)]
-                            [ste cnt]))) [zero-vec 0] boids)
+                                (let [dst (v/dist (:position this) (:position b))]
+                                  (if (and (pos? dst) (< dst nd) )
+                                    [(v/add ste (:vector b)) (inc cnt)]
+                                    [ste cnt]))) [zero-vec 0] boids)
         s' (if (pos? c) (v/div s c) s)]
     (if (not= 0 (v/mag s'))
 
@@ -72,10 +72,10 @@
 (defn cohesion [this boids]
   (let [nd 120
         [^Vec2 s ^double c] (reduce (fn [[ste ^double cnt] b]
-                        (let [^double dst (v/dist (:position this) (:position b))]
-                          (if (and (pos? dst) (< dst nd) )
-                            [(v/add ste (:position b)) (inc cnt)]
-                            [ste cnt]))) [zero-vec 0] boids)]
+                                      (let [dst (v/dist (:position this) (:position b))]
+                                        (if (and (pos? dst) (< dst nd) )
+                                          [(v/add ste (:position b)) (inc cnt)]
+                                          [ste cnt]))) [zero-vec 0] boids)]
     (if (pos? c)
       (steer this (v/div s c) false)
       s)))
@@ -84,11 +84,11 @@
 (defn separate [this boids]
   (let [des-sep 80
         [s ^double c] (reduce (fn [[^Vec2 ste ^double cnt] b]
-                        (let [vect (v/sub (:position this) (:position b))
-                              ^double dst (v/mag vect)]
-                          (if (and (pos? dst) (< dst des-sep))
-                            [(v/add ste (v/mult (v/normalize vect) (/ 1.0 dst))) (inc cnt)]
-                            [ste cnt]))) [zero-vec 0] boids)
+                                (let [vect (v/sub (:position this) (:position b))
+                                      dst (v/mag vect)]
+                                  (if (and (pos? dst) (< dst des-sep))
+                                    [(v/add ste (v/mult (v/normalize vect) (/ 1.0 dst))) (inc cnt)]
+                                    [ste cnt]))) [zero-vec 0] boids)
         s' (if (pos? c) (v/div s c) s)]
     (if (not= 0 (v/mag s'))
       (let [sl (v/set-mag s' (:max-speed this))
@@ -143,7 +143,7 @@
 
 
 (defn calc-tail [cvs this]
-  (let [^double speed (v/mag (:vector this))
+  (let [speed (v/mag (:vector this))
         pl (+ 5 (/ speed 3.0)) 
 
         [seg ss c] (loop [point (:position this)
@@ -165,7 +165,7 @@
     (set-stroke cvs 2)
     (path cvs seg)
     (assoc this :path seg :short-path ss :count c)
-  ) )
+    ) )
 
 
 

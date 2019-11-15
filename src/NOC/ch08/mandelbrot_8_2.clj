@@ -44,9 +44,9 @@
                             (recur (inc n) na nb)
                             n)))
               nc (mod (* nn 16) 255)]
-          (p/set-color pixels i j (if (== nn maxiterations)
-                                    :black
-                                    (c/color nc nc nc))))))
+          (p/set-color! pixels i j (if (== nn maxiterations)
+                                     :black
+                                     (c/color nc nc nc))))))
     pixels))
 
 (p/set-canvas-pixels! cnvs (calc-mandelbrot))

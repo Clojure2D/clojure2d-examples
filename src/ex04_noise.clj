@@ -33,7 +33,7 @@
               :hint :mid})
 
 (defmethod key-pressed ["noise" \space] [_ _]
-  (save canvas (next-filename "results/ex04/" ".jpg")))
+  (save cnvs (next-filename "results/ex04/" ".jpg")))
 
 (draw-noise r/noise)
 
@@ -52,13 +52,13 @@
 ;; => (:value :gradient :simplex)
 
 ;; interpolations
-(keys r/interpolations)
+(keys r/noise-interpolations)
 ;; => (:none :linear :hermite :quintic)
 
 (defn draw-random-noise
   "Draw random noise for given fractal type"
   [t]
-  (let [cfg {:interpolation (rand-nth (keys r/interpolations))
+  (let [cfg {:interpolation (rand-nth (keys r/noise-interpolations))
              :noise-type (rand-nth (keys r/noise-types))
              :octaves (r/irand 2 9)
              :gain (r/drand 0.25 0.75)}]
@@ -84,3 +84,14 @@
 (draw-random-noise r/ridgedmulti-noise)
 
 ;; [[../results/ex04/061F9A12_000012.jpg]] [[../results/ex04/061F9A12_000013.jpg]] [[../results/ex04/061F9A12_000014.jpg]]
+
+(defn draw-random-warp
+  "Draw random warped noise."
+  []
+  (let [cfg (r/random-noise-cfg {:warp-scale (r/drand 0.1 10)})]
+    (draw-noise (r/random-noise-fn cfg))
+    cfg))
+
+(draw-random-warp)
+
+;; [[../results/ex04/6A2E760C_000006.jpg]] [[../results/ex04/6A2E760C_000004.jpg]] [[../results/ex04/6A2E760C_000005.jpg]]

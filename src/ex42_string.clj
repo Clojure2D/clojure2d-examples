@@ -34,7 +34,7 @@
   ""
   [canvas window ^long frame _]
   (let [field (get-state window)
-        s (m/norm (max 0 ^int (mouse-x window)) 0 w 10 200)
+        s (m/mnorm (max 0 (mouse-x window)) 0.0 w 10.0 200.0)
         t (/ frame 100.0)]
 
     (-> canvas

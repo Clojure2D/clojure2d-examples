@@ -10,13 +10,13 @@
   "Draw lines"
   [canvas window _ _]
   (let [circle-res (int (m/norm (mouse-y window) 0 (height canvas) 2 80))
-        radius (+ 0.5 (- ^int (mouse-x window) (* 0.5 ^int (width canvas))))
+        radius (+ 0.5 (- (mouse-x window) (* 0.5 (width canvas))))
         angle (/ m/TWO_PI circle-res)]
     (-> canvas
-        (set-stroke (/ (max 1.0 ^int (mouse-y window)) 20.0) :square)
+        (set-stroke (/ (max 1.0 (mouse-y window)) 20.0) :square)
         (set-background :white)
         (set-color :black)
-        (translate (* 0.5 ^int (width window)) (* 0.5 ^int (height window))))
+        (translate (* 0.5 (width window)) (* 0.5 (height window))))
     (dotimes [i circle-res]
       (let [x (* radius (m/cos (* i angle)))
             y (* radius (m/sin (* i angle)))]

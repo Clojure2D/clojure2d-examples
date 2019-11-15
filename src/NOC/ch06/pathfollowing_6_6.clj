@@ -100,7 +100,7 @@
                             (Vec2. (- (.x start) r)
                                    (+ (.y start) (- (.y nposition) (.y end))))
                             nposition)
-          theta (+ (m/radians 90) ^double (v/heading nvelocity))]
+          theta (+ (m/radians 90) (v/heading nvelocity))]
 
       (when (second (get-state window))
         (-> canvas

@@ -12,11 +12,11 @@
   "Draw lines"
   [canvas window _ _]
   (when (mouse-in-window? window)
-    (let [tile-count (max 0.01 (int (/ ^int (mouse-y window) 15)))
-          scl (/ ^int (width canvas) tile-count)
+    (let [tile-count (max 0.01 (/ (mouse-y window) 15.0))
+          scl (/ (width canvas) tile-count)
           rng (r/rng :jdk (:seed (get-state window)))]
       (set-background canvas :white)
-      (set-stroke canvas (max 0.1 (/ ^int (mouse-x window) 15)))
+      (set-stroke canvas (max 0.1 (/ (mouse-x window) 15.0)))
       (doseq [^long grid-x (range tile-count)
               ^long grid-y (range tile-count)]
         (let [px (* grid-x scl)

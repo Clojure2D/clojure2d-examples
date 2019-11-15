@@ -30,7 +30,7 @@
       (dotimes [gx (inc grid-resolution-x)]
         (let [noise-x (m/norm gx 0 grid-resolution-x 0 noise-x-range)
               noise-y (m/norm gy 0 grid-resolution-y 0 noise-y-range)
-              noise-value (noise noise-x noise-y)
+              ^double noise-value (noise noise-x noise-y)
               angle (* noise-value m/TWO_PI)]
 
           (-> canvas
@@ -39,7 +39,7 @@
 
           (when debug
             (-> canvas
-                (set-color (c/gray (* noise-value 255)))
+                (set-color (c/gray (* noise-value 255.0)))
                 (ellipse 0 0 tile-size-25 tile-size-25)))
 
           (-> canvas
@@ -71,9 +71,9 @@
 (defmethod key-pressed [wname \d] [_ s] (update s :debug not))
 
 (defmethod key-pressed [wname virtual-key] [e s]
-  (let [falloff (get-in s [:noise-cfg :gain])
-        octaves (get-in s [:noise-cfg :octaves])
-        lacunarity (get-in s [:noise-cfg :lacunarity])
+  (let [^double falloff (get-in s [:noise-cfg :gain])
+        ^long octaves (get-in s [:noise-cfg :octaves])
+        ^double lacunarity (get-in s [:noise-cfg :lacunarity])
         ns (condp = (key-code e)
              :up (assoc-in s [:noise-cfg :gain] (m/constrain (+ falloff 0.05) 0.0 1.0))
              :down (assoc-in s [:noise-cfg :gain] (m/constrain (- falloff 0.05) 0.0 1.0))

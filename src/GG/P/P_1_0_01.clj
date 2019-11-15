@@ -13,8 +13,8 @@
   "Draw rectangle"
   [canvas window _ _]
   (when (mouse-in-window? window)
-    (let [^int mx (mouse-x window)
-          ^int my (mouse-y window)]
+    (let [mx (mouse-x window)
+          my (mouse-y window)]
       (-> canvas
           (set-background (c/from-HSB* (c/color (* hue-scale (* 0.5 my)) 255 255)))
           (set-color (c/from-HSB* (c/color (* hue-scale (- 360.0 (* 0.5 my))) 255 255)))

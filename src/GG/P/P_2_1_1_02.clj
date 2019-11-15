@@ -15,8 +15,8 @@
   [canvas window _ _]
   (when (mouse-in-window? window)
     (let [cap (:cap (get-state window))
-          wx (max 0.1 (/ ^int (mouse-x window) 10.0))
-          wy (max 0.1 (/ ^int (mouse-y window) 10.0))
+          wx (max 0.1 (/ (mouse-x window) 10.0))
+          wy (max 0.1 (/ (mouse-y window) 10.0))
           rng (r/rng :jdk (:seed (get-state window)))]
       (set-background canvas :white)
       (set-color canvas :black)

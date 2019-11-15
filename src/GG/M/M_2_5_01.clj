@@ -57,7 +57,7 @@
       (set-stroke line-weight :round)
       (translate (/ w 2) (/ h 2)))
   (doseq [[p1 p2] (all-pairs points)
-          :let [^double d (v/dist p1 p2)
+          :let [d (v/dist p1 p2)
                 a (m/pow (/ (inc (/ d connection-radius))) 6.0)]]
     (when (<= d connection-radius)
       (-> canvas

@@ -48,7 +48,7 @@
   (if (== ^int (.id node) ^int (.id other-node))
     node
     (let [dxy (v/sub (.pos other-node) (.pos node))
-          ^double d (v/mag dxy)]
+          d (v/mag dxy)]
       (if (bool-and (pos? d) (< d radius))
         (let [s (m/pow (* d rradius) (/ ramp))
               f (/ (* 9.0 s strength (+ (/ (inc s)) (/ (- s 3.0) 4.0))) d)]

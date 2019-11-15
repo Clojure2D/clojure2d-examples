@@ -26,7 +26,7 @@
             (push-matrix canvas)
             (translate canvas pos-x pos-y)
             
-            (case draw-mode
+            (case (int draw-mode)
               1 (dotimes [i cnt]
                   (-> canvas
                       (crect 0 0 tile-width tile-height true)

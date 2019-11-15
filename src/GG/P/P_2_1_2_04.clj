@@ -17,23 +17,23 @@
   [canvas window _ _]
   (when (mouse-in-window? window)
     (let [rng (r/rng :jdk (get-state window))
-          mx (/ (max 2 ^int (mouse-x window)) 20)
-          my (/ (max 2 ^int (mouse-y window)) 20)]
+          mx (/ (max 2 (mouse-x window)) 20)
+          my (/ (max 2 (mouse-y window)) 20)]
       (-> canvas
           (set-background :white)
           (set-color (c/from-HSB* (c/color 136 255 164 154))))
       (doseq [^long grid-x (range tile-count)
               ^long grid-y (range tile-count)]
-        (let [px (* grid-x (/ ^int (width window) tile-count))
-              py (* grid-y (/ ^int (height window) tile-count))
-              p [(v/vec2 (+ px ^double (r/drandom rng (- mx) mx))
-                         (+ py ^double (r/drandom rng (- my) my)))
-                 (v/vec2 (+ px rect-size ^double (r/drandom rng (- mx) mx))
-                         (+ py ^double (r/drandom rng (- my) my)))
-                 (v/vec2 (+ px rect-size ^double (r/drandom rng (- mx) mx))
-                         (+ py rect-size ^double (r/drandom rng (- my) my)))
-                 (v/vec2 (+ px ^double (r/drandom rng (- mx) mx))
-                         (+ py rect-size ^double (r/drandom rng (- my) my)))]]
+        (let [px (* grid-x (/ (width window) tile-count))
+              py (* grid-y (/ (height window) tile-count))
+              p [(v/vec2 (+ px (r/drandom rng (- mx) mx))
+                         (+ py (r/drandom rng (- my) my)))
+                 (v/vec2 (+ px rect-size (r/drandom rng (- mx) mx))
+                         (+ py (r/drandom rng (- my) my)))
+                 (v/vec2 (+ px rect-size (r/drandom rng (- mx) mx))
+                         (+ py rect-size (r/drandom rng (- my) my)))
+                 (v/vec2 (+ px (r/drandom rng (- mx) mx))
+                         (+ py rect-size (r/drandom rng (- my) my)))]]
           (path canvas p true false))))))
 
 (def window (show-window {:canvas (canvas 600 600)
