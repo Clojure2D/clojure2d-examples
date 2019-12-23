@@ -8,18 +8,18 @@
   "Draw agent"
   [canvas window _ state]
   (let [mx (max 1 (mouse-x window))]
-    (loop [[px py] state
+    (loop [[^long px ^long py] state
            i 0]
       (let [direction (rand-nth [:n :ne :e :se :s :sw :w :nw])
-            [npx npy] (case direction
-                        :n  [px (- py step-size)]
-                        :ne [(+ px step-size) (- py step-size)]
-                        :e  [(+ px step-size) py]
-                        :se [(+ px step-size) (+ py step-size)]
-                        :s  [px (+ py step-size)]
-                        :sw [(- px step-size) (+ py step-size)]
-                        :w  [(- px step-size) py]
-                        :nw [(- px step-size) (- py step-size)])
+            [^long npx ^long npy] (case direction
+                                    :n  [px (- py step-size)]
+                                    :ne [(+ px step-size) (- py step-size)]
+                                    :e  [(+ px step-size) py]
+                                    :se [(+ px step-size) (+ py step-size)]
+                                    :s  [px (+ py step-size)]
+                                    :sw [(- px step-size) (+ py step-size)]
+                                    :w  [(- px step-size) py]
+                                    :nw [(- px step-size) (- py step-size)])
             npx (if (> npx (width canvas)) 0 (if (neg? npx) (width canvas) npx))
             npy (if (> npy (height canvas)) 0 (if (neg? npy) (height canvas) npy))]
         (-> canvas

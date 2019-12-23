@@ -22,9 +22,9 @@
 
 (defn hit-sphere? [center ^double radius ^Ray ray]
   (let [oc (v/sub (.origin ray) center)
-        ^double a (v/magsq (.direction ray))
-        b (* 2.0 ^double (v/dot oc (.direction ray)))
-        c (- ^double (v/dot oc oc) (* radius radius))
+        a (v/magsq (.direction ray))
+        b (* 2.0 (v/dot oc (.direction ray)))
+        c (- (v/dot oc oc) (* radius radius))
         discriminant (- (* b b) (* 4 a c))]
     (pos? discriminant)))
 
@@ -45,7 +45,7 @@
     (let [u (/ (double i) nx)
           v (/ (double j) ny)
           r (->Ray orig (v/add lower-left-corner (v/add (v/mult horizontal u) (v/mult vertical v))))]
-      (p/set-color img i (- (dec ny) j) (color r)))))
+      (p/set-color! img i (- (dec ny) j) (color r)))))
 
 (u/show-image img)
 

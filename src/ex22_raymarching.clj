@@ -124,7 +124,7 @@
 (defn gamma
   ""
   [col]
-  (v/applyf col #(m/pow (m/constrain ^double % 0.0 1.0) 1.5)))
+  (v/fmap col #(m/pow (m/constrain ^double % 0.0 1.0) 1.5)))
 
 (defn desaturate
   ""

@@ -15,7 +15,7 @@
 
 (def ^:const ^double len 1300.0)
 
-(def grad (c/gradient-presets :rainbow))
+(def grad (c/gradient :rainbow))
 
 (defn next-step
   "Next brownian motion step."

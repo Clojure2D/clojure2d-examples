@@ -157,7 +157,7 @@
          (sonification (* 5.0 (m/sin (/ time 45.0))) (* 5.0  (m/sin (/ time 50.0)))) ;;;; change!
          
          (p/filter-channels p/equalize) ;;;; change!
-         (p/filter-colors (partial c/nearest-color distance palette)) ;;;; change!
+         (p/filter-colors #(c/nearest-color palette % distance)) ;;;; change!
          (p/filter-channels p/normalize)
          (p/set-canvas-pixels! canvas))
 
@@ -190,7 +190,7 @@
   (println "stopped"))
 
 ;; run updater in separate thread
-(future (updater))
+(updater)
 
 ;; uncomment and run to save current state
 (comment do

@@ -1,7 +1,12 @@
 (ns GG.M.M-4-1-01
   (:require [clojure2d.core :refer :all]
             [fastmath.vector :as v]
-            [fastmath.random :as r]))
+            [fastmath.random :as r]
+            [fastmath.core :as m]))
+
+(set! *warn-on-reflection* true)
+(set! *unchecked-math* :warn-on-boxed)
+(m/use-primitive-operators)
 
 (def ^:const w 600)
 (def ^:const h 600)
@@ -14,17 +19,17 @@
 
 (defn update-node
   ""
-  [{:keys [pos velocity damping]}]
+  [{:keys [pos velocity ^double damping]}]
   (let [npos (v/add pos velocity)
-        x (npos 0)
-        y (npos 1)
+        ^double x (npos 0)
+        ^double y (npos 1)
         vx (if (or (< x min-x)
                    (> x max-x))
-             (- (velocity 0))
+             (- ^double (velocity 0))
              (velocity 0))
         vy (if (or (< y min-y)
                    (> y max-y))
-             (- (velocity 1))
+             (- ^double (velocity 1))
              (velocity 1))]
     (Node. npos (v/mult (v/vec2 vx vy) (- 1.0 damping)) damping)))
 

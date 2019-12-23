@@ -9,10 +9,10 @@
 
 (dotimes [j (height img)]
   (dotimes [i (width img)]
-    (let [r (/ (double i) ^int (width img))
-          g (/ (double (- (dec ^int (height img)) j)) ^int (height img))
+    (let [r (/ (double i) (width img))
+          g (/ (double (- (dec (height img)) j)) (height img))
           col (v/mult (v/vec4 r g 0.2 1.0) 255.0)]
-      (p/set-color img i j col))))
+      (p/set-color! img i j col))))
 
 (u/show-image img)
 

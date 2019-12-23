@@ -14,7 +14,7 @@
 (def ^:const w 800)
 (def ^:const l 200)
 
-(def pal (conj (m/sample (c/gradient [(c/gray 0) (c/gray 220)]) 6) :red :maroon))
+(def pal (conj (c/palette (c/gradient [(c/gray 0) (c/gray 220)]) 6) :red :maroon))
 
 (def positions (repeatedly 6 (fn []
                                (repeatedly (count pal)

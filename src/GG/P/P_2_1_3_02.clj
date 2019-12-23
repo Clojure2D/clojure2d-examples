@@ -2,6 +2,8 @@
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]))
 
+(m/use-primitive-operators)
+
 (def ^:const ^int cnt 10)
 
 (defn next-pair
@@ -36,7 +38,7 @@
             
             (push-matrix canvas)
             (translate canvas pos-x pos-y)
-            (loop [[side i] [0 0]
+            (loop [[side ^long i] [0 0]
                    x2 0
                    y2 0
                    line-weight 0

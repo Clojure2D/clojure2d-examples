@@ -46,7 +46,7 @@
     (loop [y y1]
       (loop [x x1]
         
-        (let [^Vec2 vv (v/mult (v/applyf (v/mult (field (Vec2. x y)) fscale) #(m/sin %)) 2.7)
+        (let [^Vec2 vv (v/mult (v/sin (v/mult (field (Vec2. x y)) fscale)) 2.7)
               xx (m/norm (+ (.x vv) (r/grand 0.0012)) x1- x2+ 0.0 w)
               yy (m/norm (+ (.y vv) (r/grand 0.0012)) y1- y2+ 0.0 h)]
           (point canvas xx yy))

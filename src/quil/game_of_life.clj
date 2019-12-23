@@ -38,7 +38,7 @@
   [canvas _ _ state]
   (let [state (or state (random-state))]
     (set-background canvas 240 240 240)
-    (let [cell-size (quot ^int (width canvas) grid-size)]
+    (let [cell-size (quot (width canvas) grid-size)]
       (doseq [[^long i ^int v] (map-indexed vector state)]
         (let [multiplier (int (/ i grid-size))
               x (* cell-size (- i (* multiplier grid-size)))

@@ -3,7 +3,8 @@
 (ns ex11-pixels
   (:require [clojure2d.core :as core]
             [clojure2d.pixels :as p]
-            [clojure2d.color :as c])
+            [clojure2d.color :as c]
+            [clojure2d.color.blend :as b])
   (:import [clojure2d.pixels Pixels]))
 
 (set! *warn-on-reflection* true)
@@ -76,6 +77,6 @@
                                                  (p/load-pixels "results/ex11/1FABF63A_000039.jpg")))
 
 ;; let's make random blends
-(p/set-canvas-pixels! canvas (p/compose-channels (rand-nth c/blends-list) (rand-nth c/blends-list) (rand-nth c/blends-list) nil
+(p/set-canvas-pixels! canvas (p/compose-channels (rand-nth b/blends-list) (rand-nth b/blends-list) (rand-nth b/blends-list) nil
                                                  (p/load-pixels "results/ex11/1FABF63A_000034.jpg")
                                                  (p/load-pixels "results/ex11/1FABF63A_000039.jpg")))

@@ -18,11 +18,11 @@
 (defn draw [canvas _ ^long fps _]
   (-> canvas
       (set-background 255 255 236)
-      (translate (/ ^int (width canvas) 2) (/ ^int (height canvas) 2)))
+      (translate (/ (width canvas) 2) (/ (height canvas) 2)))
   (doseq [^long i (range 1000)]
     (let [v (+ (mod fps 3) i)
           ang (* v m/PHI m/TWO_PI)
-          r   (* (m/sqrt v) ^int (width canvas) (/ 70))
+          r   (* (m/sqrt v) (width canvas) (/ 70))
           x   (* (m/cos ang) r)
           y   (* (m/sin ang) r)
           sz  (+ 3 (* i 0.002))]

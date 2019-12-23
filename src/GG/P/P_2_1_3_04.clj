@@ -3,13 +3,15 @@
             [fastmath.core :as m]
             [clojure2d.color :as c]))
 
+(m/use-primitive-operators)
+
 (def color-mode-fn (c/color-converter :HSB 360 100 100))
 
 (defn draw
   "Draw lines"
   [canvas window _ _]
   (when (mouse-in-window? window)
-    (let [[draw-mode tile-count-x tile-count-y] (get-state window)
+    (let [[draw-mode ^long tile-count-x ^long tile-count-y] (get-state window)
           mx (m/abs (mouse-x window))
           my (m/abs (mouse-y window))
           cnt (+ 10 (int (/ mx 10)))
@@ -33,15 +35,17 @@
                       (scale (- 1.0 (/ 3.0 cnt)))
                       (rotate (* 0.1 para))))
               2 (dotimes [i (inc cnt)]
-                  (let [gradient (c/mix :black (c/color 52 100 71) (/ i cnt))]
+                  (let [r (/ (double i) cnt)
+                        gradient (c/mix :black (c/color 52 100 71) r)]
                     (-> canvas
-                        (set-color (color-mode-fn gradient) (* 200.0 (/ i cnt)))
+                        (set-color (color-mode-fn gradient) (* 200.0 r))
                         (rotate m/QUARTER_PI)
                         (crect 0 0 tile-width tile-height)
                         (scale (- 1.0 (/ 3.0 cnt)))
                         (rotate (* 1.5 para)))))
               3 (dotimes [i (inc cnt)]
-                  (let [gradient (c/mix (c/color 0 130 164) :white (/ i cnt))]
+                  (let [r (/ (double i) cnt)
+                        gradient (c/mix (c/color 0 130 164) :white r)]
                     (-> canvas
                         (set-color gradient 170)
 
@@ -68,7 +72,7 @@
 (defmethod key-pressed [(:window-name window) \1] [_ [_ a b]] [1 a b])
 (defmethod key-pressed [(:window-name window) \2] [_ [_ a b]] [2 a b])
 (defmethod key-pressed [(:window-name window) \3] [_ [_ a b]] [3 a b])
-(defmethod key-pressed [(:window-name window) virtual-key] [e [dm tcx tcy]]
+(defmethod key-pressed [(:window-name window) virtual-key] [e [dm ^long tcx ^long tcy]]
   (case (key-code e)
     :down [dm tcx (max (dec tcy) 1)]
     :up [dm tcx (inc tcy)]

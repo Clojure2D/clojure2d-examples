@@ -34,8 +34,8 @@
               cs (int (r/irandom rng 4))] 
           (dotimes [i step-size]
             (let [clr (* 255.0 (- 1.0 (* i color-step)))
-                  diameter-x (m/norm i 0 step-size tile-width end-size)
-                  diameter-y (m/norm i 0 step-size tile-height end-size)]
+                  diameter-x (m/mnorm i 0 step-size tile-width end-size)
+                  diameter-y (m/mnorm i 0 step-size tile-height end-size)]
               (set-color canvas clr clr clr)
               (case cs
                 0 (ellipse canvas (+ i pos-x) pos-y diameter-x diameter-x)

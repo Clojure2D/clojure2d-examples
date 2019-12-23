@@ -2,11 +2,13 @@
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]))
 
+(m/use-primitive-operators)
+
 (defn draw
   "Draw lines"
   [canvas window _ _]
   (when (mouse-in-window? window)
-    (let [[draw-mode tile-count-x tile-count-y] (get-state window)
+    (let [[draw-mode ^long tile-count-x ^long tile-count-y] (get-state window)
           mx (m/abs (mouse-x window))
           my (m/abs (mouse-y window))
           cnt (+ 5 (int (/ mx 20)))
@@ -52,7 +54,7 @@
 (defmethod key-pressed [(:window-name window) \1] [_ [_ a b]] [1 a b])
 (defmethod key-pressed [(:window-name window) \2] [_ [_ a b]] [2 a b])
 (defmethod key-pressed [(:window-name window) \3] [_ [_ a b]] [3 a b])
-(defmethod key-pressed [(:window-name window) virtual-key] [e [dm tcx tcy]]
+(defmethod key-pressed [(:window-name window) virtual-key] [e [dm ^long tcx ^long tcy]]
   (case (key-code e)
     :down [dm tcx (max (dec tcy) 1)]
     :up [dm tcx (inc tcy)]

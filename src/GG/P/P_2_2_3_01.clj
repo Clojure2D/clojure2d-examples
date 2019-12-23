@@ -14,7 +14,7 @@
 
 (defn draw
   "Setup"
-  [canvas window _ [center-x center-y points :as all]] 
+  [canvas window _ [^long center-x ^long center-y points :as all]] 
   (let [{:keys [filled? freezed?]} (get-state window)]
     (if freezed? all
         (let [mx (mouse-x window)
@@ -25,7 +25,7 @@
                                                     (map #(v/add % (v/vec2 (r/drand (- step-size) step-size)
                                                                            (r/drand (- step-size) step-size))) points)]
                                                    (let [radius (* init-radius (r/drand 0.5 1.0))]
-                                                     [mx my (for [i (range form-resolution)]
+                                                     [mx my (for [^long i (range form-resolution)]
                                                               (v/vec2 (* radius (m/cos (* i angle)))
                                                                       (* radius (m/sin (* i angle)))))]))
               vcenter (v/vec2 center-x center-y)
@@ -48,7 +48,7 @@
                           :draw-fn draw 
                           :draw-state [(/ (width cnvs) 2)
                                        (/ (height cnvs) 2)
-                                       (for [i (range form-resolution)]
+                                       (for [^long i (range form-resolution)]
                                          (v/vec2 (* init-radius (m/cos (* i angle)))
                                                  (* init-radius (m/sin (* i angle)))))]
                           :state {:filled? false

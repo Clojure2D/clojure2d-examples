@@ -13,12 +13,11 @@
 
 (def cnvs (canvas 600 600))
 
-(def colors (c/gradient :Yxy (c/random-palette)))
+(def colors (c/gradient (c/random-palette) {:colorspace :Yxy}))
 
 (defn draw
-  ""
   [canvas window fc state]
-  (let [^Vec2 mpos (mouse-pos window) 
+  (let [mpos (mouse-pos window) 
         cnt (int (m/cnorm (.x mpos) -1 600 3 100))
         col (m/cnorm (.y mpos) -1 600 0.0 1.0)
         step (/ m/TWO_PI cnt)

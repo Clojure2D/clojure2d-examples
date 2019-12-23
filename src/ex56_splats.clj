@@ -5,7 +5,8 @@
             [fastmath.vector :as v]
             [clojure2d.extra.utils :as utils]
             [clojure2d.pixels :as p]
-            [clojure2d.color :as c]))
+            [clojure2d.color :as c]
+            [clojure2d.color.blend :as b]))
 
 (m/use-primitive-operators)
 
@@ -26,7 +27,7 @@
     (path canvas p true false)))
 
 (def img (with-canvas [c c]
-           (set-composite c (p/composite (rand-nth c/blends-list)))
+           (set-composite c (p/composite (rand-nth b/blends-list)))
            (dotimes [i splats-no]
              (let [s (m/norm i 0 splats-no 0 20)]
                (-> (set-color c (g (/ i (double splats-no))) (r/drand 2 10))

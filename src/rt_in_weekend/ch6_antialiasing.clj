@@ -17,9 +17,9 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const v1 (v/mult (v/vec3 1.0 1.0 1.0) 255.0))
-(def ^:const v2 (v/mult (v/vec3 0.5 0.7 1.0) 255.0))
-(def ^:const one (v/vec3 1.0 1.0 1.0))
+(def v1 (v/mult (v/vec3 1.0 1.0 1.0) 255.0))
+(def v2 (v/mult (v/vec3 0.5 0.7 1.0) 255.0))
+(def one (v/vec3 1.0 1.0 1.0))
 
 (def world [(->Sphere (v/vec3 0.0 0.0 -1.0) 0.5 nil)
             (->Sphere (v/vec3 0.0 -100.5 -1.0) 100.0 nil)])
@@ -37,15 +37,15 @@
 
 (def img (p/pixels nx ny))
 
-(dotimes [j ny]
-  (println (str "Line: " j))
-  (dotimes [i nx]
-    (let [col (reduce v/add (v/vec3 0.0 0.0 0.0)
-                      (repeatedly samples #(let [u (/ (+ (r/drand) i) nx)
-                                                 v (/ (+ (r/drand) j) ny)
-                                                 r (get-ray default-camera u v)]
-                                             (color r world))))]
-      (p/set-color img i (- (dec ny) j) (v/div col samples)))))
+(time (dotimes [j ny]
+        (when (zero? (mod j 50)) (println (str "Line: " j)))
+        (dotimes [i nx]
+          (let [col (reduce v/add (v/vec3 0.0 0.0 0.0)
+                            (repeatedly samples #(let [u (/ (+ (r/drand) i) nx)
+                                                       v (/ (+ (r/drand) j) ny)
+                                                       r (get-ray default-camera u v)]
+                                                   (color r world))))]
+            (p/set-color! img i (- (dec ny) j) (v/div col samples))))))
 
 (u/show-image img)
 

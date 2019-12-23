@@ -34,7 +34,7 @@
     (let [u (/ (double i) nx)
           v (/ (double j) ny)
           r (->Ray orig (v/add lower-left-corner (v/add (v/mult horizontal u) (v/mult vertical v))))]
-      (p/set-color img i (- (dec ny) j) (color r)))))
+      (p/set-color! img i (- (dec ny) j) (color r)))))
 
 (u/show-image img)
 

@@ -13,8 +13,8 @@
 
 (defn draw
   "Setup"
-  [canvas window _ [center-x center-y points :as all]] 
-  (let [{:keys [filled? freezed?  mode? step-size]} (get-state window)]
+  [canvas window _ [^long center-x ^long center-y points :as all]] 
+  (let [{:keys [filled? freezed?  mode? ^long step-size]} (get-state window)]
     (if freezed? all
         (let [mx (mouse-x window)
               my (mouse-y window)
@@ -25,11 +25,11 @@
                                                                            (r/drand (- step-size) step-size))) points)]
                                                    (if mode?
                                                      (let [radius (* init-radius (r/drand 0.5 1.0))]
-                                                       [mx my (for [i (range form-resolution)]
+                                                       [mx my (for [^long i (range form-resolution)]
                                                                 (v/vec2 (* radius (m/cos (* i angle)))
                                                                         (* radius (m/sin (* i angle)))))])
                                                      (let [radius (* init-radius 4.0)]
-                                                       [mx my (for [i (range form-resolution)]
+                                                       [mx my (for [^long i (range form-resolution)]
                                                                 (v/vec2
                                                                  (m/lerp radius (- radius) (/ i (double form-resolution)))
                                                                  0.0))])))
@@ -53,7 +53,7 @@
                           :draw-fn draw 
                           :draw-state [(/ (width cnvs) 2)
                                        (/ (height cnvs) 2)
-                                       (for [i (range form-resolution)]
+                                       (for [^long i (range form-resolution)]
                                          (v/vec2 (* init-radius (m/cos (* i angle)))
                                                  (* init-radius (m/sin (* i angle)))))]
                           :state {:filled? false
@@ -68,7 +68,7 @@
 (defmethod key-released [wname \4] [_ s] (assoc s :mode? false))
 
 (defmethod key-pressed [wname virtual-key] [e s]
-  (let [ss (:step-size s)
+  (let [ss (long (:step-size s))
         ss (max 1 (case (key-code e)
                     :up (inc ss)
                     :down (dec ss)

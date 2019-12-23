@@ -13,9 +13,9 @@
   HitableProto
   (hit [_ r t-min t-max]
     (let [oc (v/sub (.origin ^Ray r) center)
-          ^double a (v/magsq (.direction ^Ray r))
-          b- (- ^double (v/dot oc (.direction ^Ray r)))
-          c (- ^double (v/dot oc oc) (* radius radius))
+          a (v/magsq (.direction ^Ray r))
+          b- (- (v/dot oc (.direction ^Ray r)))
+          c (- (v/dot oc oc) (* radius radius))
           discriminant (- (* b- b-) (* a c))]
       (when (pos? discriminant)
         (let [dsqrt (m/sqrt discriminant)
@@ -29,3 +29,4 @@
                          (> temp ^double t-min))
                 (let [patp (point-at-parameter r temp)]
                   (->HitData temp patp (v/div (v/sub patp center) radius) material))))))))))
+

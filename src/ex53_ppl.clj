@@ -20,8 +20,8 @@
 (def ^:const ^long scaling 4)
 (def ^:const ^long csize (* scaling size))
 (def rand-size #(r/drand (* 0.2 size) (* 0.8 size)))
-;; (def pal (vec (c/resample 35 (reverse (c/palette-presets :spectral-11)))))
-(def pal (vec (c/resample 35 [:green :yellow :red])))
+#_(def pal (vec (c/palette (reverse (c/palette :spectral-11)) 35)))
+(def pal (vec (c/palette [:green :yellow :red] 35)))
 (def ^:const ^long lim (dec (count pal)))
 
 (defrecord Spore [^long id ^Vec2 pos ^double phi ^Vec2 vvec ^double v ^double r ^double alpha ^double beta col])

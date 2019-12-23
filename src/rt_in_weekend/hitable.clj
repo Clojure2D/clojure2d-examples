@@ -1,5 +1,4 @@
-(ns rt-in-weekend.hitable
-  (:require [fastmath.vector :as v]))
+(ns rt-in-weekend.hitable)
 
 (deftype HitData [^double t p normal material])
 

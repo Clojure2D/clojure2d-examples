@@ -65,3 +65,4 @@
 (defmethod key-released [wname \backspace] [_ s]
   (with-canvas-> cnvs (set-background :white))
   s)
+

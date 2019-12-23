@@ -32,7 +32,7 @@
                              ^int b (range -11 11)
                              :let [center (v/vec3 (+ a (r/drand 0.9)) 0.2 (+ b (r/drand 0.9)))
                                    choose-mat (r/drand)]
-                             :when (> ^double (v/mag (v/sub center (v/vec3 4 0.2 0))) 0.9)]
+                             :when (> (v/mag (v/sub center (v/vec3 4 0.2 0))) 0.9)]
                          (->Sphere center 0.2 (cond
                                                 (< choose-mat 0.6) (->Lambertian (v/vec3 (m/sq (r/drand))
                                                                                          (m/sq (r/drand))
@@ -77,13 +77,13 @@
         (dotimes [i nx]
           (let [p (v/vec2 i j)
                 col (reduce v/add zero
-                            (mapv #(let [^Vec2 pp (v/add % p)
-                                         u (/ (.x pp) nx)
-                                         v (/ (.y pp) ny)
-                                         r (get-ray camera u v)]
-                                     (color r world)) r2-seq))]
-            (p/set-color img i (- (dec ny) j) (-> (v/div col samples)
-                                                  (v/applyf #(m/sqrt %))
-                                                  (v/mult 255.0)))))))
+                            (map #(let [^Vec2 pp (v/add % p)
+                                        u (/ (.x pp) nx)
+                                        v (/ (.y pp) ny)
+                                        r (get-ray camera u v)]
+                                    (color r world)) r2-seq))]
+            (p/set-color! img i (- (dec ny) j) (-> (v/div col samples)
+                                                   (v/sqrt)
+                                                   (v/mult 255.0)))))))
 
 ;; (save img "results/rt-in-weekend/random_scene_r2.jpg")

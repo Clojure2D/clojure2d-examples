@@ -55,9 +55,9 @@
                                                        v (/ (+ (r/drand) j) ny)
                                                        r (get-ray default-camera u v)]
                                                    (color r world))))]
-            (p/set-color img i (- (dec ny) j) (-> (v/div col samples)
-                                                  (v/applyf #(m/sqrt %))
-                                                  (v/mult 255.0)))))))
+            (p/set-color! img i (- (dec ny) j) (-> (v/div col samples)
+                                                   (v/sqrt)
+                                                   (v/mult 255.0)))))))
 
 (u/show-image img)
 

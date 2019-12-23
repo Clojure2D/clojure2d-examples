@@ -9,7 +9,7 @@
 (defn draw
   ""
   [canvas window ^long frame _]
-  (let [{:keys [phi freq draw-animation?]} (get-state window)
+  (let [{:keys [phi ^double freq draw-animation?]} (get-state window)
         point-count (if draw-animation? (- (width canvas) 250) (width canvas))
         shape (for [i (range point-count)
                     :let [angle (m/norm i 0 point-count 0 m/TWO_PI)
@@ -70,11 +70,11 @@
 
 (defmethod key-pressed [wname \a] [_ s] (update s :draw-animation? not))
 
-(defmethod key-pressed [wname \1] [_ s] (update s :freq #(max 1 (dec %))))
+(defmethod key-pressed [wname \1] [_ s] (update s :freq #(max 1 (dec ^double %))))
 (defmethod key-pressed [wname \2] [_ s] (update s :freq inc))
 
 (defmethod key-pressed [wname virtual-key] [e s]
   (case (key-code e)
-    :left (update s :phi #(+ % 15.0))
-    :right (update s :phi #(- % 15.0))
+    :left (update s :phi #(+ ^double % 15.0))
+    :right (update s :phi #(- ^double % 15.0))
     s))

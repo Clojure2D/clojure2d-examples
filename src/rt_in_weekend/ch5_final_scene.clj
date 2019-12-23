@@ -38,12 +38,12 @@
 
 (def img (p/pixels nx ny))
 
-(dotimes [j ny]
-  (dotimes [i nx]
-    (let [u (/ (double i) nx)
-          v (/ (double j) ny)
-          r (->Ray orig (v/add lower-left-corner (v/add (v/mult horizontal u) (v/mult vertical v))))]
-      (p/set-color img i (- (dec ny) j) (color r world)))))
+(time (dotimes [j ny]
+        (dotimes [i nx]
+          (let [u (/ (double i) nx)
+                v (/ (double j) ny)
+                r (->Ray orig (v/add lower-left-corner (v/add (v/mult horizontal u) (v/mult vertical v))))]
+            (p/set-color! img i (- (dec ny) j) (color r world))))))
 
 (u/show-image img)
 
