@@ -1,4 +1,4 @@
-(defproject clojure2d-examples "1.3.0-alpha1"
+(defproject clojure2d-examples "1.3.0-alpha2"
   :description "Examples for Clojure2d library"
   :url "https://github.com/Clojure2D/clojure2d-examples"
   :license {:name "The Unlicense"
@@ -6,7 +6,7 @@
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [net.littleredcomputer/sicmutils "0.12.0"]
                  [generateme/fastmath "1.5.0-alpha4"]
-                 [clojure2d "1.3.0-alpha1"]]
+                 [clojure2d "1.3.0-alpha2"]]
   
   ;; For WINDOWS please uncomment two following lines
   ;; :exclusions [[ml.dmlc/xgboost4j] [asm]]
