@@ -34,12 +34,12 @@
           scattered (->Ray (.p ^HitData hit-data) (if-not (pos? fuzz)
                                                     reflected
                                                     (v/add reflected (v/mult (random-in-unit-sphere) fuzz))))]
-      (when (pos? ^double (v/dot (.direction ^Ray scattered) (.normal ^HitData hit-data)))
+      (when (pos? (v/dot (.direction ^Ray scattered) (.normal ^HitData hit-data)))
         [albedo scattered]))))
 
 (defn- refract [v n ^double ni-over-nt]
   (let [uv (v/normalize v)
-        ^double dt (v/dot uv n)
+        dt (v/dot uv n)
         discriminant (- 1.0 (* ni-over-nt ni-over-nt (- 1.0 (* dt dt))))]
     (when (pos? discriminant)
       (v/sub (v/mult (v/sub uv (v/mult n dt)) ni-over-nt)
@@ -54,14 +54,14 @@
 (defrecord Dielectric [^double ref-idx]
   MaterialProto
   (scatter [_ ray-in hit-data]
-    (let [^double dot (v/dot (.direction ^Ray ray-in) (.normal ^HitData hit-data))
+    (let [dot (v/dot (.direction ^Ray ray-in) (.normal ^HitData hit-data))
           [outward-normal ni-over-nt cosine] (if (pos? dot)
                                                [(v/sub (.normal ^HitData hit-data))
                                                 ref-idx
-                                                (/ (* ref-idx dot) ^double (v/mag (.direction ^Ray ray-in)))]
+                                                (/ (* ref-idx dot) (v/mag (.direction ^Ray ray-in)))]
                                                [(.normal ^HitData hit-data)
                                                 (/ ref-idx)
-                                                (- (/ dot ^double (v/mag (.direction ^Ray ray-in))))])
+                                                (- (/ dot (v/mag (.direction ^Ray ray-in))))])
           refracted (refract (.direction ^Ray ray-in) outward-normal ni-over-nt)]
       [one (if (and refracted (> (r/drand) (schlick cosine ref-idx)))
              (->Ray (.p ^HitData hit-data) refracted)

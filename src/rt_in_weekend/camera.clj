@@ -2,6 +2,7 @@
   (:require [rt-in-weekend.ray :refer :all]
             [fastmath.vector :as v]
             [fastmath.core :as m]
+            [fastmath.protocols :as p]
             [fastmath.random :as r])
   (:import [fastmath.vector Vec2]))
 
@@ -14,7 +15,7 @@
 
 (deftype FirstCamera [origin lower-left-corner horizontal vertical]
   CameraProto
-  (get-ray [_ u v] (->Ray origin (v/add (v/add (v/mult horizontal u) (v/mult vertical v))
+  (get-ray [_ u v] (->Ray origin (p/add (p/add (p/mult horizontal u) (p/mult vertical v))
                                         lower-left-corner))))
 
 (def ^:const lower-left-corner (v/vec3 -2.0 -1.0 -1.0))

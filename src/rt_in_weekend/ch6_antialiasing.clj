@@ -8,7 +8,8 @@
             [rt-in-weekend.sphere :refer :all]
             [rt-in-weekend.camera :refer :all]
             [fastmath.core :as m]
-            [fastmath.random :as r])
+            [fastmath.random :as r]
+            [fastmath.protocols :as pr])
   (:import [fastmath.vector Vec3]
            [rt_in_weekend.ray Ray]
            [rt_in_weekend.hitable HitData]))
@@ -26,7 +27,7 @@
 
 (defn color [^Ray ray world]
   (if-let [^HitData world-hit (hit-list world ray 0.001 Double/MAX_VALUE)]
-    (v/mult (v/add (.normal world-hit) one) 127.5)
+    (pr/mult (pr/add (.normal world-hit) one) 127.5)
     (let [^Vec3 unit (v/normalize (.direction ray))
           t (* 0.5 (inc (.y unit)))]
       (v/interpolate v1 v2 t))))
