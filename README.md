@@ -85,7 +85,7 @@ In Emacs/Cider: C-c C-k
 * quil - [Quil](http://quil.info/examples) examples ported to Clojure2d
 * GG - [Generative Design](http://www.generative-gestaltung.de/) examples ported to Clojure2D
 * funprogramming - [funprogramming](https://www.funprogramming.org/) examples from creative coding tutorials by Abe Pazos
-* [Ray Tracing in One Weekend](https://github.com/petershirley/raytracinginoneweekend)
+* [_Ray Tracing in One Weekend_](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
 
 ## How to contribute
 
