@@ -1,5 +1,5 @@
 (ns ex15-colorspace
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :as c2d]
             [clojure2d.pixels :as p]
             [clojure2d.color :as c])
   (:import [clojure2d.pixels Pixels]))
@@ -11,11 +11,11 @@
 
 (def ^Pixels img (p/load-pixels "results/test.jpg"))
 
-(def cnvs (canvas (width img) (height img)))
-(def window (show-window cnvs "Colorspace" 15 nil))
+(def cnvs (c2d/canvas (c2d/width img) (c2d/height img)))
+(def window (c2d/show-window cnvs "Colorspace" 15 nil))
 
-(defmethod key-pressed ["Colorspace" \space] [_ _]
-  (save cnvs (next-filename "results/ex15/" ".jpg")))
+(defmethod c2d/key-pressed ["Colorspace" \space] [_ _]
+  (c2d/save cnvs (c2d/next-filename "results/ex15/" ".jpg")))
 
 (p/set-canvas-pixels! cnvs (p/filter-colors c/to-OHTA* img))
 (p/set-canvas-pixels! cnvs (p/filter-colors c/to-CMY* img))

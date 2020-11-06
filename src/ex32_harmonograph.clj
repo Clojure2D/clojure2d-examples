@@ -5,15 +5,15 @@
 ;; Eats a lot of memory, rendering is run on all but one cores
 
 (ns ex32-harmonograph
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :as c2d]
             [clojure2d.pixels :as p]
             [fastmath.core :as m]
             [fastmath.random :as r]
             [fastmath.vector :as v]
             [clojure2d.color :as c]
-            [clojure2d.core :as core]
             [clojure.pprint :refer [pprint]])
-  (:import  [fastmath.vector Vec2 Vec4]))
+  (:import  [fastmath.vector Vec4]
+            [clojure2d.pixels LDRenderer]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
@@ -85,12 +85,12 @@
            dampstepsx dampstepsy]}]
   (let [^int dampxc (if dampstepsx (count dampstepsx) 0)
         ^int dampyc (if dampstepsy (count dampstepsy) 0)
-        ^BinPixels bp (p/renderer w h :gaussian)]
+        ^LDRenderer bp (p/renderer w h :gaussian)]
     (loop [prevx (double 0.0)
            prevy (double 0.0)
            time (double start-time)
            iter (long 0)]
-      (if (and (window-active? window) (< iter ^long n))
+      (if (and (c2d/window-active? window) (< iter ^long n))
         (let [s1 (m/sin (+ (* time f2) p2))
               s2 (m/sin (+ (* time f3) p3))
 
@@ -128,11 +128,11 @@
 ;; press `space` to save
 ;; close window to stop
 (def result (let [config (make-random-config)
-                  c (canvas w h :low)
-                  window (show-window c "Harmonograph" 800 800 5)]
+                  c (c2d/canvas w h :low)
+                  window (c2d/show-window c "Harmonograph" 800 800 5)]
 
-              (defmethod key-pressed ["Harmonograph" \space] [_ _]
-                (save c (next-filename "results/ex32/" ".png")))
+              (defmethod c2d/key-pressed ["Harmonograph" \space] [_ _]
+                (c2d/save c (c2d/next-filename "results/ex32/" ".png")))
 
               (pprint config)
               
@@ -142,15 +142,15 @@
                 (draw-on-canvas c bp)
                 (loop [time (* step first-step)
                        prev bp]
-                  (if (window-active? window)
+                  (if (c2d/window-active? window)
                     (do
                       (println time) 
                       (let [to #(+ time (* step ^int % steps-per-task))
                             newb (apply p/merge-renderers prev
                                         (map deref (mapv #(future (iterate-harmonograph steps-per-task (to %) window config))
-                                                         (range available-tasks))))] 
+                                                         (range c2d/available-tasks))))] 
                         (draw-on-canvas c newb)
-                        (recur (+ time ^double (r/grand) (* step steps-per-task available-tasks))
+                        (recur (+ time ^double (r/grand) (* step steps-per-task c2d/available-tasks))
                                newb)))
                     (do
                       (println :done)

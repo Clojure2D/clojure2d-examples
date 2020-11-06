@@ -1,5 +1,5 @@
 (ns ex27-palettes
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :as c2d]
             [clojure2d.color :as c]))
 
 (set! *warn-on-reflection* true)
@@ -16,15 +16,15 @@
 (def ^:const ^int bw (/ (- w ww) 2))
 (def ^:const ^int bh (/ (- h hh) 2))
 
-(def cnvs (canvas w h))
-(def window (show-window cnvs "Palettes" 15 nil))
+(def cnvs (c2d/canvas w h))
+(def window (c2d/show-window cnvs "Palettes" 15 nil))
 
 (defn draw-palette
   ""
   [canvas values ^long box-size]
   (doseq [[^long id col] values]
-    (set-color canvas col)
-    (rect canvas id bh box-size hh)))
+    (c2d/set-color canvas col)
+    (c2d/rect canvas id bh box-size hh)))
 
 (defn do-it
   ""
@@ -34,19 +34,19 @@
         values (map-indexed (fn [^long id v] [(+ bw (* id box-size)) v])
                             palette)]
     
-    (with-canvas-> cnvs
-      (set-color 20 20 20)
-      (rect 0 0 w halfh)
-      (set-color 235 235 235)
-      (rect 0 halfh w halfh)
+    (c2d/with-canvas-> cnvs
+      (c2d/set-color 20 20 20)
+      (c2d/rect 0 0 w halfh)
+      (c2d/set-color 235 235 235)
+      (c2d/rect 0 halfh w halfh)
       (draw-palette values box-size))
 
     palette))
 
-(defmethod key-pressed ["Palettes" \s] [_ _]
-  (save cnvs (next-filename "results/ex27/" ".jpg")))
+(defmethod c2d/key-pressed ["Palettes" \s] [_ _]
+  (c2d/save cnvs (c2d/next-filename "results/ex27/" ".jpg")))
 
-(defmethod key-pressed ["Palettes" \space] [_ _]
+(defmethod c2d/key-pressed ["Palettes" \space] [_ _]
   (do-it))
 
 (do-it)

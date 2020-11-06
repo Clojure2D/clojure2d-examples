@@ -53,7 +53,7 @@
         dxy (v/vec2 (- (.x xy) (.x pos))
                     (- (.y xy) (.y pos)))
         d (v/mag dxy)]
-    (if (bool-and (pos? d) (< d radius))
+    (if (and (pos? d) (< d radius))
       (let [s (m/pow (* d rradius) (/ ramp))
             f (/ (* 9.0 s strength (+ (/ (inc s)) (/ (- s 3.0) 4.0))) d)]
         (Node. pos (v/add (.velocity node) (v/mult dxy f)) (.damping node)))

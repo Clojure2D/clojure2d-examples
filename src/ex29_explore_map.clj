@@ -1,5 +1,5 @@
 (ns ex29-explore-map
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :as c2d]
             [fastmath.core :as m]
             [fastmath.random :as r]
             [fastmath.complex :as c]
@@ -10,12 +10,12 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def cnvs (canvas 600 600))
-(def window (show-window cnvs "Explore map"))
+(def cnvs (c2d/canvas 600 600))
+(def window (c2d/show-window cnvs "Explore map"))
 
-(defmethod key-pressed ["Explore map" \space] [_ _]
-  (binding [*jpeg-image-quality* 0.9]
-    (save cnvs (next-filename "results/ex29/" ".jpg"))))
+(defmethod c2d/key-pressed ["Explore map" \space] [_ _]
+  (binding [c2d/*jpeg-image-quality* 0.9]
+    (c2d/save cnvs (c2d/next-filename "results/ex29/" ".jpg"))))
 
 (defn make-standard-map
   "Standard Map"
@@ -90,12 +90,12 @@
   
   (loop [[x y] [initx inity]
          count (int 0)]
-    (when (and (window-active? window) (< count 3000))
+    (when (and (c2d/window-active? window) (< count 3000))
       (let [xx (m/norm x sminx smaxx 0 600)
             yy (m/norm y sminy smaxy 0 600)]
 
         (when (> count 20)
-          (point canvas xx yy))
+          (c2d/point canvas xx yy))
         
         (recur (f x y)
                (unchecked-inc count))))))
@@ -103,8 +103,8 @@
 (defn draw-map
   "draw map from starting point grid"
   [canvas [rmin rmax ^double step] [rminx rmaxx rminy rmaxy] scale f]
-  (set-background canvas 10 10 10)
-  (set-color canvas 240 240 240 20)
+  (c2d/set-background canvas 10 10 10)
+  (c2d/set-color canvas 240 240 240 20)
   (doseq [o (map #(+ (* 2.0 step ^double (r/grand)) ^double %) (range rmin rmax step))]
     (draw-map-position canvas o o scale f) ;; initial point on diagonal line
     (draw-map-position canvas (r/drand rmin rmax) (r/drand rmin rmax) scale f))) ;; random initial point
@@ -129,7 +129,7 @@
       rpars (map #(apply r/drand %) pars)]
   (println random-map)
   (println rpars)
-  (with-canvas-> cnvs
+  (c2d/with-canvas-> cnvs
     (draw-map steps r scale (apply f rpars)))
   :done)
 

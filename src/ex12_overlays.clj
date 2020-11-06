@@ -3,8 +3,7 @@
 (ns ex12-overlays
   (:require [clojure2d.core :as core]
             [clojure2d.extra.overlays :as o]
-            [fastmath.random :as r])
-  (:import [java.awt.image BufferedImage]))
+            [fastmath.random :as r]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)

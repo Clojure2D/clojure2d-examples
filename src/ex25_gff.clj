@@ -4,7 +4,7 @@
 
 (ns ex25-gff
   "Gaussian Free Field" 
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :as c2d]
             [fastmath.core :as m]
             [fastmath.random :as r]))
 
@@ -43,21 +43,20 @@
 (defn my-draw
   ""
   [canvas ^double hf]
-  (do
-    (set-background canvas 21 20 19)
-    (dotimes [t rays]
-      (let [theta (* t rsteps)]
-        (loop [x (* 0.5 w)
-               y (* 0.5 h)
-               iter (long 0)]
-          (when (< iter 350)
-            (let [v (* hf (get-field-value x y))
-                  sx (m/sin (+ v theta))
-                  sy (m/cos (+ v theta))]
-              (rect canvas x y 0.8 0.8)
-              (recur (+ x sx)
-                     (+ y sy)
-                     (inc iter)))))))))
+  (c2d/set-background canvas 21 20 19)
+  (dotimes [t rays]
+    (let [theta (* t rsteps)]
+      (loop [x (* 0.5 w)
+             y (* 0.5 h)
+             iter (long 0)]
+        (when (< iter 350)
+          (let [v (* hf (get-field-value x y))
+                sx (m/sin (+ v theta))
+                sy (m/cos (+ v theta))]
+            (c2d/rect canvas x y 0.8 0.8)
+            (recur (+ x sx)
+                   (+ y sy)
+                   (inc iter))))))))
 
 (defn draw
   ""
@@ -66,14 +65,14 @@
         hf (/ (m/sqrt (* 8.0 (/ kappa m/PI))) 
               (- 4.0 kappa))]
     (when (== frame 200) 
-      (comment save window "results/ex25/gff.jpg"))
+      (comment c2d/save window "results/ex25/gff.jpg"))
     (my-draw canvas hf)))
 
 (do
 
-  (def c (canvas w h :highest))
+  (def c (c2d/canvas w h :highest))
 
-  (with-canvas-> c
-    (set-color 220 220 210 200))
+  (c2d/with-canvas-> c
+    (c2d/set-color 220 220 210 200))
 
-  (def window (show-window c "GFF" #(draw %1 %2 %3 %4))))
+  (def window (c2d/show-window c "GFF" #(draw %1 %2 %3 %4))))

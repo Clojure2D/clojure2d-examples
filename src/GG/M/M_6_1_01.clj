@@ -49,7 +49,7 @@
     node
     (let [dxy (v/sub (.pos other-node) (.pos node))
           d (v/mag dxy)]
-      (if (bool-and (pos? d) (< d radius))
+      (if (and (pos? d) (< d radius))
         (let [s (m/pow (* d rradius) (/ ramp))
               f (/ (* 9.0 s strength (+ (/ (inc s)) (/ (- s 3.0) 4.0))) d)]
           (Node. (.id node) (.pos node) (v/add (.velocity node) (v/mult dxy f))))

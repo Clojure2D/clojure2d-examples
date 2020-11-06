@@ -39,8 +39,8 @@
                               na (+ (- aa bb) x)
                               nb (+ twoab y)
                               aabb (+ aa bb)]
-                          (if (bool-and (< aabb 16.0)
-                                        (< n maxiterations))
+                          (if (and (< aabb 16.0)
+                                   (< n maxiterations))
                             (recur (inc n) na nb)
                             n)))
               nc (mod (* nn 16) 255)]

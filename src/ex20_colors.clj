@@ -1,11 +1,9 @@
 (ns ex20-colors
   (:require [clojure2d.color :as c]
-            [clojure2d.core :refer :all]
+            [clojure2d.core :as c2d]
             [fastmath.vector :as v]
-            [clojure2d.pixels :as p]
-            [fastmath.core :as m])
-  (:import fastmath.vector.Vec4
-           clojure2d.pixels.Pixels))
+            [clojure2d.pixels :as p])
+  (:import clojure2d.pixels.Pixels))
 
 ;; reduce colors to random palette
 
@@ -14,11 +12,11 @@
 
 (def ^Pixels img (p/load-pixels "results/test.jpg"))
 
-(def cnvs (canvas (width img) (height img)))
-(def window (show-window cnvs "Colors" 15 nil))
+(def cnvs (c2d/canvas (c2d/width img) (c2d/height img)))
+(def window (c2d/show-window cnvs "Colors" 15 nil))
 
-(defmethod key-pressed ["Colors" \space] [_ _]
-  (save cnvs (next-filename "results/ex20/" ".jpg")))
+(defmethod c2d/key-pressed ["Colors" \space] [_ _]
+  (c2d/save cnvs (c2d/next-filename "results/ex20/" ".jpg")))
 
 ;; colourlovers
 (p/set-canvas-pixels! cnvs (p/filter-colors (c/nearest-color (c/random-palette)) img))

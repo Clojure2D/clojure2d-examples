@@ -4,9 +4,9 @@
 ;; low speed cpu version
 
 (ns ex22-raymarching
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :as c2d]
             [fastmath.core :as m]
-            [fastmath.random :refer :all]
+            [fastmath.random :as r]
             [fastmath.vector :as v]
             [clojure2d.color :as c]
             [fastmath.fields :as f])
@@ -19,12 +19,12 @@
 (def ^:const ^long w 1000)
 (def ^:const ^long h 1000)
 
-(def cnvs (canvas w h :low))
+(def cnvs (c2d/canvas w h :low))
 
-(def window (show-window cnvs "raymarching" 15 nil))
+(def window (c2d/show-window cnvs "raymarching" 15 nil))
 
-(defmethod key-pressed ["raymarching" \space] [_ _]
-  (save cnvs "results/ex22/scene.jpg"))
+(defmethod c2d/key-pressed ["raymarching" \space] [_ _]
+  (c2d/save cnvs "results/ex22/scene.jpg"))
 
 (def ^:const ^double mint 0.01) ;; minimum ray distance 
 (def ^:const ^double maxt 30.0) ;; maximum ray distance
@@ -94,7 +94,7 @@
   ""
   [^double x ^double y]
   (let [^Vec2 v (terrain-f (Vec2. (+ x 0.5) y))]
-    (* 3.5 ^double (noise (* 0.08 (.x v)) (* 0.08 (.y v))))))
+    (* 3.5 ^double (r/noise (* 0.08 (.x v)) (* 0.08 (.y v))))))
 
 (defn normal
   ""
@@ -160,12 +160,13 @@
             col (if (< t maxt) ;; terrain
                   (let [^Vec3 pos (v/add ro (v/mult rd t))
                         ^Vec3 nor (normal terrain pos t)
-                        hh (- 1.0 (smoothstep -2.0 1.0 (.y pos)))
+                        ;; hh (- 1.0 (smoothstep -2.0 1.0 (.y pos)))
                         sun (m/constrain ^double (v/dot nor sun-light) 0.0 1.0)
                         sha (if (> sun 0.01) (softshadow pos sun-light terrain) 0.0)
-                        sky (+ 0.5 (* 0.5 (.y nor)))
+                        sky (* 0.1 (+ 0.5 (* 0.5 (.y nor))))
 
-                        lin (v/emult (v/mult sun-lin sun) (Vec3. sha (m/pow sha 1.2) (m/pow sha 1.5)))]
+                        lin (v/add (v/emult (v/mult sun-lin sun) (Vec3. sha (m/pow sha 1.2) (m/pow sha 1.5)))
+                                   (v/mult sky-color sky))]
                     (calc-fog t lin bcol))
                   bcol)
             col (v/add col (v/mult glow-color (* (* 0.2 s s) (m/constrain (/ (+ (.y rd) 0.4) 0.4) 0.0 1.0)))) ;; sun glow
@@ -175,6 +176,6 @@
                   desaturate
                   (v/mult 255)
                   c/to-color)]
-        (with-canvas-> cnvs
-          (set-color c)
-          (rect x y 1 1))))))
+        (c2d/with-canvas-> cnvs
+          (c2d/set-color c)
+          (c2d/rect x y 1 1))))))

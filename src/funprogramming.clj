@@ -7,7 +7,6 @@
             [fastmath.random :as r]
             [fastmath.core :as m]
             [clojure2d.color :as c]
-            [fastmath.vector :as v]
             [clojure2d.pixels :as p]
             [clojure.string :refer [join]]))
 
@@ -1389,10 +1388,10 @@
                (set-stroke canvas w)
                (line canvas oldx oldy newx newy)
                
-               (if (bool-or (neg? newx)
-                            (neg? newy)
-                            (> newx (width canvas))
-                            (> newy (height canvas)))
+               (if (or (neg? newx)
+                       (neg? newy)
+                       (> newx (width canvas))
+                       (> newy (height canvas)))
                  (reset)
                  [newx newy (+ a (r/drand -0.4 0.2)) (+ w 0.1)])))]
   (with-canvas-> canvas (set-background :white))
@@ -1802,10 +1801,10 @@
       bgcolor (c/from-HSB* (c/color (r/drand 255) 150 255))
       stroke :white
       draw (fn [canvas window _ [^double x ^double y current-weight target-weight current-alpha]]
-             (let [[nx ny ntarget-weight target-alpha] (if (bool-and (> (mouse-x window) (- x (/ sz 2.0)))
-                                                                     (< (mouse-x window) (+ x (/ sz 2.0)))
-                                                                     (> (mouse-y window) (- y (/ sz 2.0)))
-                                                                     (< (mouse-y window) (+ y (/ sz 2.0))))
+             (let [[nx ny ntarget-weight target-alpha] (if (and (> (mouse-x window) (- x (/ sz 2.0)))
+                                                                (< (mouse-x window) (+ x (/ sz 2.0)))
+                                                                (> (mouse-y window) (- y (/ sz 2.0)))
+                                                                (< (mouse-y window) (+ y (/ sz 2.0))))
                                                          (if (mouse-pressed? window)
                                                            [(m/lerp x (mouse-x window) 0.2)
                                                             (m/lerp y (mouse-y window) 0.2)
@@ -1849,7 +1848,7 @@
                         fgcolor (from-hsb (c/color h 80 100 100))]
                     [fgcolor bgcolor])
       inside? (fn [^long x ^long y]
-                (bool-and (> x x1) (< x x2) (> y y1) (< y y2)))
+                (and (> x x1) (< x x2) (> y y1) (< y y2)))
       draw (fn [canvas window _ colors]
 
              (let [ncolors (if (and (mouse-pressed? window) (inside? (mouse-x window) (mouse-y window)))

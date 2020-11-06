@@ -13,14 +13,14 @@
 ;; Click mouse to make new center point
 
 (ns ex34-ducks-kalisets
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :as c2d]
             [fastmath.core :as m]
             [fastmath.complex :as c]
             [fastmath.vector :as v]
             [clojure2d.pixels :as p]
             [fastmath.random :as r]
-            [clojure.pprint :refer :all])
-  (:import [fastmath.vector Vec2 Vec4]))
+            [clojure.pprint :refer [pprint]])
+  (:import [fastmath.vector Vec2]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
@@ -43,8 +43,8 @@
   (Bounds. x1 y1 x2 y2 (* 0.5 (- x2 x1)) (* 0.5 (- y2 y1))))
 
 ;; Coloring functions
-(def coloring-fns {:f1 (fn [nz z] (m/exp (* -6.0 ^double (v/mag nz))))
-                   :f2 (fn [nz z] (m/exp (* -6.0 ^double (v/magsq nz))))
+(def coloring-fns {:f1 (fn [nz _] (m/exp (* -6.0 ^double (v/mag nz))))
+                   :f2 (fn [nz _] (m/exp (* -6.0 ^double (v/magsq nz))))
                    :f3 (fn [nz z] (m/exp (/ -6.0 ^double (v/mag (v/sub nz z)))))
                    :f4 (fn [nz z] (m/exp (/ -6.0 ^double (v/magsq (v/sub nz z)))))})
 
@@ -151,8 +151,8 @@
                              (+ wsum w))
                       (/ sum wsum))))
               col (* 255 (m/abs (m/qsin (* mlt m/TWO_PI (m/sqrt m)))))]
-          (set-color canvas col col col)
-          (rect canvas y x 1 1)))))
+          (c2d/set-color canvas col col col)
+          (c2d/rect canvas y x 1 1)))))
   canvas)
 
 (defn make-random-config
@@ -165,15 +165,15 @@
      :mlt (r/drand 1 3)
      :iter-fn itername
      :weight-fn (rand-nth weight-fns)
-     :bounds (make-bounds -2 -2 2 2)}))
+     :bounds (make-bounds -2.0 -2.0 2.0 2.0)}))
 
-(def cnvs (canvas w h :low))
+(def cnvs (c2d/canvas w h :low))
 
 (defn draw-fractal
   "Draw fractal"
   [config]
   (pprint config)
-  (with-canvas-> cnvs
+  (c2d/with-canvas-> cnvs
     (draw-ducks config)
     (p/set-canvas-pixels! (p/filter-channels p/normalize (p/to-pixels cnvs))))
   (println "done!")
@@ -184,17 +184,17 @@
   []
   (draw-fractal (make-random-config)))
 
-(def window (show-window {:canvas cnvs
-                          :window-name title
-                          :fps 20
-                          :refresher :fast
-                          :state (new-fractal)}))
+(def window (c2d/show-window {:canvas cnvs
+                              :window-name title
+                              :fps 20
+                              :refresher :fast
+                              :state (new-fractal)}))
 
-(defmethod key-pressed [title \n] [_ _]
+(defmethod c2d/key-pressed [title \n] [_ _]
   (new-fractal))
 
-(defmethod key-pressed [title \space] [_ state]
-  (save cnvs (next-filename "results/ex34/" ".jpg"))
+(defmethod c2d/key-pressed [title \space] [_ state]
+  (c2d/save cnvs (c2d/next-filename "results/ex34/" ".jpg"))
   state)
 
 (defn scale-bounds
@@ -206,25 +206,25 @@
     (make-bounds (- midx nsx) (- midy nsy)
                  (+ midx nsx) (+ midy nsy))))
 
-(defmethod key-pressed [title \z] [_ config] 
+(defmethod c2d/key-pressed [title \z] [_ config] 
   (draw-fractal (assoc config :bounds (scale-bounds 0.5 (:bounds config)))))
 
-(defmethod key-pressed [title \x] [_ config]
+(defmethod c2d/key-pressed [title \x] [_ config]
   (draw-fractal (assoc config :bounds (scale-bounds 2.0 (:bounds config)))))
 
-(defmethod key-pressed [title \c] [_ config]
+(defmethod c2d/key-pressed [title \c] [_ config]
   (draw-fractal (assoc config
                        :coloring-fn (rand-nth (keys coloring-fns))
                        :mlt (r/drand 1 3))))
 
-(defmethod key-pressed [title \w] [_ config] 
+(defmethod c2d/key-pressed [title \w] [_ config] 
   (draw-fractal (assoc config :weight-fn (rand-nth weight-fns))))
 
-(defmethod mouse-event [title :mouse-pressed] [e config]
+(defmethod c2d/mouse-event [title :mouse-pressed] [e config]
   (println config)
   (let [^Bounds cbounds (:bounds config)
-        nx (m/norm (mouse-y e) 0 w (.x1 cbounds) (.x2 cbounds))
-        ny (m/norm (mouse-x e) 0 h (.y1 cbounds) (.y2 cbounds))
+        nx (m/norm (c2d/mouse-y e) 0 w (.x1 cbounds) (.x2 cbounds))
+        ny (m/norm (c2d/mouse-x e) 0 h (.y1 cbounds) (.y2 cbounds))
         nbounds (make-bounds (- nx (.sx cbounds)) (- ny (.sy cbounds))
                              (+ nx (.sx cbounds)) (+ ny (.sy cbounds)))]
     (draw-fractal (assoc config :bounds nbounds))))

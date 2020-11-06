@@ -1,6 +1,6 @@
 (ns ex04-noise
   "Draw various noise variants"
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :as c2d]
             [fastmath.core :as m]
             [fastmath.random :as r]
             [clojure2d.color :as c]))
@@ -9,31 +9,31 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def cnvs (canvas 200 200 :low)) ;; low quality canvas (we draw pixel by pixel)
+(def cnvs (c2d/canvas 200 200 :low)) ;; low quality canvas (we draw pixel by pixel)
 
 (defn draw-noise
   "Loop through noise field and draw it."
   [n]
-  (with-canvas [canvas cnvs] ;; make graphical context
-    (set-background canvas :black)
+  (c2d/with-canvas [canvas cnvs] ;; make graphical context
+    (c2d/set-background canvas :black)
     (dotimes [y 180]
       (dotimes [x 180]
         (let [xx (/ x 30.0)
               yy (/ y 30.0)
               nn (* 255.0 ^double (n xx yy))]
-          (set-color canvas (c/color nn nn nn))
-          (rect canvas (+ x 10) (+ y 10) 1 1)))))
-  canvas)
+          (c2d/set-color canvas (c/color nn nn nn))
+          (c2d/rect canvas (+ x 10) (+ y 10) 1 1))))
+    canvas))
 
-(show-window {:canvas cnvs
-              :window-name "noise"
-              :w 600
-              :h 600
-              :fps 10
-              :hint :mid})
+(c2d/show-window {:canvas cnvs
+                  :window-name "noise"
+                  :w 600
+                  :h 600
+                  :fps 10
+                  :hint :mid})
 
-(defmethod key-pressed ["noise" \space] [_ _]
-  (save cnvs (next-filename "results/ex04/" ".jpg")))
+(defmethod c2d/key-pressed ["noise" \space] [_ _]
+  (c2d/save cnvs (c2d/next-filename "results/ex04/" ".jpg")))
 
 (draw-noise r/noise)
 

@@ -2,11 +2,11 @@
 ;; forced movement
 
 (ns ex10-curvature2
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :as c2d]
             [fastmath.core :as m]
             [fastmath.random :as rr]
             [fastmath.vector :as v]
-            [fastmath.fields :refer :all]
+            [fastmath.fields :as f]
             [clojure.pprint :refer [pprint]])
   (:import [fastmath.vector Vec2 Vec3]))
 
@@ -45,35 +45,35 @@
         ^Vec2 vv (v/add v vshift)
         n (* angle-scale ^double (m/norm (noise (.x vv) (.y vv)) 0 1 -1 1))
         angle (+ (.z in) n)]
-    (point canvas nx ny)
+    (c2d/point canvas nx ny)
     (Vec3. nx ny angle)))
 
 (defn example-10
   []
-  (binding [*skip-random-fields* true]
-    (let [cnvs (canvas w h)
-          window (show-window cnvs "curvature2" 15 nil)
+  (binding [f/*skip-random-fields* true]
+    (let [cnvs (c2d/canvas w h)
+          window (c2d/show-window cnvs "curvature2" 15 nil)
           noise (rr/random-noise-fn)
-          field-config (random-configuration)
-          field (combine field-config)
+          field-config (f/random-configuration)
+          field (f/combine field-config)
           vshift (Vec2. (rr/drand -3 3) (rr/drand -3 3))
           mv-fun (partial move-particle vshift field noise)
           particles (repeatedly 500 make-particle)
           looper (fn [canvas] (loop [xs particles
-                                     time (double 0.0)]
-                                (if (window-active? window)
-                                  (recur (mapv (partial mv-fun canvas time) xs) (+ time 0.001))
-                                  canvas)))]    
+                                    time (double 0.0)]
+                               (if (c2d/window-active? window)
+                                 (recur (mapv (partial mv-fun canvas time) xs) (+ time 0.001))
+                                 canvas)))]    
       
-      (defmethod key-pressed ["curvature2" \space] [_ _]
-        (save cnvs (next-filename "results/ex10/" ".jpg")))
+      (defmethod c2d/key-pressed ["curvature2" \space] [_ _]
+        (c2d/save cnvs (c2d/next-filename "results/ex10/" ".jpg")))
 
       (pprint field-config)
 
-      (with-canvas-> cnvs
-        (set-background 240 240 240)
-        (set-color 20 20 20 20)
-        (set-stroke point-size)
+      (c2d/with-canvas-> cnvs
+        (c2d/set-background 240 240 240)
+        (c2d/set-color 20 20 20 20)
+        (c2d/set-stroke point-size)
         (looper)))))
 
 (example-10)

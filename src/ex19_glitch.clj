@@ -1,9 +1,8 @@
 ;; Several glitch examples
 
 (ns ex19-glitch
-  (:require [fastmath.core :as m]
-            [clojure2d.pixels :as p]
-            [clojure2d.core :refer :all]
+  (:require [clojure2d.pixels :as p]
+            [clojure2d.core :as c2d]
             [clojure2d.color :as c]
             [fastmath.fields :as v]
             [clojure2d.extra.glitch :as g])
@@ -14,11 +13,11 @@
 
 (def ^Pixels img (p/load-pixels "results/test.jpg"))
 
-(def cnvs (canvas (width img) (height img)))
-(def window (show-window cnvs "Glitch"))
+(def cnvs (c2d/canvas (c2d/width img) (c2d/height img)))
+(def window (c2d/show-window cnvs "Glitch"))
 
-(defmethod key-pressed ["Glitch" \space] [_ _]
-  (save cnvs (next-filename "results/ex19/" ".jpg")))
+(defmethod c2d/key-pressed ["Glitch" \space] [_ _]
+  (c2d/save cnvs (c2d/next-filename "results/ex19/" ".jpg")))
 
 ;; slitscan
 

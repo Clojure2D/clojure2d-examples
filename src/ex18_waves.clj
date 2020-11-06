@@ -1,7 +1,7 @@
 ;; visualize wave generators
 
 (ns ex18-waves
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :as c2d]
             [fastmath.core :as m]
             [fastmath.random :as r]
             [fastmath.signal :as s]
@@ -11,12 +11,12 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def cnvs (canvas 600 600))
+(def cnvs (c2d/canvas 600 600))
 
-(def display (show-window cnvs "waves"))
+(def display (c2d/show-window cnvs "waves"))
 
-(defmethod key-pressed ["waves" \space] [_ _]
-  (save cnvs (next-filename "results/ex18/" ".jpg")))
+(defmethod c2d/key-pressed ["waves" \space] [_ _]
+  (c2d/save cnvs (c2d/next-filename "results/ex18/" ".jpg")))
 
 ;; frequencies and amplitudes
 (def f (mapv #(<< 1 ^long %) (range 16)))
@@ -30,16 +30,16 @@
            prev (yfn 0)]
       (when (< x 600)
         (let [ny (yfn x)]
-          (line canvas x prev (inc x) ny)
+          (c2d/line canvas x prev (inc x) ny)
           (recur (inc x) ny))))))
 
 (def valid-oscillators (vec (disj (set s/oscillators) :constant)))
 
 ;; run several times
 (let [lst (map #(s/oscillator (rand-nth valid-oscillators) (f %) (a %) (r/drand 1)) (range 1 5))]
-  (with-canvas-> cnvs
-    (set-color :white)
-    (set-background :black)
+  (c2d/with-canvas-> cnvs
+    (c2d/set-color :white)
+    (c2d/set-background :black)
     (draw-fun (apply s/oscillators-sum lst)))
   :done)
 
@@ -52,8 +52,8 @@
           v1 (* 255.0 (m/sq v))
           v2 (* 255.0 (m/sqrt v))
           c (c/color (* 255.0 v) v1 v2)]
-      (set-color canvas c)
-      (rect canvas x y 1 1))))
+      (c2d/set-color canvas c)
+      (c2d/rect canvas x y 1 1))))
 
 ;; try several times
 (let [num 7
@@ -64,7 +64,7 @@
   (dotimes [y 600]
     (let [yy (/ y 600.0)
           lst (map #(s/oscillator (nth wvs %) (f (nth octaves %)) (a (nth octaves %)) (+ (* yy ^double (nth phasemult %)) ^double (nth phases %))) (range num))]
-      (with-canvas-> cnvs
+      (c2d/with-canvas-> cnvs
         (draw-fun2 y (apply s/oscillators-sum lst)))))
   :done)
 

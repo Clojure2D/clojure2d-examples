@@ -1,9 +1,9 @@
 (ns ex05-particles
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :as c2d]
             [fastmath.core :as m]
             [fastmath.random :as r]
             [fastmath.vector :as v]
-            [fastmath.fields :refer :all]
+            [fastmath.fields :as f]
             [clojure.pprint :refer [pprint]])
   (:import [fastmath.vector Vec2]))
 
@@ -48,36 +48,36 @@
     
     (if (and (<= 80 ny (- h 81)) (<= 80 nx (- w 81))) ;; if inside window, draw. Create new particle otherwise.
       (do
-        (set-color canvas col col col alpha)
+        (c2d/set-color canvas col col col alpha)
         
         (if line?
-          (line canvas (.x in) (.y in) nx ny)
-          (point canvas nx ny))
+          (c2d/line canvas (.x in) (.y in) nx ny)
+          (c2d/point canvas nx ny))
         
         (Vec2. nx ny))
       (make-particle))))
 
-(binding [*skip-random-fields* true]
-  (let [cnvs (canvas w h) ;; canvas
-        window (show-window cnvs "particles" w h 25) ;; window
+(binding [f/*skip-random-fields* true]
+  (let [cnvs (c2d/canvas w h) ;; canvas
+        window (c2d/show-window cnvs "particles" w h 25) ;; window
         noise (r/random-noise-fn) ;; scalar field (random noise)
-        field-config (random-configuration) ;; vector field random configuration
-        field (combine field-config) ;; vector field
+        field-config (f/random-configuration) ;; vector field random configuration
+        field (f/combine field-config) ;; vector field
         vrand (Vec2. (r/drand -1 1) (r/drand -1 1)) ;; vector field shift
         mv-fun (partial move-particle vrand (r/brand) field noise)  ;; move particle function with current config
         particles (repeatedly 25000 make-particle) ;; particle list
         looper (fn [cnvs] (loop [xs particles] ;; loop and draw unless window is visible (close window to stop)
-                            (if (window-active? window)
-                              (recur (mapv (partial mv-fun cnvs) xs))
-                              cnvs)))]
+                           (if (c2d/window-active? window)
+                             (recur (mapv (partial mv-fun cnvs) xs))
+                             cnvs)))]
     
-    (defmethod key-pressed ["particles" \space] [_ _]
-      (save cnvs (next-filename "results/ex05/" ".jpg")))
+    (defmethod c2d/key-pressed ["particles" \space] [_ _]
+      (c2d/save cnvs (c2d/next-filename "results/ex05/" ".jpg")))
 
     (pprint field-config)
 
-    (with-canvas-> cnvs
-      (set-background 10 10 10)
-      (set-stroke point-size)
+    (c2d/with-canvas-> cnvs
+      (c2d/set-background 10 10 10)
+      (c2d/set-stroke point-size)
       looper))) ;; run!
 

@@ -1,23 +1,21 @@
 ;; grids based on noise, result used in pix2line glitch sketch
 
 (ns ex17-grids
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :as c2d]
             [fastmath.core :as m]
             [fastmath.random :as r]
-            [clojure2d.pixels :as p]
-            [clojure2d.color :as c])
-  (:import [clojure2d.pixels Pixels]))
+            [clojure2d.color :as c]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def cnvs (canvas 600 600 :low))
+(def cnvs (c2d/canvas 600 600 :low))
 
-(def window (show-window cnvs "grid" 10 nil))
+(def window (c2d/show-window cnvs "grid" 10 nil))
 
-(defmethod key-pressed ["grid" \space] [_ _]
-  (save cnvs (next-filename "results/ex17/" ".jpg")))
+(defmethod c2d/key-pressed ["grid" \space] [_ _]
+  (c2d/save cnvs (c2d/next-filename "results/ex17/" ".jpg")))
 
 (def dark (c/awt-color 2 22 52))
 (def light (c/awt-color 232 221 203))
@@ -41,10 +39,10 @@
               yy (* (quot x nnx) (int (* nnx (inc ^double (noise (+ 0.2 (quot x nnx)) time )))))
               xx (* (quot y nny) (int (* nny (inc ^double (noise (- 0.4 (quot y nny)) (- time))))))
               n (< ^double (noise (+ 0.4 (quot (+ x xx) nx)) (- 0.4 (quot (+ y yy) ny))) 0.5)]
-          (set-awt-color canvas (if n dark light))
-          (rect canvas x y 1 1))))))
+          (c2d/set-awt-color canvas (if n dark light))
+          (c2d/rect canvas x y 1 1))))))
 
 (do
-  (with-canvas-> cnvs
+  (c2d/with-canvas-> cnvs
     (draw-grid))
   :done)

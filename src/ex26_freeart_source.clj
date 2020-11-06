@@ -19,8 +19,8 @@
 
 (ns ex26-freeart-source
   (:require [clojure2d.color :as c]
-            [clojure2d.core :refer :all]
-            [clojure2d.extra.glitch :as g]
+            [clojure2d.core :as c2d]
+            ;; [clojure2d.extra.glitch :as g]
             [clojure2d.extra.overlays :as o]
             [clojure2d.extra.segmentation :as es]
             [clojure2d.extra.signal :as s]
@@ -45,10 +45,10 @@
 (def ^:const number-of-frames 44)
 
 ;; canvas bound to window
-(def cnvs (canvas w h :low))
+(def cnvs (c2d/canvas w h :low))
 
 ;; canvases which represent frames
-(def canvases (vec (repeatedly number-of-frames #(black-canvas w h :mid))))
+(def canvases (vec (repeatedly number-of-frames #(c2d/black-canvas w h :mid))))
 
 ;; pixels from images (44 frames)
 (def images (mapv #(p/load-pixels (str "src/ex26/" (format "%02d" %) ".jpg")) (range number-of-frames)))
@@ -56,23 +56,22 @@
 ;; Iteratively go through canvases (frames) and draw them onto screen canvas
 (defn draw
   "Draw current frame on the screen"
-  [canvas window ^long frame state]
+  [canvas _ ^long _ state]
   (let [curr (or state canvases)
-        id (mod frame number-of-frames)
         current-canvas (first curr)]
-    (image canvas (get-image current-canvas))
+    (c2d/image canvas (c2d/get-image current-canvas))
     (next curr)))
 
 ;; Display window. I don't know why but running first time shows blank window.
 ;; Close and execute second time.
-(def window (show-window {:canvas cnvs
-                          :window-name "free_art_-_source"
-                          :w (* w 2)
-                          :h (* h 2)
-                          :fps 25
-                          :draw-fn draw
-                          :renderer :fast
-                          :hint :mid}))
+(def window (c2d/show-window {:canvas cnvs
+                              :window-name "free_art_-_source"
+                              :w (* w 2)
+                              :h (* h 2)
+                              :fps 25
+                              :draw-fn draw
+                              :renderer :fast
+                              :hint :mid}))
 
 ;; Prepare noise and spot overlay frames, it's slow
 (def noise-frames (vec (repeatedly number-of-frames #(o/noise-overlay w h {:alpha 60})))) ;;;; change!
@@ -137,18 +136,18 @@
   "This is the function where all the things will happen"
   [canvas ^long time ^long frame]
   (let [color (mod time 255)] ;;;; change!
-    (set-color canvas 0 0 0 200) ;;;; change!
-    (rect canvas 20 20 (- w 40) (- h 40)) ;;;; change!
+    (c2d/set-color canvas 0 0 0 200) ;;;; change!
+    (c2d/rect canvas 20 20 (- w 40) (- h 40)) ;;;; change!
 
-    (set-color canvas color (- 255 color) 11 200) ;;;; change!
+    (c2d/set-color canvas color (- 255 color) 11 200) ;;;; change!
     (dotimes [x w]
       (let [n (r/noise (/ frame 100.0) (/ frame 200.0) (/ x 20.0))] ;;;; change!
         (when (> n 0.636) ;;;; change!
-          (line canvas x 0 x h))))
+          (c2d/line canvas x 0 x h))))
 
     (doseq [[x y size] (filter (fn [_] (r/brand 0.985)) (segments frame))] ;;;; change!
-      (set-color canvas (p/get-color (images frame) x y))
-      (rect canvas x y size size)) ;;;; change! (use rect)
+      (c2d/set-color canvas (p/get-color (images frame) x y))
+      (c2d/rect canvas x y size size)) ;;;; change! (use rect)
     
     (->> (p/to-pixels canvas)
          (p/filter-channels p/box-blur-1) ;;;; change!
@@ -161,11 +160,11 @@
          (p/filter-channels p/normalize)
          (p/set-canvas-pixels! canvas))
 
-    (with-canvas-> (canvases frame)
-      (image (-> (get-image canvas)
-                 (o/render-rgb-scanlines) ;;;; change!
-                 (o/render-noise (noise-frames frame)) ;;;; change!
-                 (o/render-spots (spots-frames frame))))))) ;;;; change!
+    (c2d/with-canvas-> (canvases frame)
+      (c2d/image (-> (c2d/get-image canvas)
+                     (o/render-rgb-scanlines) ;;;; change!
+                     (o/render-noise (noise-frames frame)) ;;;; change!
+                     (o/render-spots (spots-frames frame))))))) ;;;; change!
 
 ;; atom controlling updater
 (def is-running (atom true))
@@ -181,12 +180,12 @@
 (defn updater
   "Update frames"
   []
-  (let [buffer (canvas w h)]
+  (let [buffer (c2d/canvas w h)]
     (loop [time (long 0)]
       (let [frame (mod time number-of-frames)]
-        (with-canvas-> buffer
+        (c2d/with-canvas-> buffer
           (scenario time frame)))
-      (when (and  @is-running (window-active? window)) (recur (inc time)))))
+      (when (and  @is-running (c2d/window-active? window)) (recur (inc time)))))
   (println "stopped"))
 
 ;; run updater in separate thread
@@ -194,6 +193,6 @@
 
 ;; uncomment and run to save current state
 (comment do
-         (close-session)
+         (c2d/close-session)
          (dotimes [s number-of-frames]
-           (save (canvases s) (next-filename "results/ex26/" ".jpg"))))
+           (c2d/save (canvases s) (c2d/next-filename "results/ex26/" ".jpg"))))

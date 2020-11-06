@@ -1,10 +1,9 @@
 ;; https://gist.github.com/yogthos/3411106
 
 (ns ex14-metaballs
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :as c2d]
             [fastmath.core :as m]
             [fastmath.random :as r]
-            [clojure2d.color :as c]
             [fastmath.vector :as v])
   (:import [fastmath.vector Vec3]))
 
@@ -54,30 +53,30 @@
       
       (let [^Vec3 c (reduce (fn [current ball]
                               (compute-color x y current ball)) zero balls)]
-        (set-color canvas c)
-        (rect canvas x y 2 2))
+        (c2d/set-color canvas c)
+        (c2d/rect canvas x y 2 2))
       
       (when (< x SIZE-2) (recur (+ 2 x))))
     (when (< y SIZE-2) (recur (+ 2 y)))))
 
 (defn draw-balls
-  [n canvas window framecount result]
+  [_ canvas _ _ result]
   (let [balls (map move result)]
     (draw canvas balls)
     balls))
 
 (defn example-14
   [n]
-  (let [c (canvas SIZE SIZE :low)]
-    (show-window {:canvas c
-                  :window-name "metaballs"
-                  :draw-fn (partial draw-balls n)
-                  :draw-state (repeatedly n make-ball)
-                  :refresher :fast})))
+  (let [c (c2d/canvas SIZE SIZE :low)]
+    (c2d/show-window {:canvas c
+                      :window-name "metaballs"
+                      :draw-fn (partial draw-balls n)
+                      :draw-state (repeatedly n make-ball)
+                      :refresher :fast})))
 
 (def window (example-14 (r/irand 2 6)))
 
-(comment save window "results/ex14/metaballs.jpg")
+(comment c2d/save window "results/ex14/metaballs.jpg")
 
 ;; [[../results/ex14/metaballs.jpg]]
 

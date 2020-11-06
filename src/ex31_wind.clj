@@ -2,7 +2,7 @@
 ;; https://www.openprocessing.org/sketch/151044
 
 (ns ex31-wind
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :as c2d]
             [fastmath.core :as m]
             [fastmath.random :as r]))
 
@@ -10,7 +10,7 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def cnvs (canvas 500 500 :highest))
+(def cnvs (c2d/canvas 500 500 :highest))
 
 (def ^:const ^double s (/ m/TWO_PI 320.0)) ;; speed
 (def ^:const ^double phase-scale (/ m/PI 400.0)) 
@@ -22,11 +22,11 @@
 
 (defn draw
   "Wind algorithm "
-  [canvas window ^long frame state]
+  [canvas _ ^long frame state]
   (let [^double a (or state 0.0)]
-    (comment when (= frame 200) (binding [*jpeg-image-quality* 0.9]
-                                  (save cnvs "results/ex31/wind.jpg")))
-    (set-background canvas 226 210 184)
+    (comment when (= frame 200) (binding [c2d/*jpeg-image-quality* 0.9]
+                                  (c2d/save cnvs "results/ex31/wind.jpg")))
+    (c2d/set-background canvas 226 210 184)
     (dotimes [j 16]
       (dotimes [i 400]
         (let [jj (+ 50 (* j 25))
@@ -42,8 +42,8 @@
               dy (random-c)
               x (+ ii dx dx)
               y (+ swing dy dy)] 
-          (set-color canvas 20 20 20 (- 150 (* 150 (m/hypot dx dy))))
-          (ellipse canvas x y 2 2))))
+          (c2d/set-color canvas 20 20 20 (- 150 (* 150 (m/hypot dx dy))))
+          (c2d/ellipse canvas x y 2 2))))
     (+ a s)))
 
-(def window (show-window cnvs "Wind blows" draw))
+(def window (c2d/show-window cnvs "Wind blows" draw))

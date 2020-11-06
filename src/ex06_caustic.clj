@@ -1,5 +1,5 @@
 (ns ex06-caustic
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :as c2d]
             [fastmath.core :as m]
             [fastmath.random :as r]
             [fastmath.vector :as v]
@@ -40,18 +40,18 @@
                 ^Vec2 v2 (field (Vec2. (+ hhx delta) (+ hhy delta)))
                 dx (* d (- (.x v1) (.x v2)))
                 dy (* d (- (.y v1) (.y v2)))]
-            (rect canvas (+ dx x) (+ dy y) 1 1))
-          (when (and (window-active? window) (< y (+ d2 height))) (recur (+ y 0.3))))
-        (when (and (window-active? window) (< x (+ d2 width))) (recur (+ x 0.3))))))
+            (c2d/rect canvas (+ dx x) (+ dy y) 1 1))
+          (when (and (c2d/window-active? window) (< y (+ d2 height))) (recur (+ y 0.3))))
+        (when (and (c2d/window-active? window) (< x (+ d2 width))) (recur (+ x 0.3))))))
   canvas)
 
-(let [cnvs (canvas 800 800)
-      window (show-window cnvs "caustic" 15 nil)]
+(let [cnvs (c2d/canvas 800 800)
+      window (c2d/show-window cnvs "caustic" 15 nil)]
 
-  (defmethod key-pressed ["caustic" \space] [_ _]
-    (save cnvs (next-filename "results/ex06/" ".jpg")))
+  (defmethod c2d/key-pressed ["caustic" \space] [_ _]
+    (c2d/save cnvs (c2d/next-filename "results/ex06/" ".jpg")))
 
-  (with-canvas-> cnvs
-    (set-color 10 20 40 30)
-    (set-background 200 200 210)
+  (c2d/with-canvas-> cnvs
+    (c2d/set-color 10 20 40 30)
+    (c2d/set-background 200 200 210)
     (draw-caustic window 800 800)))

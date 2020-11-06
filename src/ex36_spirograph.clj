@@ -1,9 +1,8 @@
 (ns ex36-spirograph
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :as c2d]
             [fastmath.core :as m]
             [fastmath.vector :as v]
-            [fastmath.random :as r]
-            [clojure.pprint :refer :all])
+            [fastmath.random :as r])
   (:import [fastmath.vector Vec2]))
 
 (set! *warn-on-reflection* true)
@@ -17,9 +16,9 @@
 
 (def ^:const title "Spirograph")
 
-(def cnvs (canvas w h))
+(def cnvs (c2d/canvas w h))
 
-(def window (show-window cnvs title))
+(def window (c2d/show-window cnvs title))
 
 (defn make-spirograph
   "Create sprirograph fn based on parameters"
@@ -41,12 +40,12 @@
   (dotimes [x steps]
     (let [t (/ x 500.0)
           ^Vec2 res (v/add mid (v/mult (spirograph-fn t) (* 0.9 hw)))]      
-      (point canvas (.x res) (.y res)))))
+      (c2d/point canvas (.x res) (.y res)))))
 
-(with-canvas-> cnvs
-  (set-background :black)
-  (set-color :linen 30)
+(c2d/with-canvas-> cnvs
+  (c2d/set-background :black)
+  (c2d/set-color :linen 30)
   (draw-spirograph (make-spirograph) (r/drand 10000 200000)))
 
-(defmethod key-pressed [title \space] [_ _]
-  (save cnvs (next-filename "results/ex36/" ".jpg")))
+(defmethod c2d/key-pressed [title \space] [_ _]
+  (c2d/save cnvs (c2d/next-filename "results/ex36/" ".jpg")))

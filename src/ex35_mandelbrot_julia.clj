@@ -19,12 +19,11 @@
 ;; Move mouse to see Julia related to mouse position
 
 (ns ex35-mandelbrot-julia
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :as c2d]
             [fastmath.core :as m]
             [fastmath.random :as r]
-            [fastmath.vector :as v]
-            [clojure2d.pixels :as p])
-  (:import [fastmath.vector Vec2 Vec4]))
+            [fastmath.vector :as v])
+  (:import [fastmath.vector Vec4]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
@@ -79,8 +78,8 @@
                          (recur (inc iter) (v/add (mulm z z) c)) 
                          (dec iter)))
             col (* 255.0 (m/pow (/ idx 512.0) 0.4))]
-        (set-color canvas col col col)
-        (rect canvas x y 1 1))))
+        (c2d/set-color canvas col col col)
+        (c2d/rect canvas x y 1 1))))
   make-matrix)
 
 (defn draw-julia
@@ -98,8 +97,8 @@
                          (recur (inc iter) (v/add (mulm z z) c)) 
                          (dec iter)))
             col (* 255.0 (m/pow (/ idx 64.0) 0.4))]
-        (set-color canvas col col col)
-        (rect canvas x y 1 1))))
+        (c2d/set-color canvas col col col)
+        (c2d/rect canvas x y 1 1))))
   make-matrix)
 
 (defn check-matrix-def
@@ -151,33 +150,33 @@
 
 ;; window, context and events
 
-(def mcanvas (canvas w w :low))
-(def mwindow (show-window {:canvas mcanvas
-                           :window-name "Mandelbrot"
-                           :state complex-matrix}))
+(def mcanvas (c2d/canvas w w :low))
+(def mwindow (c2d/show-window {:canvas mcanvas
+                               :window-name "Mandelbrot"
+                               :state complex-matrix}))
 
-(def jcanvas (canvas hw hw :low))
-(def jwindow (show-window jcanvas "Julia"))
+(def jcanvas (c2d/canvas hw hw :low))
+(def jwindow (c2d/show-window jcanvas "Julia"))
 
-(with-canvas-> mcanvas
-  (draw-mandelbrot (get-state mwindow)))
+(c2d/with-canvas-> mcanvas
+  (draw-mandelbrot (c2d/get-state mwindow)))
 
-(defmethod key-pressed ["Mandelbrot" \space] [_ _]
-  (with-canvas-> mcanvas
+(defmethod c2d/key-pressed ["Mandelbrot" \space] [_ _]
+  (c2d/with-canvas-> mcanvas
     (draw-mandelbrot (make-matrix-maker))))
 
-(defmethod key-pressed ["Mandelbrot" \m] [_ _]
-  (with-canvas-> mcanvas
+(defmethod c2d/key-pressed ["Mandelbrot" \m] [_ _]
+  (c2d/with-canvas-> mcanvas
     (draw-mandelbrot complex-matrix)))
 
-(defmethod mouse-event ["Mandelbrot" :mouse-moved] [e matrix-maker]
-  (let [nx (m/mnorm (mouse-y e) 0.0 w -3.0 3.0)
-        ny (m/mnorm (mouse-x e) 0.0 w -3.0 3.0)]
-    (with-canvas-> jcanvas
+(defmethod c2d/mouse-event ["Mandelbrot" :mouse-moved] [e matrix-maker]
+  (let [nx (m/mnorm (c2d/mouse-y e) 0.0 w -3.0 3.0)
+        ny (m/mnorm (c2d/mouse-x e) 0.0 w -3.0 3.0)]
+    (c2d/with-canvas-> jcanvas
       (draw-julia matrix-maker (matrix-maker nx ny)))))
 
-(defmethod key-pressed ["Mandelbrot" \s] [_ s]
-  (save mcanvas (next-filename "results/ex35/mandelbrot" ".jpg"))
-  (save jcanvas (next-filename "results/ex35/julia" ".jpg"))
+(defmethod c2d/key-pressed ["Mandelbrot" \s] [_ s]
+  (c2d/save mcanvas (c2d/next-filename "results/ex35/mandelbrot" ".jpg"))
+  (c2d/save jcanvas (c2d/next-filename "results/ex35/julia" ".jpg"))
   s)
 

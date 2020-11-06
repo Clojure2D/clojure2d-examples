@@ -1,11 +1,11 @@
 (ns ex23-raymarching2
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :as c2d]
             [fastmath.core :as m]
-            [fastmath.random :refer :all]
+            [fastmath.random :as rnd]
             [fastmath.vector :as v]
             [clojure2d.color :as c]
             [clojure2d.extra.raymarching :as r])
-  (:import [fastmath.vector Vec2 Vec3]
+  (:import [fastmath.vector Vec3]
            [clojure2d.extra.raymarching HitData Material]))
 
 (set! *warn-on-reflection* true)
@@ -15,12 +15,12 @@
 (def ^:const ^long w 1200)
 (def ^:const ^long h 1200)
 
-(def cnvs (canvas w h :low))
+(def cnvs (c2d/canvas w h :low))
 
-(def window (show-window cnvs "raymarching2" 15 nil))
+(def window (c2d/show-window cnvs "raymarching2" 15 nil))
 
-(defmethod key-pressed ["raymarching2" \space] [_ _]
-  (save cnvs "results/ex23/scene.jpg"))
+(defmethod c2d/key-pressed ["raymarching2" \space] [_ _]
+  (c2d/save cnvs "results/ex23/scene.jpg"))
 
 (do
   (def ^:const ^double max-depth 20.0)
@@ -46,7 +46,7 @@
   (defn fn-plane
     ""
     [^Vec3 p]
-    (let [v (- (* 1.5 ^double (noise (* 0.06 (.x p)) (* 0.06 (.z p)))) 1.5)]
+    (let [v (- (* 1.5 ^double (rnd/noise (* 0.06 (.x p)) (* 0.06 (.z p)))) 1.5)]
       (HitData. (- (.y p) v) m1)))
 
   ;; scene
@@ -106,10 +106,10 @@
         (dotimes [y h]
           (let [yy (m/norm y 0.0 h 2.0 -2.0)
                 ^Vec3 rd (camera (v/normalize (Vec3. xx yy 1.0)))
-                col (calc-color ro rd 1)]
-            (set-color canvas (c/to-color (v/mult col 255)))
-            (rect canvas x y 1 1)))))))
+                col (calc-color ro rd 1.0)]
+            (c2d/set-color canvas (c/to-color (v/mult col 255)))
+            (c2d/rect canvas x y 1 1)))))))
 
-(with-canvas-> cnvs
-  (set-background 0 0 0)
+(c2d/with-canvas-> cnvs
+  (c2d/set-background 0 0 0)
   (do-it))
