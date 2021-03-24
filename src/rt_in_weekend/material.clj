@@ -14,9 +14,18 @@
 (defprotocol MaterialProto
   (scatter [m ray-in hit-data]))
 
+#_(defn- random-in-unit-sphere []
+    (let [v (v/vec3 (r/drand -1.0 1.0) (r/drand -1.0 1.0) (r/drand -1.0 1.0))]
+      (if (< ^double (v/magsq v) 1.0) v (recur))))
+
 (defn- random-in-unit-sphere []
-  (let [v (v/vec3 (r/drand -1.0 1.0) (r/drand -1.0 1.0) (r/drand -1.0 1.0))]
-    (if (< ^double (v/magsq v) 1.0) v (recur))))
+  (let [r (m/cbrt (r/drand))
+        u (r/drand -1.0 1.0)
+        ur (* r (m/sqrt (- 1.0 (* u u))))
+        phi (r/drand m/TWO_PI)]
+    (v/vec3  (* ur (m/cos phi))
+             (* ur (m/sin phi))
+             (* r u))))
 
 (deftype Lambertian [albedo]
   MaterialProto

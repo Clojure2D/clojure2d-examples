@@ -56,6 +56,8 @@
 
 (def ^:const ^int nx 800)
 (def ^:const ^int ny 400)
+(def ^:const ^double dnx (/ 800.0))
+(def ^:const ^double dny (/ 400.0))
 (def ^:const ^int samples 200)
 
 (def img (p/pixels nx ny))
@@ -73,17 +75,18 @@
                           :fps 1}))
 
 (time (dotimes [j ny]
-        (println (str "Line: " j))
-        (dotimes [i nx]
-          (let [p (v/vec2 i j)
-                col (reduce v/add zero
-                            (map #(let [^Vec2 pp (v/add % p)
-                                        u (/ (.x pp) nx)
-                                        v (/ (.y pp) ny)
-                                        r (get-ray camera u v)]
-                                    (color r world)) r2-seq))]
-            (p/set-color! img i (- (dec ny) j) (-> (v/div col samples)
-                                                   (v/sqrt)
-                                                   (v/mult 255.0)))))))
+        (when (window-active? window)
+          (println (str "Line: " j))
+          (dotimes [i nx]
+            (let [p (v/vec2 i j)
+                  col (reduce v/add zero
+                              (pmap #(let [^Vec2 pp (v/add % p)
+                                           u (* (.x pp) dnx)
+                                           v (* (.y pp) dny)
+                                           r (get-ray camera u v)]
+                                       (color r world)) r2-seq))]
+              (p/set-color! img i (- (dec ny) j) (-> (v/div col samples)
+                                                     (v/sqrt)
+                                                     (v/mult 255.0))))))))
 
 ;; (save img "results/rt-in-weekend/random_scene_r2.jpg")

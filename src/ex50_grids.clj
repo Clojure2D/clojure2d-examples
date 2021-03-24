@@ -7,7 +7,8 @@
   * up/down - to change cell size"
   (:require [clojure2d.core :refer :all]
             [fastmath.grid :as grid]
-            [fastmath.core :as m]))
+            [fastmath.core :as m]
+            [fastmath.vector :as v]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
@@ -24,16 +25,22 @@
   [canvas window _ _]
   (let [g (:grid (get-state window))
         m (mouse-pos window)
-        cell (grid/coords->cell g m)
+        off (v/vec2 (/ (width canvas) 2) (/ (height canvas) 2))
+        moff (v/sub m off)
+        cell (grid/coords->cell g moff)
         anchor (grid/cell->anchor g cell)
-        mid (grid/coords->mid g m)]
+        mid (grid/coords->mid g moff)]
     (when (and (pos? (int (m 0))) (pos? (int (m 1))))
       (-> canvas
+          (push-matrix)
+          (translate off)
           (set-background :black 50)
-          (filled-with-stroke :white :maroon grid-cell g (m 0) (m 1) 1.0)
+          (filled-with-stroke :white :maroon grid-cell g (moff 0) (moff 1) 1.0)
           (set-color :green)
-          (ellipse (anchor 0) (anchor 1) 5 5)
+          (ellipse (anchor 0) (anchor 1) 8 8 true)
+          (set-color :red)
           (ellipse (mid 0) (mid 1) 5 5)
+          (pop-matrix)
           (set-color :black)
           (rect 10 10 140 40)
           (set-color :white)
@@ -43,7 +50,7 @@
 (show-window {:canvas (canvas 1000 800 :highest)
               :window-name "Grids"
               :draw-fn draw
-              :state (state-data :flat-hex 30.0)})
+              :state (state-data :flat-hex 100.0)})
 
 (defmethod key-pressed ["Grids" \1] [_ s]  (state-data :square (:size s)))
 (defmethod key-pressed ["Grids" \2] [_ s]  (state-data :shifted-square (:size s)))
@@ -59,4 +66,5 @@
       :up (state-data t (inc size))
       :down (state-data t (if (<= size 3) size (dec size)))
       s)))
+
 

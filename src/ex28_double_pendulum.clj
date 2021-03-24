@@ -1,6 +1,6 @@
 ;; Double pendulum simulation using sicmutils
 ;;
-;; https://github.com/littleredcomputer/sicmutils/blob/master/src/sicmutils/examples/double_pendulum.clj
+;; https://github.com/sicmutils/sicmutils/blob/master/src/sicmutils/examples/double_pendulum.cljc
 ;; https://mitpress.mit.edu/books/structure-and-interpretation-classical-mechanics-0
 (ns ex28-double-pendulum 
   (:require [sicmutils.examples.double-pendulum :as dp]
