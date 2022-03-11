@@ -22,28 +22,32 @@
 
 (defn draw
   "Wind algorithm "
-  [canvas _ ^long frame state]
-  (let [^double a (or state 0.0)]
-    (comment when (= frame 200) (binding [c2d/*jpeg-image-quality* 0.9]
-                                  (c2d/save cnvs "results/ex31/wind.jpg")))
-    (c2d/set-background canvas 226 210 184)
-    (dotimes [j 16]
-      (dotimes [i 400]
-        (let [jj (+ 50 (* j 25))
-              ii (+ 50 i)
-              step (* (m/sin (* 2.0 m/TWO_PI (r/noise (/ a 40.0)))) (m/sin (* (- 450 ii) phase-scale)))
-              swing (->> 50.0
-                         (- (* 150.0 (r/noise (+ a (/ ii 200.0))
-                                              (+ a (/ jj 300.0))
-                                              (/ a 10.0))))
-                         (* step)
-                         (+ jj))
-              dx (random-c)
-              dy (random-c)
-              x (+ ii dx dx)
-              y (+ swing dy dy)] 
-          (c2d/set-color canvas 20 20 20 (- 150 (* 150 (m/hypot dx dy))))
-          (c2d/ellipse canvas x y 2 2))))
-    (+ a s)))
+  [canvas window _ state]
+  (locking window
+    (let [^double a (or state 0.0)]
+      (c2d/set-background canvas 226 210 184)
+      (dotimes [j 16]
+        (Thread/sleep 1)
+        (dotimes [i 400]
+          (let [jj (+ 50 (* j 25))
+                ii (+ 50 i)
+                step (* (m/sin (* 2.0 m/TWO_PI (r/noise (/ a 40.0)))) (m/sin (* (- 450 ii) phase-scale)))
+                swing (->> 50.0
+                           (- (* 150.0 (r/noise (+ a (/ ii 200.0))
+                                                (+ a (/ jj 300.0))
+                                                (/ a 10.0))))
+                           (* step)
+                           (+ jj))
+                dx (random-c)
+                dy (random-c)
+                x (+ ii dx dx)
+                y (+ swing dy dy)] 
+            (c2d/set-color canvas 20 20 20 (- 150 (* 150 (m/hypot dx dy))))
+            (c2d/ellipse canvas x y 2 2))))
+      (+ a s))))
 
-(def window (c2d/show-window cnvs "Wind blows" draw))
+(def window (c2d/show-window {:canvas cnvs
+                            :window-name "Wind blows"
+                            :draw-fn draw}))
+
+(comment (locking window (c2d/save window "results/ex31/wind.jpg")))

@@ -83,9 +83,10 @@ In Emacs/Cider: C-c C-k
   * ch08/lsystem-8-9.clj
   * ch08/treestochasticnoise-8-10
 * quil - [Quil](http://quil.info/examples) examples ported to Clojure2d
-* GG - [Generative Design](http://www.generative-gestaltung.de/) examples ported to Clojure2D
+* GG - [Generative Design](http://www.generative-gestaltung.de/) examples ported to Clojure2d
 * funprogramming - [funprogramming](https://www.funprogramming.org/) examples from creative coding tutorials by Abe Pazos
 * [_Ray Tracing in One Weekend_](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
+* box2d - [cljbox2d](https://github.com/lambdaisland/cljbox2d) examples ported to Clojure2d
 
 ## How to contribute
 

@@ -4,9 +4,8 @@
   :license {:name "The Unlicense"
             :url "http://unlicense.org"}
   :dependencies [[org.clojure/clojure "1.10.3"]
-                 ;; [net.littleredcomputer/sicmutils "0.12.2-SNAPSHOT"]
-                 [sicmutils/sicmutils "0.17.0"]
-                 [clojure2d "1.4.3"]]  
+                 [sicmutils/sicmutils "0.21.1"]
+                 [com.lambdaisland/cljbox2d "0.4.19"]
+                 [clojure2d "1.4.4-SNAPSHOT"]]  
   :repl-options {:timeout 120000}
-  :target-path "target/%s"
-  :jvm-opts ["-Xmx4096M"])
+  :target-path "target/%s")

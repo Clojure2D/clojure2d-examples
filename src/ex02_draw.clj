@@ -33,16 +33,16 @@
         (c2d/ellipse 100 100 ew eh)))) ;; draw ellipse
 
 (def window (c2d/show-window {:canvas (c2d/canvas 200 200 :mid) ;; create canvas with mid quality
-                              :window-name "ellipse"             ;; name window
-                              :w 400 ;; size of window (twice as canvas)
-                              :h 400
-                              :hint :mid ;; hint for drawing canvas on window, mid quality (affects scalling 200 -> 400)
-                              :draw-fn draw
-                              :setup (fn [c _]
-                                       (c2d/set-background c 45 45 41))})) ;; draw callback funtion
-
+                            :window-name "ellipse"             ;; name window
+                            :w 400 ;; size of window (twice as canvas)
+                            :h 400
+                            :hint :mid ;; hint for drawing canvas on window, mid quality (affects scalling 200 -> 400)
+                            :draw-fn draw
+                            :setup (fn [c _]
+                                     (c2d/set-background c 45 45 41))})) ;; draw callback funtion
 
 ;; save to the file, it saves attached canvas not resized window content itself
-(comment save window "results/ex02/blob.jpg")
+(comment
+  (c2d/save window "results/ex02/blob.jpg"))
 
 ;; [[../results/ex02/blob.jpg]]

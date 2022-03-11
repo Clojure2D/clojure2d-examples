@@ -45,26 +45,29 @@
 (defn draw
   "Draw rotating rectangle. This function is prepared to be run in refreshing thread from your window."
   [canvas ;; canvas to draw on
-   _ ;; window bound to function (for mouse movements)
+   window;; window object
    ^long framecount ;; frame number
    _] ;; state (if any), not used here
-  (let [midwidth (* 0.5 ^long (c2d/width canvas))] ;; find middle of the canvas
+  (locking window ;; synchronize on window object
+    (let [midwidth (* 0.5 ^long (c2d/width canvas))] ;; find middle of the canvas
 
-    (-> canvas ;; use canvas (context is already ready! It's draw function.)
-        (c2d/set-background :linen) ;; clear background with :inen color
-        (c2d/translate midwidth midwidth) ;; set origin in the middle
-        (c2d/rotate (/ framecount 100.0)) ;; rotate clockwise (based on number of frame)
-        (c2d/set-color :maroon) ;; set color to maroon
-        (c2d/crect 0 0 midwidth midwidth) ;; draw centered rectangle
-        (c2d/rotate (/ framecount -90.0)) ;; rotate counterclockwise
-        (c2d/set-color 255 69 0 200) ;; set color to orange with transparency
-        (c2d/crect 0 0 (* 0.9 midwidth) (* 0.9 midwidth))))) ;; draw smaller rectangle
+      (-> canvas ;; use canvas (context is already ready! It's draw function.)
+          (c2d/set-background :linen) ;; clear background with :inen color
+          (c2d/translate midwidth midwidth) ;; set origin in the middle
+          (c2d/rotate (/ framecount 100.0)) ;; rotate clockwise (based on number of frame)
+          (c2d/set-color :maroon)           ;; set color to maroon
+          (c2d/crect 0 0 midwidth midwidth) ;; draw centered rectangle
+          (c2d/rotate (/ framecount -90.0)) ;; rotate counterclockwise
+          (c2d/set-color 255 69 0 200) ;; set color to orange with transparency
+          (c2d/crect 0 0 (* 0.9 midwidth) (* 0.9 midwidth)))))) ;; draw smaller rectangle
 
-;; run twice!
-(def window2 (c2d/show-window (c2d/canvas 600 600) "Rotating square" draw)) ;; create canvas, display window and draw on canvas via draw function (60 fps)
+;; create canvas, display window and draw on canvas via draw function (60 fps)
+(def window2 (c2d/show-window {:canvas (c2d/canvas 600 600)
+                             :window-name "Rotating square"
+                             :draw-fn draw})) 
 
-;; save on space pressed (be aware that saving is not synchronized with drawing. Occassional glitches may appear.
+;; save on space pressed (be aware that saving is not synchronized with drawing and we have to lock explicitely)
 (defmethod c2d/key-pressed ["Rotating square" \space] [_ _] 
-  (c2d/save (c2d/resize (c2d/get-image window2) 300 300) "results/ex00/rotating.jpg"))
+  (locking window2 (c2d/save (c2d/resize (c2d/get-image window2) 300 300) "results/ex00/rotating.jpg")))
 
 ;; [[../results/ex00/rotating.jpg]]
