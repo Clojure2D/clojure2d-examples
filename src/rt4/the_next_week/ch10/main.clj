@@ -267,11 +267,20 @@
              final-scene)]
      (f scene-def))))
 
+#_(def image (time (scene/render (main {:background (v/vec3 0.0 0.0 0.0)
+                                      :samples-per-pixel 250
+                                      :aspect-ratio 1.0
+                                      :max-depth 4
+                                      :shuffle? false
+                                      :image-width 400} 0))))
+
 (def image (time (scene/render (main {:background (v/vec3 0.0 0.0 0.0)
-                                    :samples-per-pixel 200
+                                    :samples-per-pixel 10000
                                     :aspect-ratio 1.0
+                                    :shuffle? false
                                     :image-width 800} 0))))
 
 (comment
-  (common/save image "results/rt4/the_next_week/ch10.jpg"))
+  #_(common/save image "results/rt4/the_next_week/ch10low.jpg")
+  (common/save image "results/rt4/the_next_week/ch10high.jpg"))
 

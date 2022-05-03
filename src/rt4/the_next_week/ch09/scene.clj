@@ -43,7 +43,7 @@
           image-height- (dec image-height)
           max-depth (:max-depth config)
           background (:background config)]
-      (common/pdotimes [j image-height]
+      (common/pdotimes [j image-height (not (:shuffle? config))]
         (when (common/active? image)
           (dotimes [i image-width]
             (let [pixel-color (-> (reduce v/add zero

@@ -222,7 +222,8 @@
 (def image (time (scene/render (main {:background (v/vec3 0.0 0.0 0.0)
                                     :samples-per-pixel 200
                                     :aspect-ratio 1.0
-                                    :image-width 600} 0))))
+                                    :image-width 600
+                                    :shuffle? false} 0))))
 
 (comment
   (common/save image "results/rt4/the_next_week/ch09.jpg"))

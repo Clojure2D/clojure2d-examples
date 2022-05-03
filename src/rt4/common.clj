@@ -17,7 +17,7 @@
                   (c2d/image canvas p))]
     {:window (c2d/show-window {:canvas (c2d/canvas width height :low)
                                :draw-fn draw-fn
-                               :fps 10})
+                               :fps 5})
      :pixels p}))
 
 (defn active?
@@ -33,8 +33,8 @@
   "Parallel dotimes"
   {:style/indent 1}
   [[line-sym lines not-shuffle?] & forms]
-  (let [l (if not-shuffle? `(range ~lines) `(shuffle (range ~lines)))]
-    `(->> ~l
+  `(let [l# (if ~not-shuffle? (range ~lines) (shuffle (range ~lines)))]
+     (->> l#
           (pmap (fn [y#]
                   (let [~line-sym (long y#)]
                     ~@forms)))
