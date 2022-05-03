@@ -32,12 +32,13 @@
 (defmacro pdotimes
   "Parallel dotimes"
   {:style/indent 1}
-  [[line-sym lines] & forms]
-  `(->> (shuffle (range ~lines))
-        (pmap (fn [y#]
-                (let [~line-sym (long y#)]
-                  ~@forms)))
-        (dorun)))
+  [[line-sym lines not-shuffle?] & forms]
+  (let [l (if not-shuffle? `(range ~lines) `(shuffle (range ~lines)))]
+    `(->> ~l
+          (pmap (fn [y#]
+                  (let [~line-sym (long y#)]
+                    ~@forms)))
+          (dorun))))
 
 ;;
 
