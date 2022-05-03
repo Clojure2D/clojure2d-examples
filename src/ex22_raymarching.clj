@@ -44,7 +44,6 @@
   (def camera-tilt 0.0) ;; tilt camera
 
   (defn set-camera
-    ""
     [ta cr]
     (let [cw (v/normalize (v/sub ta ro))
           cp (Vec3. (m/sin cr) (m/cos cr) 0.0)
@@ -58,7 +57,6 @@
     (def ^Vec3 cam3 c3)))
 
 (defn cast-ray
-  ""
   ^double [rd f]
   (loop [i (int 0)
          t mint]
@@ -73,7 +71,6 @@
 (def ^:const ^double k 16.0)
 
 (defn softshadow
-  ""
   [pos rd f]
   (loop [i (int 0)
          res 1.0
@@ -91,13 +88,11 @@
                      (f/field :auger 0.7 {})))
 
 (defn terrain
-  ""
   [^double x ^double y]
   (let [^Vec2 v (terrain-f (Vec2. (+ x 0.5) y))]
     (* 3.5 ^double (r/noise (* 0.08 (.x v)) (* 0.08 (.y v))))))
 
 (defn normal
-  ""
   [f ^Vec3 v ^double t]
   (let [eps (max 0.002 (* 0.0001 t))]
     (v/normalize (Vec3. (- ^double (f (- (.x v) eps) (.z v))
@@ -107,38 +102,32 @@
                            ^double (f (.x v) (+ (.z v) eps)))))))
 
 (defn calc-fog
-  ""
   [^double t col bcol]
   (let [fo (- 1.0 (m/exp (* -0.01 t t)))
         fbcol (v/interpolate fog-color bcol fo)]
     (v/interpolate col fbcol fo)))
 
 (let [v3 (Vec3. 3.0 3.0 3.0)]
-    (defn contrast
-      ""
-      [col]
-      (let [s (v/mult (v/add v3 (v/mult col 2.0)) 0.1)] 
-        (v/add (v/mult col 0.9)
-               (v/emult col (v/emult s col))))))
+  (defn contrast
+    [col]
+    (let [s (v/mult (v/add v3 (v/mult col 2.0)) 0.1)] 
+      (v/add (v/mult col 0.9)
+             (v/emult col (v/emult s col))))))
 
 (defn gamma
-  ""
   [col]
   (v/fmap col #(m/pow (m/constrain ^double % 0.0 1.0) 1.5)))
 
 (defn desaturate
-  ""
   [col]
   (let [luma (c/luma col)]
     (v/interpolate col (Vec3. luma luma luma) 0.2)))
 
 (defn reflect
-  ""
   [I N]
   (v/sub I (v/mult N (* 2.0 ^double (v/dot N I)))))
 
 (defn smoothstep
-  ""
   ^double [edge0 edge1 ^double x]
   (let [t (m/norm x edge0 edge1)]
     (* t t (- 3.0 (* 2.0 t)))))

@@ -86,9 +86,11 @@ In Emacs/Cider: C-c C-k
 * GG - [Generative Design](http://www.generative-gestaltung.de/) examples ported to Clojure2d
 * funprogramming - [funprogramming](https://www.funprogramming.org/) examples from creative coding tutorials by Abe Pazos
 * [_Ray Tracing in One Weekend_](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
-* box2d - [cljbox2d](https://github.com/lambdaisland/cljbox2d) examples ported to Clojure2d
+
+### Other examples
+
+* box2d - [cljbox2d](https://github.com/lambdaisland/cljbox2d) [examples](https://github.com/lambdaisland/cljbox2d/tree/main/src/lambdaisland/cljbox2d/demo/clojure2d) ported to Clojure2d
 
 ## How to contribute
 
-If you prepared new script and want to share - generate pull request or send to to: generateme.blog@gmail.com
-
+If you prepared new script and want to share - generate pull request or send code to: generateme.blog@gmail.com

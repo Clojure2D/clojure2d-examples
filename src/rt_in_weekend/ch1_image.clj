@@ -4,7 +4,6 @@
             [clojure2d.extra.utils :as u]
             [fastmath.vector :as v]))
 
-
 (def img (p/pixels 800 400))
 
 (dotimes [j (height img)]

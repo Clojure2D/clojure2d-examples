@@ -24,10 +24,10 @@
 (def ^:const zero (v/vec3 0.0 0.0 0.0))
 
 (def world [(->Sphere (v/vec3 0.0 0.0 -1.0) 0.5 (->Lambertian (v/vec3 0.1 0.2 0.5)))
-            (->Sphere (v/vec3 0.0 -100.5 -1.0) 100.0 (->Lambertian (v/vec3 0.8 0.8 0.0)))
-            (->Sphere (v/vec3 1.0 0.0 -1.0) 0.5 (->Metal (v/vec3 0.8 0.6 0.2) 0.0))
-            (->Sphere (v/vec3 -1.0 0.0 -1.0) 0.5 (->Dielectric 1.5))
-            (->Sphere (v/vec3 -1.0 0.0 -1.0) -0.45 (->Dielectric 1.5))])
+          (->Sphere (v/vec3 0.0 -100.5 -1.0) 100.0 (->Lambertian (v/vec3 0.8 0.8 0.0)))
+          (->Sphere (v/vec3 1.0 0.0 -1.0) 0.5 (->Metal (v/vec3 0.8 0.6 0.2) 0.0))
+          (->Sphere (v/vec3 -1.0 0.0 -1.0) 0.5 (->Dielectric 1.5))
+          (->Sphere (v/vec3 -1.0 0.0 -1.0) -0.45 (->Dielectric 1.5))])
 
 (defn color
   ([ray world] (color ray world 50))
@@ -60,9 +60,9 @@
                                                        v (/ (+ (r/drand) j) ny)
                                                        r (get-ray camera u v)]
                                                    (color r world))))]
-            (p/set-color img i (- (dec ny) j) (-> (v/div col samples)
-                                                  (v/applyf #(m/sqrt %))
-                                                  (v/mult 255.0)))))))
+            (p/set-color! img i (- (dec ny) j) (-> (v/div col samples)
+                                                   (v/fmap #(m/sqrt %))
+                                                   (v/mult 255.0)))))))
 
 (u/show-image img)
 
