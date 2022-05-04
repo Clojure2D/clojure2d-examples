@@ -7,7 +7,8 @@
             [fastmath.random :as r]
             [rt4.the-next-week.ch10.ray :as ray])
   (:import [rt4.the_next_week.ch10.hittable HitData]
-           [rt4.the_next_week.ch10.interval Interval]))
+           [rt4.the_next_week.ch10.interval Interval]
+           [rt4.the_next_week.ch10.ray Ray]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
@@ -24,7 +25,7 @@
               rec2-t (min (.mx ^Interval ray-t) (.t rec2))]
           (when (< rec1-t rec2-t)
             (let [rec1-t (max 0.0 rec1-t)
-                  ray-length (v/mag (:direction r))
+                  ray-length (v/mag (.direction ^Ray r))
                   distance-inside-boundary (* (- rec2-t rec1-t) ray-length)
                   hit-distance (* neg-inv-density (m/log (r/drand)))]
               (when (<= hit-distance distance-inside-boundary)

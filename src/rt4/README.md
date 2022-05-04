@@ -10,11 +10,7 @@ Notes:
 * `fastmath.vector` is used for vector operations
 * Some minor enhancements are made
 * The result is displayed in a window during rendering. `clojure2d.pixels` buffer is used as a storage.
+* More optimized version starts with The Next Week, Chapter 10
 
 Yes, it's slow (c++ version is also slow :) )
 
-Optimization ideas:
-
-* Access fields directly (currently via keywords) in records
-* Avoid operations on map `assoc` and `update`
-* Unroll some loops and lazy sequence generators

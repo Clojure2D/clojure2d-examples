@@ -1,7 +1,9 @@
 (ns rt4.the-next-week.ch10.hittable-list
   (:require [rt4.the-next-week.ch10.interval :as interval]
             [rt4.the-next-week.ch10.hittable :as hittable]
-            [rt4.the-next-week.ch10.aabb :as aabb]))
+            [rt4.the-next-week.ch10.aabb :as aabb])
+  (:import [rt4.the_next_week.ch10.interval Interval]
+           [rt4.the_next_week.ch10.hittable HitData]))
 
 (defprotocol HittableListProto
   (add [hittable-list object]))
@@ -10,8 +12,10 @@
   hittable/HittableProto
   (hit [_ ray ray-t]
     (reduce (fn [curr-hit object]
-              (if-let [hit-object (hittable/hit object ray (interval/interval (:mn ray-t)
-                                                                              (or (:t curr-hit) (:mx ray-t))))]
+              (if-let [hit-object (hittable/hit object ray (interval/interval (.mn ^Interval ray-t)
+                                                                              (or (and curr-hit
+                                                                                       (.t ^HitData curr-hit))
+                                                                                  (.mx ^Interval ray-t))))]
                 hit-object
                 curr-hit)) nil objects))
   HittableListProto

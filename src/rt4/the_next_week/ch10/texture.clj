@@ -71,7 +71,7 @@
     ;; also using code from version 3.x
     (let [^fastmath.vector.Vec3 p p]
       (v/mult one (* 0.5 (inc (m/sin (+ (* scale (.z p))
-                                        (* 10.0 (m/abs (fbm-noise (.x p) (.y p) (.z p))))))))))))
+                                        (* 10.0 (m/abs ^double (fbm-noise (.x p) (.y p) (.z p))))))))))))
 
 (defn noise-texture [^double scale]
   (->NoiseTexture (perlin/perlin) scale))

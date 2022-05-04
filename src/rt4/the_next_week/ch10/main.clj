@@ -212,31 +212,30 @@
         light (material/diffuse-light (v/vec3 7 7 7))
         moving-sphere-material (material/lambertian (v/vec3 0.7 0.3 0.1))
         emat (material/lambertian earth-texture)
-        pertext (texture/noise-texture 0.1)
+        pertext (material/lambertian (texture/noise-texture 0.1))
         white (material/lambertian (v/vec3 0.73 0.73 0.73))
+        dielectric (material/dielectric 1.5)
         
-        boxes1 (-> (apply hittable-list/hittable-list (for [^long i (range 20)
-                                                            ^long j (range 20)
-                                                            :let [x0 (+ -1000.0 (* i 100.0))
-                                                                  z0 (+ -1000.0 (* j 100.0))
-                                                                  x1 (+ x0 100.0)
-                                                                  y1 (r/drand 1.0 101.0)
-                                                                  z1 (+ z0 100.0)]]
-                                                        (quad/box (v/vec3 x0 0.0 z0) (v/vec3 x1 y1 z1) ground)))
-                   (bvh/bvh-node))
-        boundary (sphere/sphere (v/vec3 360 150 145) 70.0 (material/dielectric 1.5))
-        boundary2 (sphere/sphere (v/vec3 0 0 0) 5000.0 (material/dielectric 1.5))
-        boxes2 (-> (apply hittable-list/hittable-list
-                          (repeatedly 1000 (fn [] (sphere/sphere (v/generate-vec3 #(r/drand 165)) 10.0 white))))
-                   (bvh/bvh-node)
-                   (hittable/rotate-y 15.0)
-                   (hittable/translate (v/vec3 -100 270 395)))
-        world (-> (hittable-list/hittable-list boxes1)
+        boundary (sphere/sphere (v/vec3 360 150 145) 70.0 dielectric)
+        boundary2 (sphere/sphere (v/vec3 0 0 0) 5000.0 dielectric)
+        boxes (-> (apply hittable-list/hittable-list
+                         (repeatedly 1000 (fn [] (sphere/sphere (common/random-vec3 1.0 165.0) 10.0 white))))
+                  (bvh/bvh-node)
+                  (hittable/rotate-y 15.0)
+                  (hittable/translate (v/vec3 -100 270 395)))
+        world (-> (apply hittable-list/hittable-list (for [^long i (range 20)
+                                                           ^long j (range 20)
+                                                           :let [x0 (+ -1000.0 (* i 100.0))
+                                                                 z0 (+ -1000.0 (* j 100.0))
+                                                                 x1 (+ x0 100.0)
+                                                                 y1 (r/drand 1.0 101.0)
+                                                                 z1 (+ z0 100.0)]]
+                                                       (quad/box (v/vec3 x0 0.0 z0) (v/vec3 x1 y1 z1) ground)))
                   (hittable-list/add (quad/quad (v/vec3 123 554 147) (v/vec3 300 0 0)
                                                 (v/vec3 0 0 265) light))
                   (hittable-list/add (moving-sphere/sphere (v/vec3 400 400 200) (v/vec3 430 400 200)
                                                            50.0 moving-sphere-material))
-                  (hittable-list/add (sphere/sphere (v/vec3 260 150 45) 50.0 (material/dielectric 1.5)))
+                  (hittable-list/add (sphere/sphere (v/vec3 260 150 45) 50.0 dielectric))
                   (hittable-list/add (sphere/sphere (v/vec3 0 150 145) 50.0
                                                     (material/metal (v/vec3 0.8 0.8 0.9) 1.0)))
                   (hittable-list/add boundary)
@@ -244,9 +243,8 @@
                   (hittable-list/add boundary2)
                   (hittable-list/add (constant-medium/constant-medium boundary2 0.0001 (v/vec3 1 1 1)))
                   (hittable-list/add (sphere/sphere (v/vec3 400 200 400) 100.0 emat))
-                  (hittable-list/add (sphere/sphere (v/vec3 220 280 300) 80.0
-                                                    (material/lambertian pertext)))
-                  (hittable-list/add boxes2))]
+                  (hittable-list/add (sphere/sphere (v/vec3 220 280 300) 80.0 pertext))
+                  (hittable-list/add boxes))]
     (scene/scene camera (bvh/bvh-node world) scene-def)))
 
 (defn main
@@ -271,13 +269,13 @@
                                       :samples-per-pixel 250
                                       :aspect-ratio 1.0
                                       :max-depth 4
-                                      :shuffle? false
+                                      :shuffle? true
                                       :image-width 400} 0))))
 
 (def image (time (scene/render (main {:background (v/vec3 0.0 0.0 0.0)
                                     :samples-per-pixel 10000
                                     :aspect-ratio 1.0
-                                    :shuffle? false
+                                    :shuffle? true
                                     :image-width 800} 0))))
 
 (comment

@@ -3,7 +3,8 @@
             [clojure2d.pixels :as p]
             [fastmath.random :as r]
             [fastmath.vector :as v]
-            [fastmath.core :as m]))
+            [fastmath.core :as m])
+  (:import [fastmath.vector Vec2 Vec3]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
@@ -42,29 +43,29 @@
 
 ;;
 
-(defn random-in-unit-disc [] (r/ball-random 2))
-(defn random-in-unit-sphere [] (r/ball-random 3))
-(defn random-unit-vector [] (v/normalize (random-in-unit-sphere)))
-(defn random-on-hemisphere [normal]
+(defn random-in-unit-disc ^Vec2 [] (r/ball-random 2))
+(defn random-in-unit-sphere ^Vec3 [] (r/ball-random 3))
+(defn random-unit-vector ^Vec3 [] (v/normalize (random-in-unit-sphere)))
+(defn random-on-hemisphere ^Vec3 [normal]
   (let [on-unit-sphere (random-unit-vector)]
     (if (pos? (v/dot on-unit-sphere normal))
       on-unit-sphere (v/sub on-unit-sphere))))
 (defn random-vec3
-  ([] (v/generate-vec3 r/drand))
-  ([^double mn ^double mx] (v/generate-vec3 #(r/drand mn mx))))
+  (^Vec3 [] (v/generate-vec3 r/drand))
+  (^Vec3 [^double mn ^double mx] (v/generate-vec3 #(r/drand mn mx))))
 
 
 ;;
 
 (defn reflect
-  [v n]
+  ^Vec3 [v n]
   (->> (v/dot v n)
        (* 2.0)
        (v/mult n)
        (v/sub v)))
 
 (defn refract
-  [uv n ^double etai-over-etat]
+  ^Vec3 [uv n ^double etai-over-etat]
   (let [cos-theta (min (v/dot (v/sub uv) n) 1.0)
         r-out-perp (v/mult (v/add uv (v/mult n cos-theta))  etai-over-etat)
         r-out-parallel (v/mult n (- (m/sqrt (abs (- 1.0 (v/magsq r-out-perp))))))]

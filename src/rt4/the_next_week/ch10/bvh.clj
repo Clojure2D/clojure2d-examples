@@ -2,7 +2,9 @@
   (:require [rt4.the-next-week.ch10.hittable :as hittable]
             [rt4.the-next-week.ch10.aabb :as aabb]
             [rt4.the-next-week.ch10.interval :as interval]
-            [fastmath.core :as m]))
+            [fastmath.core :as m])
+  (:import [rt4.the_next_week.ch10.interval Interval]
+           [rt4.the_next_week.ch10.hittable HitData]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
@@ -12,10 +14,10 @@
   hittable/HittableProto
   (hit [_ r ray-t]
     (when (aabb/hit bbox r ray-t)
-      (let [rec-left (and left (hittable/hit left r ray-t))
-            rec-right (and right (hittable/hit right r (interval/interval (:mn ray-t)
-                                                                          (or (:t rec-left)
-                                                                              (:mx ray-t)))))]
+      (let [^HitData rec-left (and left (hittable/hit left r ray-t))
+            rec-right (and right (hittable/hit right r (interval/interval (.mn ^Interval ray-t)
+                                                                          (or (and rec-left (.t rec-left))
+                                                                              (.mx ^Interval ray-t)))))]
         (or rec-right rec-left)))))
 
 (defmacro ^:private compare-hittables

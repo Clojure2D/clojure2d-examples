@@ -6,7 +6,8 @@
             [rt4.the-next-week.ch10.interval :as interval]
             [rt4.the-next-week.ch10.ray :as ray]
             [rt4.the-next-week.ch10.hittable-list :as hittable-list])
-  (:import [fastmath.vector Vec3]))
+  (:import [fastmath.vector Vec3]
+           [rt4.the_next_week.ch10.ray Ray]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
@@ -15,9 +16,9 @@
 (defrecord Quad [Q u v mat bbox normal ^double D w]
   hittable/HittableProto
   (hit [_ r ray-t]
-    (let [denom (v/dot normal (:direction r))]
+    (let [denom (v/dot normal (.direction ^Ray r))]
       (when (>= (m/abs denom) 1.0e-8)
-        (let [t (/ (- D (v/dot normal (:origin r))) denom)]
+        (let [t (/ (- D (v/dot normal (.origin ^Ray r))) denom)]
           (when (interval/contains- ray-t t)
             (let [intersection (ray/at r t)
                   planar-hitp-vector (v/sub intersection Q)

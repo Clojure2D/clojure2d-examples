@@ -5,7 +5,8 @@
             [fastmath.core :as m]
             [fastmath.vector :as v]
             [rt4.the-next-week.ch10.aabb :as aabb])
-  (:import [fastmath.vector Vec2 Vec3]))
+  (:import [fastmath.vector Vec2 Vec3]
+           [rt4.the_next_week.ch10.ray Ray]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
@@ -20,9 +21,9 @@
 (defrecord Sphere [center ^double radius mat bbox]
   hittable/HittableProto
   (hit [_ r ray-t]
-    (let [oc (v/sub (:origin r) center)
-          a (v/magsq (:direction r))
-          half-b (v/dot oc (:direction r))
+    (let [oc (v/sub (.origin ^Ray r) center)
+          a (v/magsq (.direction ^Ray r))
+          half-b (v/dot oc (.direction ^Ray r))
           c (- (v/magsq oc) (* radius radius))
           discriminant (- (* half-b half-b) (* a c))]
       (when-not (neg? discriminant)

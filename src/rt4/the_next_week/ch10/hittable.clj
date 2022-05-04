@@ -3,7 +3,8 @@
             [fastmath.vector :as v]
             [rt4.the-next-week.ch10.aabb :as aabb]
             [rt4.the-next-week.ch10.ray :as ray])
-  (:import [fastmath.vector Vec3]))
+  (:import [fastmath.vector Vec3]
+           [rt4.the_next_week.ch10.ray Ray]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
@@ -21,7 +22,7 @@
   ([r p normal mat t]
    (hit-data r p normal mat t 0.0 0.0))
   ([r p normal mat t u v]
-   (let [front-face? (neg? (v/dot (:direction r) normal))]
+   (let [front-face? (neg? (v/dot (.direction ^Ray r) normal))]
      (->HitData p (if front-face? normal (v/sub normal)) mat t u v front-face?))))
 
 ;;
@@ -29,9 +30,10 @@
 (defrecord Translate [object offset bbox]
   HittableProto
   (hit [_ r ray-t]
-    (let [offset-r (ray/ray (v/sub (:origin r) offset) (:direction r) (:time r))]
-      (when-let [rec (hit object offset-r ray-t)]
-        (update rec :p v/add offset)))))
+    (let [offset-r (ray/ray (v/sub (.origin ^Ray r) offset) (.direction ^Ray r) (.time ^Ray r))]
+      (when-let [^HitData rec (hit object offset-r ray-t)]
+        (->HitData (v/add offset (.p rec)) (.normal rec) (.mat rec)
+                   (.t rec) (.u rec) (.v rec) (.front-face? rec))))))
 
 (defn translate [p displacement]
   (->Translate p displacement (aabb/shift (:bbox p) displacement)))
@@ -50,23 +52,23 @@
 (defrecord RotateY [object ^double sin-theta ^double cos-theta bbox]
   HittableProto
   (hit [_ r ray-t]
-    (let [^Vec3 origin (:origin r)
-          ^Vec3 direction (:direction r)
+    (let [^Vec3 origin (.origin ^Ray r)
+          ^Vec3 direction (.direction ^Ray r)
           origin (v/vec3 (rot- (.x origin) (.z origin))
                          (.y origin)
                          (rot+ (.x origin) (.z origin)))
           direction (v/vec3 (rot- (.x direction) (.z direction))
                             (.y direction)
                             (rot+ (.x direction) (.z direction)))
-          rotated-r (ray/ray origin direction (:time r))]
-      (when-let [rec (hit object rotated-r ray-t)]
-        (let [^Vec3 p (:p rec)
+          rotated-r (ray/ray origin direction (.time ^Ray r))]
+      (when-let [^HitData rec (hit object rotated-r ray-t)]
+        (let [^Vec3 p (.p rec)
               p (v/vec3 (rot+ (.z p) (.x p)) (.y p) (rot- (.z p) (.x p)))
-              ^Vec3 normal (:normal rec)
+              ^Vec3 normal (.normal ^HitData rec)
               normal (v/vec3 (rot+ (.z normal) (.x normal))
                              (.y normal)
                              (rot- (.z normal) (.x normal)))]
-          (assoc rec :p p :normal normal))))))
+          (->HitData p normal (.mat rec) (.t rec) (.u rec) (.v rec) (.front-face? rec)))))))
 
 (defn rotate-y [p ^double angle]
   (let [radians (m/radians angle)

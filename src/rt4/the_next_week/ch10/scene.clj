@@ -9,24 +9,23 @@
             [rt4.the-next-week.ch10.camera :as camera]
             [fastmath.random :as r]
             [clojure2d.pixels :as p])
-  (:import [fastmath.vector Vec3]))
+  (:import [rt4.the_next_week.ch10.hittable HitData]
+           [rt4.the_next_week.ch10.material MaterialData]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def one (v/vec3 1.0 1.0 1.0))
 (def zero (v/vec3 0.0 0.0 0.0))
-(def sky (v/vec3 0.5 0.7 1.0))
 
 (defn ray-color [r world background ^long depth]
   (if (zero? depth)
     zero
-    (if-let [rec (hittable/hit world r (interval/interval 0.001 ##Inf))]
-      (let [color-from-emission (material/emitted (:mat rec) (:u rec) (:v rec) (:p rec))]
-        (if-let [scatter (material/scatter (:mat rec) r rec)]
+    (if-let [^HitData rec (hittable/hit world r (interval/interval 0.001 ##Inf))]
+      (let [color-from-emission (material/emitted (.mat rec) (.u rec) (.v rec) (.p rec))]
+        (if-let [^MaterialData scatter (material/scatter (.mat rec) r rec)]
           (v/add color-from-emission
-                 (v/emult (:attenuation scatter) (ray-color (:scattered scatter) world background (dec depth))))
+                 (v/emult (.attenuation scatter) (ray-color (.scattered scatter) world background (dec depth))))
           color-from-emission))
       background)))
 
