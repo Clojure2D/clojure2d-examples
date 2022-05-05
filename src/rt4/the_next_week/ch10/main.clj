@@ -272,7 +272,7 @@
                                     :shuffle? true
                                     :image-width 400} 0))))
 
-;; this version use reconstruction kernel (gaussian)
+;; this version uses reconstruction kernel (gaussian)
 #_(def image (time (scene/render (main {:background (v/vec3 0.0 0.0 0.0)
                                       :samples-per-pixel 100
                                       :aspect-ratio 1.0
