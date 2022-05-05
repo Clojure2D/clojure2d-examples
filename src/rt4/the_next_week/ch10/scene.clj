@@ -8,7 +8,8 @@
             [rt4.color :as color]
             [rt4.the-next-week.ch10.camera :as camera]
             [fastmath.random :as r]
-            [clojure2d.pixels :as p])
+            [clojure2d.pixels :as p]
+            [clojure2d.color :as c])
   (:import [rt4.the_next_week.ch10.hittable HitData]
            [rt4.the_next_week.ch10.material MaterialData]))
 
@@ -35,7 +36,9 @@
 (defrecord Scene [cam world config]
   SceneProto
   (render [_]
-    (let [image (common/make-pixels-and-show (:image-width config) (:image-height config))
+    (let [image (if (:renderer? config)
+                  (common/make-renderer-and-show (:image-width config) (:image-height config))
+                  (common/make-pixels-and-show (:image-width config) (:image-height config)))
           ^long image-width (:image-width config)
           ^long image-height (:image-height config)
           image-width- (dec image-width)
@@ -45,13 +48,21 @@
       (common/pdotimes [j image-height (not (:shuffle? config))]
         (when (common/active? image)
           (dotimes [i image-width]
-            (let [pixel-color (-> (reduce v/add zero
-                                          (repeatedly (:samples-per-pixel config)
-                                                      #(let [u (/ (+ i (r/drand)) image-width-)
-                                                             v (/ (+ j (r/drand)) image-height-)]
-                                                         (ray-color (camera/get-ray cam u v) world background max-depth))))
-                                  (color/->color (:samples-per-pixel config)))]
-              (p/set-color! (:pixels image) i (- image-height- j) pixel-color)))))
+            (if (:renderer? config)
+              (dotimes [_ (:samples-per-pixel config)]
+                (let [u (/ (+ i (r/drand)) image-width-)
+                      v (/ (+ j (r/drand)) image-height-)]
+                  (-> (camera/get-ray cam u v)
+                      (ray-color world background max-depth)
+                      (c/scale-up)
+                      (->> (p/set-color! (:pixels image) (+ i u) (- image-height- (+ j v)))))))
+              (-> (reduce v/add zero
+                          (repeatedly (:samples-per-pixel config)
+                                      #(let [u (/ (+ i (r/drand)) image-width-)
+                                             v (/ (+ j (r/drand)) image-height-)]
+                                         (ray-color (camera/get-ray cam u v) world background max-depth))))
+                  (color/->color (:samples-per-pixel config))
+                  (->> (p/set-color! (:pixels image) i (- image-height- j))))))))
       image)))
 
 (def default-config {:samples-per-pixel 10

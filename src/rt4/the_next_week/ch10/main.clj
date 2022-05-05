@@ -265,18 +265,27 @@
              final-scene)]
      (f scene-def))))
 
+(def image (time (scene/render (main {:background (v/vec3 0.0 0.0 0.0)
+                                    :samples-per-pixel 250
+                                    :aspect-ratio 1.0
+                                    :max-depth 4
+                                    :shuffle? true
+                                    :image-width 400} 0))))
+
+;; this version use reconstruction kernel (gaussian)
 #_(def image (time (scene/render (main {:background (v/vec3 0.0 0.0 0.0)
-                                      :samples-per-pixel 250
+                                      :samples-per-pixel 100
                                       :aspect-ratio 1.0
-                                      :max-depth 4
+                                      :max-depth 10
                                       :shuffle? true
+                                      :renderer? true
                                       :image-width 400} 0))))
 
-(def image (time (scene/render (main {:background (v/vec3 0.0 0.0 0.0)
-                                    :samples-per-pixel 2000
-                                    :aspect-ratio 1.0
-                                    :shuffle? true
-                                    :image-width 800} 0))))
+#_(def image (time (scene/render (main {:background (v/vec3 0.0 0.0 0.0)
+                                      :samples-per-pixel 2000
+                                      :aspect-ratio 1.0
+                                      :shuffle? true
+                                      :image-width 800} 0))))
 
 (comment
   (common/save image "results/rt4/the_next_week/ch10low.jpg")

@@ -1,6 +1,5 @@
 (ns rt4.common
   (:require [clojure2d.core :as c2d]
-            [clojure2d.color :as c]
             [clojure2d.pixels :as p]
             [fastmath.random :as r]
             [fastmath.vector :as v]
@@ -17,6 +16,24 @@
   (let [p (p/pixels width height)
         draw-fn (fn [canvas _ _ _]
                   (c2d/image canvas p))]
+    {:window (c2d/show-window {:canvas (c2d/canvas width height :low)
+                               :draw-fn draw-fn
+                               :setup (fn [c _]
+                                        (c2d/set-background c 240 240 242)
+                                        (c2d/set-color c :maroon 20)
+                                        (doseq [^long x (range 0 (c2d/width c) 21)
+                                                ^long y (range 0 (c2d/height c) 21)
+                                                :when (even? (+ x y)) ]
+                                          (c2d/rect c x y 21 21)))
+                               :fps 5})
+     :pixels p}))
+
+(defn make-renderer-and-show
+  "Create buffer, show window and display rendering"
+  [width height]
+  (let [p (p/renderer width height :gaussian 1.0 5.0)
+        draw-fn (fn [canvas _ _ _]
+                  (c2d/image canvas (p/to-pixels p {:splats? true :gamma-color 2.0})))]
     {:window (c2d/show-window {:canvas (c2d/canvas width height :low)
                                :draw-fn draw-fn
                                :setup (fn [c _]

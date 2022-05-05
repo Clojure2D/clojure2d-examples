@@ -11,6 +11,7 @@ Notes:
 * Some minor enhancements are made
 * The result is displayed in a window during rendering. `clojure2d.pixels` buffer is used as a storage.
 * More optimized version starts with The Next Week, Chapter 10
+* The Next Week, Chapter 10 contains additional renderer with reconstruction (antialiasing) kernel. See common.clj and clojure2d.pixels
 
 Yes, it's slow!
 
