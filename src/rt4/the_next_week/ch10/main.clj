@@ -273,12 +273,12 @@
                                       :image-width 400} 0))))
 
 (def image (time (scene/render (main {:background (v/vec3 0.0 0.0 0.0)
-                                    :samples-per-pixel 10000
+                                    :samples-per-pixel 2000
                                     :aspect-ratio 1.0
                                     :shuffle? true
                                     :image-width 800} 0))))
 
 (comment
-  #_(common/save image "results/rt4/the_next_week/ch10low.jpg")
-  (common/save image "results/rt4/the_next_week/ch10high.jpg"))
+  (common/save image "results/rt4/the_next_week/ch10low.jpg")
+  (common/save image "results/rt4/the_next_week/ch10mid.jpg"))
 
