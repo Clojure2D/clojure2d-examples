@@ -12,5 +12,14 @@ Notes:
 * The result is displayed in a window during rendering. `clojure2d.pixels` buffer is used as a storage.
 * More optimized version starts with The Next Week, Chapter 10
 
-Yes, it's slow (c++ version is also slow :) )
+Yes, it's slow!
 
+;;
+
+## Book1
+
+![Final render](results/rt4/in_one_weekend/ch14mid.jpg)
+
+## Book2
+
+![Final render](results/rt4/the_next_week/ch10mid.jpg)

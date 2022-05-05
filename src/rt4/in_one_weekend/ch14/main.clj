@@ -52,7 +52,13 @@
 (def scene (scene/scene camera (make-balls world) {:image-width 1200
                                                  :samples-per-pixel 200}))
 
+#_(def scene-mid (scene/scene camera (make-balls world) {:image-width 800
+                                                       :samples-per-pixel 200}))
+
+
 (def image (time (scene/render scene)))
+#_(def image (time (scene/render scene-mid)))
 
 (comment
-  (common/save image "results/rt4/in_one_weekend/ch14.jpg"))
+  (common/save image "results/rt4/in_one_weekend/ch14.jpg")
+  #_(common/save image "results/rt4/in_one_weekend/ch14mid.jpg"))
