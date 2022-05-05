@@ -14,8 +14,6 @@ Notes:
 
 Yes, it's slow!
 
-;;
-
 ## Book1
 
 ![Final render](../../results/rt4/in_one_weekend/ch14mid.jpg)
