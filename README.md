@@ -68,6 +68,7 @@ In Emacs/Cider: C-c C-k
 * ex55 - Composing
 * ex56 - Splats
 * ex57 - Flocking
+* ex58 - Circle Inversion art
 * NOC - [Nature of Code](https://github.com/shiffman/The-Nature-of-Code-Examples/) Clojure2d version. Most interesting:
   * ch02/attraction-many-2-7.clj
   * ch02/fluidresistance-2-5.clj
