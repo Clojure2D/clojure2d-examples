@@ -11,8 +11,8 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^long SIZE 600)
-(def ^:const ^long SIZE-2 (- SIZE 2))
+(def ^:const SIZE 600)
+(def ^:const SIZE-2 (- SIZE 2))
 (def ^:const zero (Vec3. 0.0 0.0 0.0))
 
 (deftype Ball [^double x ^double y ^double vx ^double vy ^double radius ^Vec3 color])

@@ -15,17 +15,17 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^long image-width 400)
-(def ^:const ^long image-height (long (/ image-width camera/aspect-ratio)))
+(def ^:const image-width 400)
+(def ^:const image-height (long (/ image-width camera/aspect-ratio)))
 
 ;; precompute
-(def ^:const ^long image-width- (dec image-width))
-(def ^:const ^long image-height- (dec image-height))
+(def ^:const image-width- (dec image-width))
+(def ^:const image-height- (dec image-height))
 
 ;; camera
 (def camera (camera/camera))
 
-(def ^:const ^long samples-per-pixel 100)
+(def ^:const samples-per-pixel 100)
 
 (def world [(sphere/sphere {:center (v/vec3 0.0 0.0 -1.0) :radius 0.5})
           (sphere/sphere {:center (v/vec3 0.0 -100.5 -1.0) :radius 100.0})])

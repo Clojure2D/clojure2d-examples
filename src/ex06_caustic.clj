@@ -11,14 +11,13 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^double min-range -2.0)
-(def ^:const ^double max-range 2.0)
-(def ^:const ^long tilt-scale 4)
-(def ^:const ^double delta-scale 0.5)
-(def ^:const ^long shift-scale 30)
+(def ^:const min-range -2.0)
+(def ^:const max-range 2.0)
+(def ^:const tilt-scale 4)
+(def ^:const delta-scale 0.5)
+(def ^:const shift-scale 30)
 
 (defn draw-caustic
-  ""
   [canvas window ^long width ^long height]
   (binding [vr/*skip-random-fields* true]
     (let [hw (long (/ width 2))

@@ -108,7 +108,7 @@
 
 ;; prepare random palette for color reduction
 (def palette (c/random-palette)) ;;;; change!
-(def distance (rand-nth (concat (vals v/distances) [c/delta-c c/delta-h c/delta-e-cie c/delta-e-cmc c/euclidean c/contrast-ratio])))
+(def distance (rand-nth (concat (vals v/distances) [c/delta-C* c/delta-H* c/delta-E* c/delta-E*-CMC c/delta-E*-euclidean c/contrast-ratio])))
 
 
 ;; decompose images into segments
@@ -151,7 +151,7 @@
     
     (->> (p/to-pixels canvas)
          (p/filter-channels p/box-blur-1) ;;;; change!
-         (p/compose-channels :mburn (images frame)) ;;;; change!
+         (p/compose-channels :madd (images frame)) ;;;; change!
 
          (sonification (* 5.0 (m/sin (/ time 45.0))) (* 5.0  (m/sin (/ time 50.0)))) ;;;; change!
          
@@ -189,10 +189,10 @@
   (println "stopped"))
 
 ;; run updater in separate thread
-(updater)
+(future (updater))
 
 ;; uncomment and run to save current state
-(comment do
-         (c2d/close-session)
-         (dotimes [s number-of-frames]
-           (c2d/save (canvases s) (c2d/next-filename "results/ex26/" ".jpg"))))
+(comment 
+  (c2d/close-session)
+  (dotimes [s number-of-frames]
+    (c2d/save (canvases s) (c2d/next-filename "results/ex26/" ".jpg"))))

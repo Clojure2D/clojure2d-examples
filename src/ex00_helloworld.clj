@@ -22,14 +22,14 @@
   (c2d/set-color 50 50 60) ;; set another color
   (c2d/set-stroke 2.0) ;; set line width
   (c2d/line 50 300 550 300) ;; draw line
-  (c2d/set-font-attributes 30) ;; set font size
+  (c2d/set-font-attributes 30.0) ;; set font size
   (c2d/set-color :maroon) ;; set current color
   (c2d/text "Hello World!" 110 130)) ;; draw line
 
 ;; draw dots
 (c2d/with-canvas [c my-canvas]
   (c2d/set-color c :black) ;; set color to black
-  (doseq [angle (range 0.0 m/TWO_PI (/ m/TWO_PI 10.0))] ;; draw circles around mid of canvas
+  (doseq [^double angle (range 0.0 m/TWO_PI (/ m/TWO_PI 10.0))] ;; draw circles around mid of canvas
     (c2d/ellipse c
                  (+ 300.0 (* 30.0 (m/sin angle)))
                  (+ 300.0 (* 30.0 (m/cos angle)))

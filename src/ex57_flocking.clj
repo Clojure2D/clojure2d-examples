@@ -1,20 +1,20 @@
 ;; This is the limited port of paperjs example http://paperjs.org/examples/tadpoles/
 ;; it is not implementing movement along a path.
 
-(ns examples.ex57-flocking
-  (:require [clojure2d.core :refer :all]
+(ns ex57-flocking
+  (:require [clojure2d.core :as c2d]
             [fastmath.core :as m]
             [fastmath.random :as r]
             [fastmath.vector :as v])
-    (:import [fastmath.vector Vec2]))
+  (:import [fastmath.vector Vec2]))
 
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^double w 1000)
-(def ^:const ^double h 600)
+(def ^:const w 1000)
+(def ^:const h 600)
 
 (def ^Vec2 zero-vec (Vec2. 0 0))
 
@@ -31,8 +31,7 @@
      :count 0
      :head {:size [13 8]}
      :path (mapv (fn [_] zero-vec) (range amount) )
-     :short-path (mapv (fn [_] zero-vec) (range (m/min 3 amount)))
-     }))
+     :short-path (mapv (fn [_] zero-vec) (range (m/min 3 amount)))}))
 
 (defn steer [this ^Vec2 target slowdown]
   (let [desired (v/sub target (:position this))
@@ -43,15 +42,11 @@
         steer-v (v/sub (v/set-mag desired dl) (:vector this))]
     (v/limit steer-v ^double (:max-force this))))
 
+(defn seek [t ^Vec2 target]
+  (update t :acceleration (partial v/add (steer t target false))))
 
-
-(defn seek [{ acc :acceleration :as this} ^Vec2 target]
-  (update this :acceleration (partial v/add (steer this target false))))
-
-
-(defn arrive [{ acc :acceleration :as this} ^Vec2 target]
-  (update this :acceleration (partial v/add (steer this target true))))
-
+(defn arrive [t ^Vec2 target]
+  (update t :acceleration (partial v/add (steer t target true))))
 
 (defn align [this boids]
   (let [nd 35.0
@@ -104,7 +99,6 @@
         c (cohesion this boids)]
     (assoc this :acceleration (v/add (:acceleration this) (v/add  s (v/add a c))))) ) 
 
-
 (defn update-boid [{:keys [vector position acceleration max-speed] :as b}]
   (let [speed (v/add vector acceleration)
         vec (v/limit speed max-speed)]
@@ -114,12 +108,12 @@
   (let [ang (v/heading (:vector b))
         [x y] (:position b)
         [ew eh] (:size head)]
-    (with-canvas-> cvs
-      (push-matrix)
-      (translate x y)
-      (rotate ang)
-      (ellipse 0 0 ew eh)
-      (pop-matrix)))
+    (c2d/with-canvas-> cvs
+      (c2d/push-matrix)
+      (c2d/translate x y)
+      (c2d/rotate ang)
+      (c2d/ellipse 0 0 ew eh)
+      (c2d/pop-matrix)))
   b)
 
 
@@ -160,47 +154,40 @@
                              p (v/add point (v/add (v/mult (v/normalize last-vec) pl) sway))]
                          (recur p vect (assoc seg i p) (if (< i 3) (assoc s-seg i p) s-seg) c (inc i)))
                        [seg s-seg cnt]))]
-    (set-stroke cvs 4)
-    (path cvs ss)
-    (set-stroke cvs 2)
-    (path cvs seg)
-    (assoc this :path seg :short-path ss :count c)
-    ) )
+    (c2d/set-stroke cvs 4)
+    (c2d/path cvs ss)
+    (c2d/set-stroke cvs 2)
+    (c2d/path cvs seg)
+    (assoc this :path seg :short-path ss :count c)))
 
-
-
-(defn run-boids [canvas boid {:keys [group boids] :as state}]
+(defn run-boids [canvas boid {:keys [group boids]}]
   (let [b (assoc boid :last-loc (:position boid))]
 
     (->> b
          ((fn [b] (if group
-                    b
-                    (flock b boids))))
+                   b
+                   (flock b boids))))
          (borders)
          (update-boid)
          (calc-tail canvas)
-         (draw-head canvas ))))
-
+         (draw-head canvas))))
 
 (defn get-path-target [^long i ^long n ^long f]
   (let [f' (long (/ f 30))
         a (* m/TWO_PI (/ (double(mod (+ i f') n))  (double n))) ]
     (v/add (v/vec2 (/ w 2) (/ h 2)   )    (v/mult (v/vec2 (m/cos a ) (m/sin a)) (* h 0.4)))))
 
-
-
-
-(let [canvas (canvas w h :high)
+(let [canvas (c2d/canvas w h :high)
       draw (fn [cvs wnd frm  state]
-             (let [ev (get-state wnd)
+             (let [ev (c2d/get-state wnd)
                    gr (:group state)
                    state (assoc state :group (if (= ev :change) (not gr) gr))
                    {:keys [boids group]} state
                    cb (count boids)]
-               (set-state! wnd :none)
-               (set-background cvs :black)
-               (set-color cvs :white)
-               (text cvs "click in wndow for a surprise" 10 16)
+               (c2d/set-state! wnd :none)
+               (c2d/set-background cvs :black)
+               (c2d/set-color cvs :white)
+               (c2d/text cvs "click in wndow for a surprise" 10 16)
                
                (assoc state :boids (vec (map-indexed
                                          (fn [i b]
@@ -208,10 +195,10 @@
                                              
                                              (run-boids cvs b' state))) boids)))))
       
-      wnd (show-window {:canvas canvas
-                        :draw-fn draw
-                        :window-name "boids"
-                        :draw-state (initial-state)})]
-  (defmethod mouse-event ["boids" :mouse-pressed] [e _]
-    (set-state! wnd :change)))
+      wnd (c2d/show-window {:canvas canvas
+                            :draw-fn draw
+                            :window-name "boids"
+                            :draw-state (initial-state)})]
+  (defmethod c2d/mouse-event ["boids" :mouse-pressed] [_ _]
+    (c2d/set-state! wnd :change)))
       

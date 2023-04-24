@@ -13,15 +13,15 @@
 (m/use-primitive-operators)
 
 ;; size of discrete gaussian free field grid (grid of size gff-size x gff-size)
-(def ^:const ^int gff-size (r/irand 5 100))
-(def ^:const ^int rays 75)
-(def ^:const ^double rsteps (/ m/TWO_PI rays))
+(def ^:const gff-size (r/irand 5 100))
+(def ^:const rays 75)
+(def ^:const rsteps (/ m/TWO_PI rays))
 
 (defn gff-rows [] (vec (repeatedly gff-size r/grand)))
 (def gff (vec (repeatedly gff-size gff-rows)))
 
-(def ^:const ^int w 800)
-(def ^:const ^int h 800)
+(def ^:const w 800)
+(def ^:const h 800)
 
 (defn get-field-value
   "Get bilineary interpolated gaussian field value"
@@ -41,7 +41,6 @@
     (m/lerp vy1 vy2 ry)))
 
 (defn my-draw
-  ""
   [canvas ^double hf]
   (c2d/set-background canvas 21 20 19)
   (dotimes [t rays]
@@ -59,7 +58,6 @@
                    (inc iter))))))))
 
 (defn draw
-  ""
   [canvas window ^long frame _]
   (let [kappa (* frame 0.0041)
         hf (/ (m/sqrt (* 8.0 (/ kappa m/PI))) 

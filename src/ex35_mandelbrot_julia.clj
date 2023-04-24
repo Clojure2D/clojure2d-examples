@@ -29,8 +29,8 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^int w 800)
-(def ^:const ^int hw (/ w 2))
+(def ^:const w 800)
+(def ^:const hw (/ w 2))
 
 ;; First define basic matrix operations and apply them to Vec4 type
 (defprotocol Matrix

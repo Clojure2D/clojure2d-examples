@@ -19,11 +19,11 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^int w 2048)
-(def ^:const ^int h 2048)
-(def ^:const ^double step 0.003451234) ;; time step
-(def ^:const ^int first-step 500000)
-(def ^:const ^int steps-per-task 1000000)
+(def ^:const w 2048)
+(def ^:const h 2048)
+(def ^:const step 0.003451234) ;; time step
+(def ^:const first-step 500000)
+(def ^:const steps-per-task 1000000)
 
 (def unit-fn (constantly 1.0))
 

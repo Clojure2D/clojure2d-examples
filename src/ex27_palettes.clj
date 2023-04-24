@@ -5,29 +5,27 @@
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
 
-(def ^:const ^int w 800)
-(def ^:const ^int h 400)
+(def ^:const w 800)
+(def ^:const h 400)
 
-(def ^:const ^int halfw (int (/ w 2)))
-(def ^:const ^int halfh (int (/ h 2)))
+(def ^:const halfw (int (/ w 2)))
+(def ^:const halfh (int (/ h 2)))
 
-(def ^:const ^int ww (int (* 0.8 w)))
-(def ^:const ^int hh (int (* 0.8 h)))
-(def ^:const ^int bw (/ (- w ww) 2))
-(def ^:const ^int bh (/ (- h hh) 2))
+(def ^:const ww (int (* 0.8 w)))
+(def ^:const hh (int (* 0.8 h)))
+(def ^:const bw (/ (- w ww) 2))
+(def ^:const bh (/ (- h hh) 2))
 
 (def cnvs (c2d/canvas w h))
 (def window (c2d/show-window cnvs "Palettes" 15 nil))
 
 (defn draw-palette
-  ""
   [canvas values ^long box-size]
   (doseq [[^long id col] values]
     (c2d/set-color canvas col)
     (c2d/rect canvas id bh box-size hh)))
 
 (defn do-it
-  ""
   []
   (let [palette (c/random-palette)
         box-size (int (/ ww (count palette)))

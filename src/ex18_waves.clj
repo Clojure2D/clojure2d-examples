@@ -19,11 +19,10 @@
   (c2d/save cnvs (c2d/next-filename "results/ex18/" ".jpg")))
 
 ;; frequencies and amplitudes
-(def f (mapv #(<< 1 ^long %) (range 16)))
+(def f (mapv #(m/<< 1 ^long %) (range 16)))
 (def a (mapv #(/ 1.0 ^long %) f))
 
 (defn draw-fun
-  ""
   [canvas f]
   (let [yfn #(+ 300.0 (* 300.0 ^double (f (/ ^double % 600.0))))]
     (loop [x (int 1)
@@ -44,7 +43,6 @@
   :done)
 
 (defn draw-fun2
-  ""
   [canvas y f]
   (dotimes [x 600]
     (let [^double v (-> (f (m/norm x 0 600 0.0 1.0)) 

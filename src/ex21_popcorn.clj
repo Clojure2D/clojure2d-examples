@@ -12,15 +12,14 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^long w 900)
-(def ^:const ^long h 900)
+(def ^:const w 900)
+(def ^:const h 900)
 
-(def ^:const ^double point-step 0.02) ; 0.01 - 2.0
-(def ^:const ^double point-size 1.2) ; 0.6 - 1.2
-(def ^:const ^int alpha 20)
+(def ^:const point-step 0.02) ; 0.01 - 2.0
+(def ^:const point-size 1.2) ; 0.6 - 1.2
+(def ^:const alpha 20)
 
 (defn make-particle
-  ""
   []
   (let [r (r/drand 0.5 m/TWO_PI)
         a (r/drand m/TWO_PI)]
@@ -29,7 +28,6 @@
 (def sinusoidal (f/field :sinusoidal 1.0))
 
 (defn move-particle
-  ""
   [^Vec2 vrand noisef fun canvas ^Vec2 in]
   (let [^Vec2 nf (noisef in)
         ^Vec2 v (v/add in (v/mult (sinusoidal (v/mult (->> in
@@ -47,7 +45,6 @@
       (make-particle))))
 
 (defn get-noise
-  ""
   [f ^Vec2 in]
   (let [^Vec2 in (v/mult in 0.3)]
     (Vec2. (- ^double (f (.x in) (.y in)) 0.5)

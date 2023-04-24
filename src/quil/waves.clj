@@ -2,7 +2,7 @@
 ;; Author: Erik Svedäng
 
 (ns quil.waves
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :refer [set-background set-color path show-window canvas]]
             [fastmath.core :as m]
             [fastmath.vector :as v]))
 
@@ -10,9 +10,9 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^int w 500)
-(def ^:const ^int h 500)
-(def ^:const ^double mult (m/cnorm w 700 200 0.01 0.03))
+(def ^:const w 500)
+(def ^:const h 500)
+(def ^:const mult (m/cnorm w 700 200 0.01 0.03))
 
 (def ^:const start (v/vec2 0 h))
 (def ^:const end (v/vec2 w h))
@@ -20,8 +20,9 @@
 (defn calc-y [^double tm ^double x ^double mid ^double amp]
   (+ mid (* (m/sin (+ tm x)) amp)))
 
-(defn wave [tm ^double step mid-y amp]
+(defn wave
   "Calculate path"
+  [tm ^double step mid-y amp]
   (conj (cons start
               (mapv #(let [t (* ^long % mult)
                            y (calc-y tm t mid-y amp)]

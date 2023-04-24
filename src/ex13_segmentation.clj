@@ -1,4 +1,4 @@
-(ns ex13-segmentations
+(ns ex13-segmentation
   (:require [clojure2d.core :as core]
             [clojure2d.pixels :as p]
             [clojure2d.color :as clr]
@@ -11,10 +11,10 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^long min-size 4) ; minimal block size
-(def ^:const ^long max-size 32) ; maximum block size
-(def ^:const ^double threshold 15.0) ; dividing threshold
-(def ^:const ^long channel 1) ; channel to operate with
+(def ^:const min-size 4) ; minimal block size
+(def ^:const max-size 32) ; maximum block size
+(def ^:const threshold 15.0) ; dividing threshold
+(def ^:const channel 1) ; channel to operate with
 
 (def ^Pixels img (p/load-pixels "results/test.jpg"))
 

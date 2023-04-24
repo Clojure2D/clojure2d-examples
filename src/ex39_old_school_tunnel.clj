@@ -1,5 +1,5 @@
 (ns ex39-old-school-tunnel
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :as c2d]
             [fastmath.core :as m]
             [clojure2d.pixels :as p]
             [fastmath.vector :as v])
@@ -9,11 +9,11 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^int w 300)
-(def ^:const ^int h 300)
+(def ^:const w 300)
+(def ^:const h 300)
 
-(def ^:const ^int hw (/ w 2))
-(def ^:const ^int hh (/ h 2))
+(def ^:const hw (/ w 2))
+(def ^:const hh (/ h 2))
 
 (def ^:const texture-type :generative) ;; change to :image
 
@@ -58,11 +58,11 @@
           (dotimes [y hh]
             (let [y2 (+ y y)
                   yy (m/mnorm y2 0.0 h -1.0 1.0)]
-              (set-color canvas (map-texture (v/vec2 (+ xx sa) (+ yy ca)) shift))
-              (rect canvas x2 y2 2 2))))))))
+              (c2d/set-color canvas (map-texture (v/vec2 (+ xx sa) (+ yy ca)) shift))
+              (c2d/rect canvas x2 y2 2 2))))))))
 
-(def cnvs (canvas w h :low))
-(def window (show-window cnvs "Oldschool tunnel" 600 600 60 #(draw %1 %2 %3 %4)))
+(def cnvs (c2d/canvas w h :low))
+(def window (c2d/show-window cnvs "Oldschool tunnel" 600 600 60 #(draw %1 %2 %3 %4)))
 
-(defmethod key-pressed [(:window-name window) \space] [_ _]
-  (save cnvs (next-filename "results/ex39/" ".jpg")))
+(defmethod c2d/key-pressed [(:window-name window) \space] [_ _]
+  (c2d/save cnvs (c2d/next-filename "results/ex39/" ".jpg")))

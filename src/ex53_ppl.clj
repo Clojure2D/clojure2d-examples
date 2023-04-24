@@ -3,12 +3,11 @@
 
 ;; press mouse to add spores
 
-(ns examples.ex53-ppl
-  (:require [clojure2d.core :refer :all]
+(ns ex53-ppl
+  (:require [clojure2d.core :as c2d]
             [fastmath.core :as m]
             [fastmath.vector :as v]
-            [fastmath.random :as r]
-            [clojure2d.extra.utils :as utils]
+            [fastmath.random :as r]            
             [clojure2d.color :as c])
   (:import [fastmath.vector Vec2]))
 
@@ -16,15 +15,16 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^long size 200)
-(def ^:const ^long scaling 4)
-(def ^:const ^long csize (* scaling size))
+(def ^:const size 200)
+(def ^:const scaling 4)
+(def ^:const csize (* scaling size))
 (def rand-size #(r/drand (* 0.2 size) (* 0.8 size)))
 #_(def pal (vec (c/palette (reverse (c/palette :spectral-11)) 35)))
 (def pal (vec (c/palette [:green :yellow :red] 35)))
-(def ^:const ^long lim (dec (count pal)))
+(def ^:const lim (dec (count pal)))
 
-(defrecord Spore [^long id ^Vec2 pos ^double phi ^Vec2 vvec ^double v ^double r ^double alpha ^double beta col])
+(defrecord Spore [^long id ^Vec2 pos ^double phi ^Vec2 vvec
+                  ^double v ^double r ^double alpha ^double beta col])
 
 (defn spore
   "Create spore"
@@ -38,7 +38,7 @@
   ([^long x ^long y] (+ x y)))
 
 (defn change-move
-  [{:keys [^long id pos ^double phi vvec ^double v ^double r ^double alpha ^double beta col]} spores]
+  [{:keys [^long id pos ^double phi vvec ^double v ^double r ^double alpha ^double beta _col]} spores]
   (let [in-radius (filterv #(and (not= id (:id %)) 
                                  (< ^double (v/dist-sq pos (:pos %)) r)) spores) ;; select neighbours
         cnt (count in-radius) ;; how many neihgbours
@@ -55,20 +55,20 @@
 
 (defn draw
   [canvas window _ spores]
-  (let [spores (if (mouse-pressed? window)
-                 (conj spores (next-spore (count spores) (v/div (mouse-pos window) scaling)))
+  (let [spores (if (c2d/mouse-pressed? window)
+                 (conj spores (next-spore (count spores) (v/div (c2d/mouse-pos window) scaling)))
                  spores)]
-    (set-background canvas (c/color 10 10 20) 100)
+    (c2d/set-background canvas (c/color 10 10 20) 100)
     (doseq [^Spore s spores
             :let [^Vec2 p (v/mult (.pos s) scaling)]]
-      (set-color canvas (.col s))
-      (ellipse canvas (.x p) (.y p) 8 8))
+      (c2d/set-color canvas (.col s))
+      (c2d/ellipse canvas (.x p) (.y p) 8 8))
     (mapv #(change-move % spores) spores)))
 
-(def window (show-window {:canvas (black-canvas csize csize)
-                          :draw-fn draw
-                          :background :black
-                          :draw-state (take 400 (map next-spore (range)))}))
+(def window (c2d/show-window {:canvas (c2d/black-canvas csize csize)
+                            :draw-fn draw
+                            :background :black
+                            :draw-state (take 400 (map next-spore (range)))}))
 
 
-(comment save window "results/ex53/spores.jpg")
+(comment c2d/save window "results/ex53/spores.jpg")

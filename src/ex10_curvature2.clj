@@ -14,26 +14,24 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^long w 800)
-(def ^:const ^long h 800)
-(def ^:const ^long border 200)
+(def ^:const w 800)
+(def ^:const h 800)
+(def ^:const border 200)
 
-(def ^:const ^double point-step 1.0) ; distance for particle in single step
-(def ^:const ^double point-size 0.71) ; stroke size
-(def ^:const ^double coord-scale 3.0) ; range for variation (-coord-scale, coord-scale)
-(def ^:const ^double angle-scale m/TWO_PI) ; angle modifier
-(def ^:const ^double shift-x-step 0.2) ; 
-(def ^:const ^double shift-x-scale 3.0)
-(def ^:const ^double shift-y-scale 10.0)
-(def ^:const ^double shift-y-step 0.2)
+(def ^:const point-step 1.0) ; distance for particle in single step
+(def ^:const point-size 0.71) ; stroke size
+(def ^:const coord-scale 3.0) ; range for variation (-coord-scale, coord-scale)
+(def ^:const angle-scale m/TWO_PI) ; angle modifier
+(def ^:const shift-x-step 0.2) ; 
+(def ^:const shift-x-scale 3.0)
+(def ^:const shift-y-scale 10.0)
+(def ^:const shift-y-step 0.2)
 
 (defn make-particle
-  ""
   []
   (Vec3. 0.0 (rr/drand border (- h border)) (rr/drand m/TWO_PI)))
 
 (defn move-particle
-  ""
   [^Vec2 vshift fun noise canvas time ^Vec3 in]
   (let [step-x-shift (* shift-x-step ^double (rr/noise time (/ (.x in) shift-x-scale)))
         step-y-shift (m/norm (rr/noise (/ (.y in) shift-y-scale) time) 0 1 (- shift-y-step) shift-y-step)

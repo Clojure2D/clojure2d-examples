@@ -2,7 +2,7 @@
 ;; Author: Mauro De Giorgi
 
 (ns quil.game-of-life
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :refer [set-background width set-color rect show-window canvas]]
             [fastmath.core :as m]
             [fastmath.random :as r]))
 
@@ -10,7 +10,7 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^long grid-size 20)
+(def ^:const  grid-size 20)
 
 (def random-state (fn [] (vec (repeatedly (m/sq grid-size) #(r/irand 2)))))
 
@@ -34,7 +34,6 @@
       )))
 
 (defn draw
-  ""
   [canvas _ _ state]
   (let [state (or state (random-state))]
     (set-background canvas 240 240 240)

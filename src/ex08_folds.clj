@@ -12,29 +12,28 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^long w 540)
-(def ^:const ^long h 540)
+(def ^:const w 540)
+(def ^:const h 540)
 
-(def ^:const ^double x1 -2.0)
-(def ^:const ^double y1 -2.0)
-(def ^:const ^double x2 2.0)
-(def ^:const ^double y2 2.0)
-(def ^:const ^double step (/ (- x2 x1) (* 1.8 w)))
+(def ^:const x1 -2.0)
+(def ^:const y1 -2.0)
+(def ^:const x2 2.0)
+(def ^:const y2 2.0)
+(def ^:const step (/ (- x2 x1) (* 1.8 w)))
 
-(def ^:const ^double x1- (dec x1))
-(def ^:const ^double y1- (dec y1))
-(def ^:const ^double x2+ (inc x2))
-(def ^:const ^double y2+ (inc y2))
-(def ^:const ^long w- (dec w))
-(def ^:const ^long h- (dec h))
+(def ^:const x1- (dec x1))
+(def ^:const y1- (dec y1))
+(def ^:const x2+ (inc x2))
+(def ^:const y2+ (inc y2))
+(def ^:const w- (dec w))
+(def ^:const h- (dec h))
 
-(def ^:const ^double fscale 0.7)
+(def ^:const fscale 0.7)
 
 (def s60 (future (o/spots-overlay w h {:alpha 60 :intensities [60 120 180]})))
 (def n60 (future (o/noise-overlay w h {:alpha 60})))
 
 (defn make-me
-  ""
   [canvas window]
   (let [field-config (vr/random-configuration)
         field (vr/combine field-config)
@@ -56,7 +55,6 @@
   canvas)
 
 (defn draw-folds
-  ""
   [[canvas disp]]
   (c2d/with-canvas-> canvas
     (c2d/set-background 255 250 245)
@@ -67,7 +65,6 @@
   :done)
 
 (defn example-08
-  ""
   []
   (let [cnvs (c2d/canvas w h)
         window (c2d/show-window cnvs "folds" 15 nil)]

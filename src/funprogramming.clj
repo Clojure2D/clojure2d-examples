@@ -3,11 +3,20 @@
 ;; https://www.funprogramming.org/
 
 (ns funprogramming
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :refer [show-window with-canvas-> get-canvas set-background
+                                    point line set-color canvas crect ellipse filled-with-stroke
+                                    set-stroke width height mouse-pressed? mouse-x mouse-y
+                                    key-pressed save get-state with-canvas key-event
+                                    set-font-attributes text key-char key-pressed?
+                                    rect rotate translate reset-matrix black-canvas
+                                    get-image image load-image subimage bezier datetime millis
+                                    mouse-event next-filename triangle set-state!
+                                    load-bytes push-matrix scale pop-matrix convolve]]
             [fastmath.random :as r]
             [fastmath.core :as m]
             [clojure2d.color :as c]
             [clojure2d.pixels :as p]
+            [clojure2d.extra.utils :as u]
             [clojure.string :refer [join]]))
 
 ;; Below setup is not necessary. I use it to be sure everything is as fast as possible
@@ -54,22 +63,22 @@
 ;; * To bound `draw` to window pass it as parameter when creating one
 ;; * Some colors have their names (based on 140 HTML color names). You can use name (as keyword not string) instead of RGB values.
 
-(let [draw (fn [canvas window frame state]
+(let [draw (fn [canvas _window _frame _state]
              (-> canvas
                  (set-background 255 204 0)
                  (set-color :black)
                  (line (r/drand 200)
-                       (r/drand 200)
-                       (r/drand 200)
-                       (r/drand 200))))]
+                           (r/drand 200)
+                           (r/drand 200)
+                           (r/drand 200))))]
   (show-window {:draw-fn draw}))
 
 ;; https://www.funprogramming.org/4-Shades-of-gray-and-colors-frameRate.html
 
-(let [draw (fn [canvas window frame state]
+(let [draw (fn [canvas _window _frame _state]
              (set-background canvas (r/irand 255) (r/irand 255) (r/irand 255)))]
   (show-window {:draw-fn draw
-                :fps 4}))
+                    :fps 4}))
 
 ;; https://www.funprogramming.org/5-Light-speed-effect-change-line-colors.html
 
@@ -77,16 +86,16 @@
 ;;
 ;; Remember, default window is 200x200
 
-(let [draw (fn [canvas window frame state]
+(let [draw (fn [canvas _window _frame _state]
              (-> canvas
                  (set-color 0 (r/irand 255) 0)
                  (line 100 100 (r/drand 200) (r/drand 200))))]
   (show-window {:draw-fn draw
-                :background :black}))
+                    :background :black}))
 
 ;; https://www.funprogramming.org/6-Animate-white-lines-across-the-display.html
 
-(let [draw (fn [canvas window frame state]
+(let [draw (fn [canvas _window _frame _state]
              (-> canvas
                  (set-background :black)
                  (set-color :white)
@@ -95,7 +104,7 @@
 
 ;; https://www.funprogramming.org/7-Animate-horizontal-lines-use-a-variable.html
 
-(let [draw (fn [canvas window frame state]
+(let [draw (fn [canvas _window _frame _state]
              (let [distance-top (r/drand 200)]
                (-> canvas
                    (set-background :black)
@@ -105,7 +114,7 @@
 
 ;; https://www.funprogramming.org/8-Animate-vertical-lines.html
 
-(let [draw (fn [canvas window frame state]
+(let [draw (fn [canvas _window _frame _state]
              (let [distance-left (r/drand 200)]
                (-> canvas
                    (set-background :black)
@@ -120,18 +129,18 @@
 ;; Here I explicitely create canvas and set its size. Please note: canvas size and window size can be different.
 ;; In such case result will be shrinked or stretched. To set window size use `:width` and `:height` parameters.
 
-(let [draw (fn [canvas window frame state]
+(let [draw (fn [canvas _window _frame _state]
              (let [distance-left (r/drand 200)]
                (-> canvas
                    ;; (set-background :black)
                    (set-color (r/irand 200 256)
-                              (r/irand 200 256)
-                              (r/irand 50 100))
+                                  (r/irand 200 256)
+                                  (r/irand 50 100))
                    (line distance-left 0 distance-left 199))))]
   (show-window {:canvas (canvas 200 200)
-                :draw-fn draw
-                :setup (fn [canvas _]
-                         (set-background canvas :gray))}))
+                    :draw-fn draw
+                    :setup (fn [canvas _]
+                             (set-background canvas :gray))}))
 
 ;; https://www.funprogramming.org/10-Draw-circles-and-rectangles-change-fill-color.html
 
@@ -143,30 +152,28 @@
 ;; * `ellipse` is centered already
 ;; * `:mid` is used for quality similar to default in Processing
 
-(let [canvas (canvas 400 400 :mid)
-      window (show-window {:canvas canvas})]
-  (with-canvas-> canvas 
-    (set-background 0xC0E1EA)
-    
-    (set-color 0xB6FF00)
-    (crect 200 200 150 150)
-    (set-color 0xFFBC03)
-    (crect 200 200 150 150 true)
-    
-    (set-color 0xB6FF00)
-    (ellipse 200 200 150 150)
-    (set-color 0xFFBC03)
-    (ellipse 200 200 150 150 true)))
+(with-canvas-> (canvas 400 400 :mid)
+  (set-background 0xC0E1EA)
+  
+  (set-color 0xB6FF00)
+  (crect 200 200 150 150)
+  (set-color 0xFFBC03)
+  (crect 200 200 150 150 true)
+  
+  (set-color 0xB6FF00)
+  (ellipse 200 200 150 150)
+  (set-color 0xFFBC03)
+  (ellipse 200 200 150 150 true)
+  (u/show-image))
 
 ;; second version
 
-(let [canvas (canvas 400 400 :mid)
-      window (show-window {:canvas canvas})]
-  (with-canvas-> canvas 
-    (set-background 0xC0E1EA)
+(with-canvas-> (canvas 400 400 :mid)
+  (set-background 0xC0E1EA)
 
-    (filled-with-stroke 0xB6FF00 0xFFBC03 crect 200 200 150 150)
-    (filled-with-stroke 0xB6FF00 0xFFBC03 ellipse 200 200 150 150)))
+  (filled-with-stroke 0xB6FF00 0xFFBC03 crect 200 200 150 150)
+  (filled-with-stroke 0xB6FF00 0xFFBC03 ellipse 200 200 150 150)
+  (u/show-image))
 
 ;; https://www.funprogramming.org/11-Non-random-animation-of-a-circle-crossing-the-screen.html
 
@@ -174,19 +181,19 @@
 ;;
 ;; * I use state to keep current circle position, state initialization is done by using `:draw-state` parameter for window.
 
-(let [draw (fn [canvas window frame ^double circle-x]
+(let [draw (fn [canvas _window _frame ^double circle-x]
              (-> canvas
                  (set-background 0x1BB1F5)
                  (set-color 0xC1FF3E)
                  (ellipse circle-x 50 50 50))
              (inc circle-x))]
   (show-window {:canvas (canvas 400 400)
-                :draw-fn draw
-                :draw-state 0.0}))
+                    :draw-fn draw
+                    :draw-state 0.0}))
 
 ;; https://www.funprogramming.org/12-Do-a-loop-animation-using-an-if-statement.html
 
-(let [draw (fn [canvas window frame [^double slow-circle-x ^double fast-circle-x]]
+(let [draw (fn [canvas _window _frame [^double slow-circle-x ^double fast-circle-x]]
              (-> canvas
                  (set-background 0x1BB1F5)
                  (set-color 0xC1FF3E)
@@ -196,8 +203,8 @@
              [(if (> slow-circle-x 400.0) 0.0 (inc slow-circle-x))
               (if (> fast-circle-x 400.0) 0.0 (+ fast-circle-x 5.0))])]
   (show-window {:canvas (canvas 400 400)
-                :draw-fn draw
-                :draw-state [0.0 0.0]}))
+                    :draw-fn draw
+                    :draw-state [0.0 0.0]}))
 
 ;; https://www.funprogramming.org/13-Event-happening-only-sometimes.html
 
@@ -205,7 +212,7 @@
 ;;
 ;; To get some value with random probability use `randval`
 
-(let [draw (fn [canvas window frame [^double slow-circle-x ^double fast-circle-x]]
+(let [draw (fn [canvas _window _frame [^double slow-circle-x ^double fast-circle-x]]
              (let [slow-circle-size (r/randval 0.1 60 50)]
                (-> canvas
                    (set-background 0x1BB1F5)
@@ -216,31 +223,29 @@
              [(if (> slow-circle-x 400.0) 0.0 (inc slow-circle-x))
               (if (> fast-circle-x 400.0) 0.0 (+ fast-circle-x 5.0))])]
   (show-window {:canvas (canvas 400 400)
-                :draw-fn draw
-                :draw-state [0.0 0.0]}))
+                    :draw-fn draw
+                    :draw-state [0.0 0.0]}))
 
 ;; https://www.funprogramming.org/14-New-directions-for-our-moving-circle.html
 
-(let [draw (fn [canvas window frame [^double circle-x ^double circle-y]]
-             (let [slow-circle-size (r/randval 0.1 60 50)]
-               (-> canvas
-                   (set-background 0x21EA73)
-                   (set-color :white)
-                   (ellipse circle-x circle-y 40 40)
-                   (set-stroke 7.0)
-                   (set-color 0xD60DFF)
-                   (ellipse circle-x circle-y 40 40 true)))
+(let [draw (fn [canvas _window _frame [^double circle-x ^double circle-y]]
+             (-> canvas
+                 (set-background 0x21EA73)
+                 (set-color :white)
+                 (ellipse circle-x circle-y 40 40)
+                 (set-stroke 7.0)
+                 (set-color 0xD60DFF)
+                 (ellipse circle-x circle-y 40 40 true))
              [(- circle-x 2.0)
               (+ circle-y 2.0)])]
   (show-window {:canvas (canvas 400 200)
-                :draw-fn draw
-                :draw-state [300.0 20.0]}))
+                    :draw-fn draw
+                    :draw-state [300.0 20.0]}))
 
 ;; https://www.funprogramming.org/15-Ball-bouncing-at-the-window-borders.html
 
-(let [draw (fn [canvas window frame [^double circle-x ^double circle-y ^double move-x ^double move-y]]
-             (let [slow-circle-size (r/randval 0.1 60 50)
-                   circle-x (+ circle-x move-x)
+(let [draw (fn [canvas _window _frame [^double circle-x ^double circle-y ^double move-x ^double move-y]]
+             (let [circle-x (+ circle-x move-x)
                    circle-y (+ circle-y move-y)
                    [ncircle-x nmove-x] (cond
                                          (> circle-x (width canvas)) (do (println "too far right")
@@ -268,7 +273,7 @@
 
 ;; https://www.funprogramming.org/16-Create-an-animated-rainbow.html
 
-(let [draw (fn [canvas window frame state]
+(let [draw (fn [canvas _window _frame _state]
              (let [rainbow-size (r/drand 200 270)]
                (-> canvas
                    (set-stroke (r/drand 3 10))
@@ -288,7 +293,7 @@
 ;; * There is no colorMode here but you can use color conversion functions
 ;; * Color conversion functions expect color as Vec4. To make such just call `make-color`
 
-(let [draw (fn [canvas window frame state] 
+(let [draw (fn [canvas _window _frame _state] 
              (let [rainbow-size (r/drand 200 270)]
                (-> canvas
                    (set-stroke (r/drand 3 10))
@@ -305,7 +310,7 @@
 ;;
 ;; Color is not kept between calls (each call is a new context) you have to pass current color via state
 
-(let [draw (fn [canvas window frame [^double x curr-color]]
+(let [draw (fn [canvas _window _frame [^double x curr-color]]
              (let [ncolor (if (r/brand 0.7)
                             curr-color
                             (r/randval :black :white))
@@ -326,7 +331,7 @@
                           (set-color canvas :red)
                           (line canvas x 100 x 200)
                           (r/randval :black :white))
-      draw (fn [canvas window frame [^double x curr-color]]
+      draw (fn [canvas _window _frame [^double x curr-color]]
              (set-color canvas curr-color)
              (line canvas x 200 x 100)
              (let [ncolor (r/randval 0.9 curr-color (change-line-color canvas x))
@@ -365,7 +370,7 @@
 ;; https://www.funprogramming.org/21-Improved-tiny-drawing-program.html
 
 (do
-  (def cnvs (canvas 200 200))
+  (def cnvs2 (canvas 200 200))
   (def window-name "Drawing 21")
   
   (defn draw-top-line
@@ -383,7 +388,7 @@
                        (set-stroke 2.0)
                        (point (mouse-x window) (mouse-y window))))))]
 
-    (show-window {:canvas cnvs
+    (show-window {:canvas cnvs2
                   :draw-fn draw
                   :window-name window-name
                   :setup (fn [canvas _]
@@ -403,7 +408,7 @@
       clr))
 
   (defmethod key-pressed [window-name \b] [_ clr]
-    (with-canvas-> cnvs
+    (with-canvas-> cnvs2
       (set-background (r/drand 255) (r/drand 255) (r/drand 255)))
     (draw-top-line clr)
     clr))
@@ -414,7 +419,7 @@
 ;;
 ;; Set background has the same behaviour as fill + rect on whole canvas
 
-(let [draw (fn [canvas window frame state]
+(let [draw (fn [canvas _window _frame _state]
              (-> canvas
                  (set-background :black 20)
                  (set-color :white)
@@ -462,7 +467,7 @@
 
 (let [canvas (canvas 400 400)
       window-name "Letters 25" 
-      draw (fn [canvas window _ _]
+      draw (fn [canvas _window _ _]
              (set-background canvas 0x3355cc 20))]
 
   (defmethod key-event [window-name :key-pressed] [event _]
@@ -504,7 +509,7 @@
 (let [canvas (canvas 400 400)]
   (with-canvas [cnvs canvas]
     (set-background cnvs 0x6aa21e)
-    (dotimes [c 100]
+    (dotimes [_i 100]
       (let [clr (r/drand 255)]
         (-> cnvs
             (set-color clr clr clr)
@@ -517,7 +522,7 @@
 ;; https://www.funprogramming.org/27-Animating-while-rotating.html
 
 (let [canvas (canvas 400 400)
-      draw (fn [canvas window frame ^double r]
+      draw (fn [canvas _window _frame ^double r]
              (let [circle-size (r/drand 5 15)]
                (-> canvas
                    (set-color :white)
@@ -536,7 +541,7 @@
 ;; https://www.funprogramming.org/28-Rotate-and-even-move-your-axes.html
 
 (let [canvas (canvas 400 400)
-      draw (fn [canvas window frame ^double r]
+      draw (fn [canvas _window _frame ^double r]
              (let [circle-size (r/drand 5 15)]
                (-> canvas
                    (translate (/ (width canvas) 2) (/ (height canvas) 2))
@@ -562,7 +567,7 @@
       back-r (r/drand 100)
       back-g (r/drand 100)
       back-b (r/drand 100)
-      draw (fn [canvas window frame ^double r]
+      draw (fn [canvas window _frame ^double r]
              (-> canvas
                  (set-background back-r back-g back-b 50)
                  (set-color :white)
@@ -581,31 +586,30 @@
 
 ;; https://www.funprogramming.org/30-Multiple-rotating-objects-and-reset-matrix.html
 
-(let [draw (fn [canvas window frame ^double r]
-             (let [circle-size (r/drand 5 15)]
-               (-> canvas
-                   (set-background :white)
-                   (set-color :black)
-                   
-                   (translate 100 100)
-                   (rotate r)
-                   (crect 0 0 80 80)
-                   (reset-matrix)
+(let [draw (fn [canvas _window _frame ^double r]
+             (-> canvas
+                 (set-background :white)
+                 (set-color :black)
+                 
+                 (translate 100 100)
+                 (rotate r)
+                 (crect 0 0 80 80)
+                 (reset-matrix)
 
-                   (translate 300 100)
-                   (rotate r)
-                   (crect 0 0 80 80)
-                   (reset-matrix)
+                 (translate 300 100)
+                 (rotate r)
+                 (crect 0 0 80 80)
+                 (reset-matrix)
 
-                   (translate 100 300)
-                   (rotate r)
-                   (crect 0 0 80 80)
-                   (reset-matrix)
+                 (translate 100 300)
+                 (rotate r)
+                 (crect 0 0 80 80)
+                 (reset-matrix)
 
-                   (translate 300 300)
-                   (rotate r)
-                   (crect 0 0 80 80)
-                   (reset-matrix)))
+                 (translate 300 300)
+                 (rotate r)
+                 (crect 0 0 80 80)
+                 (reset-matrix))
              
              (+ r 0.02))]
 
@@ -633,16 +637,15 @@
                                     (rotate r)
                                     (crect 0 0 rect-size rect-size)
                                     (reset-matrix)))
-      draw (fn [canvas window frame ^double r]
-             (let [circle-size (r/drand 5 15)]
-               (-> canvas
-                   (set-background :white)
-                   (set-color :black)
-                   (draw-rotating-rectangle 100 100 80 r)
-                   (draw-rotating-rectangle 300 100 40 r)
-                   (draw-rotating-rectangle 100 300 100 r)
-                   (draw-rotating-rectangle 300 300 20 r)
-                   (draw-rotating-rectangle 200 200 150 r)))             
+      draw (fn [canvas _window _frame ^double r]
+             (-> canvas
+                 (set-background :white)
+                 (set-color :black)
+                 (draw-rotating-rectangle 100 100 80 r)
+                 (draw-rotating-rectangle 300 100 40 r)
+                 (draw-rotating-rectangle 100 300 100 r)
+                 (draw-rotating-rectangle 300 300 20 r)
+                 (draw-rotating-rectangle 200 200 150 r))             
              (+ r 0.02))]
 
   (show-window {:draw-fn draw
@@ -657,16 +660,15 @@
                                     (rotate r)
                                     (crect 0 0 rect-size rect-size)
                                     (reset-matrix)))
-      draw (fn [canvas window frame ^double r]
-             (let [circle-size (r/drand 5 15)]
-               (-> canvas
-                   (set-background :white)
-                   (set-color :black)
-                   (draw-rotating-rectangle 100 100 80 r)
-                   (draw-rotating-rectangle 300 100 40 (* 0.3 r))
-                   (draw-rotating-rectangle 100 300 100 (* 0.6 r))
-                   (draw-rotating-rectangle 300 300 20 (* 1.2 r))
-                   (draw-rotating-rectangle 200 200 150 (* 2.3 r))))             
+      draw (fn [canvas _window _frame ^double r]
+             (-> canvas
+                 (set-background :white)
+                 (set-color :black)
+                 (draw-rotating-rectangle 100 100 80 r)
+                 (draw-rotating-rectangle 300 100 40 (* 0.3 r))
+                 (draw-rotating-rectangle 100 300 100 (* 0.6 r))
+                 (draw-rotating-rectangle 300 300 20 (* 1.2 r))
+                 (draw-rotating-rectangle 200 200 150 (* 2.3 r)))             
              (+ r 0.02))]
 
   (show-window {:draw-fn draw
@@ -675,7 +677,7 @@
 
 ;; second code
 
-(let [draw (fn [canvas window frame ^double x]
+(let [draw (fn [canvas _window _frame ^double x]
              (-> canvas
                  (set-background 0xc9ff29)
                  (translate 200 200)
@@ -712,7 +714,7 @@
                                     (rotate r)
                                     (rect 0 0 rect-size rect-size)
                                     (reset-matrix)))
-      draw (fn [canvas window frame ^double r]
+      draw (fn [canvas _window _frame ^double r]
              (-> canvas
                  (set-background 100 200 50)
                  (set-color :white))
@@ -733,7 +735,7 @@
 ;;
 ;; Noise used here is more dense than built in Processing (more octaves). Step through noise field should be smaller (0.005 instead of 0.02).
 
-(let [draw (fn [canvas window frame ^double my-num]
+(let [draw (fn [canvas _window _frame ^double my-num]
              (let [clr (* 255.0 ^double (r/noise (+ 100.0 my-num)))
                    x (* ^double (r/noise my-num) (width canvas))
                    y (* ^double (r/noise (+ 40.0 my-num)) (height canvas))]
@@ -750,7 +752,7 @@
 
 ;; https://www.funprogramming.org/37-Make-a-rectangle-dance-using-noise.html
 
-(let [draw (fn [canvas window frame ^double my-num]
+(let [draw (fn [canvas _window _frame ^double my-num]
              (-> canvas
                  (set-background 0x810c2f)
                  (set-color :white)
@@ -768,7 +770,7 @@
 
 ;; https://www.funprogramming.org/38-Animate-the-ocean-surface-using-noise.html
 
-(let [draw (fn [canvas window frame ^double time]
+(let [draw (fn [canvas _window _frame ^double time]
              (-> canvas
                  (set-background :white)
                  (set-color :black))
@@ -799,7 +801,7 @@
 
 ;; https://www.funprogramming.org/40-The-candy-space-Understanding-noise-with-2-and-3-parameters.html
 
-(let [draw (fn [canvas window frame ^double z]
+(let [draw (fn [canvas _window _frame ^double z]
              (doseq [^double x (range 0 (width canvas) 40)]
                (doseq [^double y (range 0 (height canvas) 40)]
                  (let [co (* 255.0 (r/noise (/ x 500.0) (/ y 500.0) z))]
@@ -834,7 +836,7 @@
 
 ;; https://www.funprogramming.org/42-Programming-animated-effects-on-Android-phones.html
 
-(let [draw (fn [canvas window frame state]
+(let [draw (fn [canvas _window _frame _state]
              (let [x (r/drand (width canvas))]
                (-> canvas
                    (set-background :black 10)
@@ -850,7 +852,7 @@
 ;;
 ;; Processing `map` is `norm` here
 
-(let [draw (fn [canvas window frame ^double a]
+(let [draw (fn [canvas _window _frame ^double a]
              (let [x (m/norm (m/sin a) -1.0 1.0 300 400)]
                (-> canvas
                    (set-background 0xBAFF0D)
@@ -907,7 +909,7 @@
 ;; https://www.funprogramming.org/46-Create-beautiful-curves-with-lots-of-sin-calls.html
 
 (let [color-conv (c/color-converter :HSB 100)
-      draw (fn [canvas window frame ^double a]
+      draw (fn [canvas _window _frame ^double a]
              (let [x (m/norm (* (m/sin a) (m/sin (* a 0.8))) -1.0 1.0 0 (width canvas))
                    y (m/norm (* (m/sin (+ 1.5 (* a 1.1))) (m/sin (* a 3.1))) -1.0 1.0 0 (height canvas))
                    co (m/norm (m/sin (* a 0.03)) -1.0 1.0 0 100)
@@ -1218,7 +1220,6 @@
 ;; https://www.funprogramming.org/62-A-screen-full-of-bouncing-circles.html
 
 (let [wname "Bouncing circles 62"
-      prob (/ 17.0 20.0)
       draw (fn [canvas window _ _]             
              (let [state (get-state window)]
                (set-background canvas :black 10)
@@ -1260,7 +1261,7 @@
 ;; https://www.funprogramming.org/64-Animate-objects-that-slow-down-and-stop-using-lerp.html
 
 (let [canvas (canvas 500 400)
-      draw (fn [canvas window _ [x y destx desty]]
+      draw (fn [canvas _window _ [x y destx desty]]
              (-> canvas
                  (set-background :white)
                  (set-color :red)
@@ -1306,7 +1307,7 @@
 
 (let [canvas (canvas 500 400)
       from-hsb (c/color-converter :HSB 100)
-      draw (fn [canvas window ^long frame [^double a ^double b]]
+      draw (fn [canvas _window ^long frame [^double a ^double b]]
              (let [x0 (m/norm (m/sin a) -1.0 1.0 20.0 (- (width canvas) 20))
                    y0 (m/norm (m/cos a) -1.0 1.0 20.0 (- (height canvas) 20))
                    x1 (m/norm (m/sin b) -1.0 1.0 20.0 (- (width canvas) 20))
@@ -1325,7 +1326,7 @@
 ;; https://www.funprogramming.org/68-Circular-motion-reviewed.html
 
 (let [canvas (canvas 500 400)
-      draw (fn [canvas window _ ^double a]
+      draw (fn [canvas _window _ ^double a]
              (if (<= a m/TWO_PI)
                (let [r (r/drand 180 220)
                      x (+ (/ (width canvas) 2) (* r (m/cos a)))
@@ -1347,7 +1348,7 @@
 (let [canvas (canvas 500 400)
       x (/ (width canvas) 2)
       y (/ (height canvas) 2)
-      draw (fn [canvas window _ [^double a ^double b]]
+      draw (fn [canvas _window _ [^double a ^double b]]
              (let [x2 (* (m/sin a) 50)
                    y2 (* (m/cos a) 50)
                    x3 (* (m/sin b) 200)
@@ -1364,7 +1365,7 @@
 
 (let [canvas (canvas 500 400)
       reset #(vector (/ (width canvas) 2) (/ (height canvas) 2) (r/drand m/TWO_PI))
-      draw (fn [canvas window _ [^double oldx ^double oldy ^double a]]
+      draw (fn [canvas _window _ [^double oldx ^double oldy ^double a]]
              (let [newx (+ oldx (* 5.0 (m/cos a)))
                    newy (+ oldy (* 5.0 (m/sin a)))]
                (set-color canvas :black)
@@ -1380,7 +1381,7 @@
 (let [canvas (canvas 500 400)
       reset #(vector (/ (width canvas) 2.0) (/ (height canvas) 2.0) (r/drand m/TWO_PI) 1.0)
       from-hsb (c/color-converter :HSB 100)
-      draw (fn [canvas window _ [^double oldx ^double oldy ^double a ^double w]]
+      draw (fn [canvas _window _ [^double oldx ^double oldy ^double a ^double w]]
              (let [newx (+ oldx (* 5.0 (m/cos a)))
                    newy (+ oldy (* 5.0 (m/sin a)))]
                
@@ -1406,7 +1407,7 @@
 ;; Using framecounter here instead of variable
 
 (let [canvas (canvas 500 400)
-      draw (fn [canvas window ^long frame _]
+      draw (fn [canvas _window ^long frame _]
              (set-background canvas :white)
              (set-color canvas 50 200 40)
              (when (zero? (mod frame 2)) (rect canvas 0 0 100 100))
@@ -1419,7 +1420,7 @@
 ;; https://www.funprogramming.org/73-The-circlebeats-of-a-running-circle.html
 
 (let [canvas (canvas 500 400)
-      draw (fn [canvas window ^long frame [^int csize ^int grow]]
+      draw (fn [canvas _window ^long frame [^int csize ^int grow]]
              (set-background canvas :white)
              (set-color canvas :red)
              (let [grow (if (zero? (mod frame 60)) 5 grow)
@@ -1447,7 +1448,7 @@
   (with-canvas [c canvas]
     (set-background c :white)
     (set-color c :black)
-    (dotimes [i 30]
+    (dotimes [_i 30]
       (bezier c midw h midw (r/drand h)
               (r/drand w) (r/drand h)
               (r/drand w) (r/drand h))))

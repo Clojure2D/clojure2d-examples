@@ -15,30 +15,31 @@
 
 ;; define canvas, window
 (def cnvs (c2d/canvas 600 600 :low))
-(def window (c2d/show-window cnvs "Double pendulum"))
+(def window (c2d/show-window {:canvas cnvs
+                            :window-name "Double pendulum"}))
 
 ;; canvas is refreshed externally by integrator, let's define frame rate
-(def ^:const ^double time-delay (/ 1000.0 ^double (:fps window)))
+(def ^:const time-delay (/ 1000.0 ^double (:fps window)))
 
 ;; pendulum settings
-(def ^:const ^double len 0.6) ; length of first rod, second has length (- 1.0 len)
-(def ^:const ^double mass1 4) ; mass of the first ball
-(def ^:const ^double mass2 10) ; mass of the second ball
-(def ^:const ^double theta (- m/PI 0.1)) ; angle of the first rod
-(def ^:const ^double phi (r/drand m/TWO_PI)) ; angle of the second rod
-(def ^:const ^double simulation-time 10.0) ; time of simulation (it's not animation time)
-(def ^:const ^double speed 0.5) ; simulation speed, set to 1.0 to have real time animation
+(def ^:const len 0.6) ; length of first rod, second has length (- 1.0 len)
+(def ^:const mass1 4.0) ; mass of the first ball
+(def ^:const mass2 10.0) ; mass of the second ball
+(def ^:const theta (- m/PI 0.1)) ; angle of the first rod
+(def ^:const phi (r/drand m/TWO_PI)) ; angle of the second rod
+(def ^:const simulation-time 10.0) ; time of simulation (it's not animation time)
+(def ^:const speed 0.5) ; simulation speed, set to 1.0 to have real time animation
 
 (do
   ;; precalculated parameters
-  (def ^:const ^double len1 len)
-  (def ^:const ^double len2 (- 1.0 len))
+  (def ^:const len1 len)
+  (def ^:const len2 (- 1.0 len))
 
-  (def ^:const ^double l1 (* len1 250.0))
-  (def ^:const ^double l2 (* len2 250.0))
+  (def ^:const l1 (* len1 250.0))
+  (def ^:const l2 (* len2 250.0))
 
-  (def ^:const ^double m1 (* 20.0 (m/cbrt mass1)))
-  (def ^:const ^double m2 (* 20.0 (m/cbrt mass2)))
+  (def ^:const m1 (* 20.0 (m/cbrt mass1)))
+  (def ^:const m2 (* 20.0 (m/cbrt mass2)))
 
   ;; local drawing buffer
   (def local-canvas (c2d/canvas 600 600))
@@ -71,7 +72,7 @@
         (c2d/image (c2d/get-image local-canvas)))
 
       ;; wait
-      (Thread/sleep time-delay)))
+      (Thread/sleep (long time-delay))))
 
   ;; run integration
   (future (dp/evolver {:t simulation-time
@@ -82,7 +83,8 @@
                        :m2 mass2
                        :theta_0 theta
                        :phi_0 phi
-                       :observe observe})))
+                       :observe observe})
+          (println "Finished")))
 
 (defmethod c2d/key-pressed ["Double pendulum" \space] [_ _]
   (c2d/save cnvs (c2d/next-filename "results/ex28/" ".jpg")))

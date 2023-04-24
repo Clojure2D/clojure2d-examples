@@ -1,5 +1,5 @@
 (ns ex42-string
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :as c2d]
             [fastmath.core :as m]
             [fastmath.vector :as v]
             [fastmath.fields :as vr]
@@ -11,35 +11,34 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^long w 500)
-(def ^:const ^long h 500)
-(def ^:const ^long midh (/ h 2))
+(def ^:const w 500)
+(def ^:const h 500)
+(def ^:const midh (/ h 2))
 
-(def ^:const ^double x1 -2.5)
-(def ^:const ^double y1 -2.5)
-(def ^:const ^double x2 2.5)
-(def ^:const ^double y2 2.5)
-(def ^:const ^double step (/ (- x2 x1) 51))
-(def ^:const ^double lines 15)
-(def ^:const ^double lines- (dec 15))
+(def ^:const x1 -2.5)
+(def ^:const y1 -2.5)
+(def ^:const x2 2.5)
+(def ^:const y2 2.5)
+(def ^:const step (/ (- x2 x1) 51))
+(def ^:const lines 15)
+(def ^:const lines- (dec 15))
 
-(def ^:const ^double x1- (dec x1))
-(def ^:const ^double y1- (dec y1))
-(def ^:const ^double x2+ (inc x2))
-(def ^:const ^double y2+ (inc y2))
+(def ^:const x1- (dec x1))
+(def ^:const y1- (dec y1))
+(def ^:const x2+ (inc x2))
+(def ^:const y2+ (inc y2))
 
-(def ^:const ^double fscale 0.7)
+(def ^:const fscale 0.7)
 
 (defn draw
-  ""
   [canvas window ^long frame _]
-  (let [field (get-state window)
-        s (m/mnorm (max 0 (mouse-x window)) 0.0 w 10.0 200.0)
+  (let [field (c2d/get-state window)
+        s (m/mnorm (max 0 (c2d/mouse-x window)) 0.0 w 10.0 200.0)
         t (/ frame 100.0)]
 
     (-> canvas
-        (set-background :black 50)
-        (set-color :white 80))
+        (c2d/set-background :black 50)
+        (c2d/set-color :white 80))
     
     (dotimes [yl lines]
       (let [y (m/norm yl 0 lines- y1 y2)
@@ -49,7 +48,7 @@
                           ^Vec2 vv (v/add nv (v/limit (v/mult (field nv) cx) 200))
                           xx (m/norm (+ ^double x (m/constrain (.x vv) -0.1 0.1)) x1- x2+ 0.0 w)]]
                 (Vec2. xx (+ midh (.y vv))))]
-        (path-bezier canvas p false true))))
+        (c2d/path-bezier canvas p false true))))
 
   ;; (save canvas (next-filename "generateme/frames42/f" ".jpg"))
 
@@ -63,15 +62,15 @@
       (pprint field-config)
       (vr/combine field-config))))
 
-(close-session)
-(def window (show-window {:canvas (canvas w h)
-                          :window-name "String"
-                          :state (new-state)
-                          :draw-fn draw}))
+(c2d/close-session)
+(def window (c2d/show-window {:canvas (c2d/canvas w h)
+                            :window-name "String"
+                            :state (new-state)
+                            :draw-fn draw}))
 
-(defmethod mouse-event [(:window-name window) :mouse-clicked] [_ _]
+(defmethod c2d/mouse-event [(:window-name window) :mouse-clicked] [_ _]
   (new-state))
 
-(defmethod key-pressed [(:window-name window) \space] [_ s]
-  (save window (next-filename "results/ex42/" ".jpg"))
+(defmethod c2d/key-pressed [(:window-name window) \space] [_ s]
+  (c2d/save window (c2d/next-filename "results/ex42/" ".jpg"))
   s)

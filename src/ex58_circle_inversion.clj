@@ -13,8 +13,8 @@
 (set! *warn-on-reflection* true)
 (m/use-primitive-operators)
 
-(def ^:const ^long c-cnt (long (r/randval (r/irand 3 10)
-                                        (r/irand 3 6))))
+(def ^:const c-cnt (long (r/randval (r/irand 3 10)
+                                  (r/irand 3 6))))
 
 (println {:c-cnt c-cnt})
 

@@ -2,7 +2,8 @@
 ;; Author: Jack Rusher
 
 (ns quil.golden-ratio-flower
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :refer [set-background translate width height set-color
+                                    ellipse show-window canvas]]
             [fastmath.core :as m]
             [clojure2d.color :as c]))
 

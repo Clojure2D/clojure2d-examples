@@ -1,7 +1,7 @@
 ;; https://bl.ocks.org/mbostock/e6f9e160585c153fa5ec543bd12b81e9
 
-(ns examples.ex54-random-walk
-  (:require [clojure2d.core :refer :all]
+(ns ex54-random-walk
+  (:require [clojure2d.core :as c2d]
             [fastmath.random :as r]
             [clojure2d.color :as c]
             [fastmath.vector :as v]
@@ -13,7 +13,7 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^double len 1300.0)
+(def ^:const len 1300)
 
 (def grad (c/gradient :rainbow))
 
@@ -23,22 +23,22 @@
 
 (def main-path (take len (iterate next-step [20 300])))
 
-(def c (canvas 1000 600 :highest))
+(def c (c2d/canvas 1000 600 :highest))
 
-(with-canvas [c c]
+(c2d/with-canvas [c c]
   (-> c
-      (set-background :white)
-      (set-color :black)
-      (set-stroke 1.5)
-      (path main-path))
-  (set-stroke c 1.0)
-  (set-composite c (p/composite :multiply))
+      (c2d/set-background :white)
+      (c2d/set-color :black)
+      (c2d/set-stroke 1.5)
+      (c2d/path main-path)
+      (c2d/set-stroke 1.0)
+      (c2d/set-composite (p/composite :multiply)))
   (doseq [[^long idx pos] (take-nth 2 (map-indexed vector main-path))
           :let [parts (partition-all 10 9 (take 200 (iterate next-step pos)))]]
     (doseq [[^long idx2 p] (map-indexed vector parts)]
-      (set-color c (grad (/ idx len)) (* 255.0 (/ (- 20 idx2 1) 20.0)))
-      (path c p)))  )
+      (c2d/set-color c (grad (/ idx (double len))) (* 255.0 (/ (- 20 idx2 1) 20.0)))
+      (c2d/path c p)))  )
 
 (utils/show-image c)
 
-(comment (save c "results/ex54/result.jpg"))
+(comment (c2d/save c "results/ex54/result.jpg"))

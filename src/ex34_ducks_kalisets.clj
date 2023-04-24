@@ -26,19 +26,18 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^int w 1000)
-(def ^:const ^int h 1000)
+(def ^:const w 1000)
+(def ^:const h 1000)
 
-(def ^:const title "Ducks and Kalisets")
+(def title "Ducks and Kalisets")
 
 (deftype Bounds [^double x1 ^double y1
                  ^double x2 ^double y2
                  ^double sx ^double sy]
   Object
-  (toString [b] (str "[(" x1 ", " y1 "), (" x2 ", " y2 ")]")))
+  (toString [_] (str "[(" x1 ", " y1 "), (" x2 ", " y2 ")]")))
 
 (defn make-bounds
-  ""
   [^double x1 ^double y1 ^double x2 ^double y2]
   (Bounds. x1 y1 x2 y2 (* 0.5 (- x2 x1)) (* 0.5 (- y2 y1))))
 

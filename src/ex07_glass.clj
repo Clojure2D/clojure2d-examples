@@ -12,7 +12,6 @@
 (set! *unchecked-math* :warn-on-boxed)
 
 (defn draw-glass
-  ""
   [canvas window ^long width ^long height]
   (binding [vr/*skip-random-fields* true]
     (let [hw (long (/ height 2))

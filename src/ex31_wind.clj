@@ -12,8 +12,8 @@
 
 (def cnvs (c2d/canvas 500 500 :highest))
 
-(def ^:const ^double s (/ m/TWO_PI 320.0)) ;; speed
-(def ^:const ^double phase-scale (/ m/PI 400.0)) 
+(def ^:const s (/ m/TWO_PI 320.0)) ;; speed
+(def ^:const phase-scale (/ m/PI 400.0)) 
 
 (defn random-c
   "Distortion and alpha - pencil look"

@@ -1,20 +1,19 @@
 ;; http://lodev.org/cgtutor/fire.html
 
 (ns ex40-old-school-fire
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :as c2d]
             [fastmath.core :as m]
             [clojure2d.pixels :as p]
             [clojure2d.color :as c]
-            [fastmath.random :as r]
-            [fastmath.vector :as v]))
+            [fastmath.random :as r]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^int bw 400)
-(def ^:const ^int bh 200)
-(def ^:const ^int bh- (dec bh))
+(def ^:const bw 400)
+(def ^:const bh 200)
+(def ^:const bh- (dec bh))
 
 (def palette (mapv #(c/from-HSL* (c/color (/ ^long % 3.0) 255.0 (min 255.0 (* 2.0 ^long %)))) (range 256)))
 
@@ -54,8 +53,8 @@
     (p/set-canvas-pixels! canvas (set-pixels pixels fns))
     all))
 
-(def cnvs (canvas bw bh :mid))
-(def window (show-window cnvs "Oldschool fire" (* 2 bw) (* 2 bh) 60 draw))
+(def cnvs (c2d/canvas bw bh :mid))
+(def window (c2d/show-window cnvs "Oldschool fire" (* 2 bw) (* 2 bh) 60 draw))
 
-(defmethod key-pressed [(:window-name window) \space] [_ _]
-  (save cnvs (next-filename "results/ex40/" ".jpg")))
+(defmethod c2d/key-pressed [(:window-name window) \space] [_ _]
+  (c2d/save cnvs (c2d/next-filename "results/ex40/" ".jpg")))

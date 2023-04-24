@@ -12,8 +12,8 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^long w 1200)
-(def ^:const ^long h 1200)
+(def ^:const w 1200)
+(def ^:const h 1200)
 
 (def cnvs (c2d/canvas w h :low))
 
@@ -23,7 +23,7 @@
   (c2d/save cnvs "results/ex23/scene.jpg"))
 
 (do
-  (def ^:const ^double max-depth 20.0)
+  (def ^:const max-depth 20.0)
 
   ;; ray origin
   (def ro (Vec3. 0.0 4.5 4.0))
@@ -44,14 +44,13 @@
 
   ;; custom plane
   (defn fn-plane
-    ""
     [^Vec3 p]
     (let [v (- (* 1.5 ^double (rnd/noise (* 0.06 (.x p)) (* 0.06 (.z p)))) 1.5)]
       (HitData. (- (.y p) v) m1)))
 
   ;; scene
   (def scene (r/op-blend fn-plane 
-                         (r/op-rotate (r/op-subtract box sphere) (Vec3. 0.0 1.0 0.0) 0.5) 0.1))
+                       (r/op-rotate (r/op-subtract box sphere) (Vec3. 0.0 1.0 0.0) 0.5) 0.1))
 
   ;; normal calculator
   (def norm (r/make-normal scene 0.01))
@@ -74,7 +73,6 @@
   (def fog (r/distance-fog (.color bg) -0.01))
 
   (defn calc-color
-    ""
     [ro rd ^double depth]
     (let [rm (ray-marching ro rd)
           ^HitData hit (rm 0)
@@ -99,7 +97,6 @@
 
 
   (defn do-it
-    ""
     [canvas]
     (dotimes [x w]
       (let [xx (m/norm x 0.0 w -2.0 2.0)]

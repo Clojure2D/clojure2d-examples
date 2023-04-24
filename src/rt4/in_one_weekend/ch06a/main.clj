@@ -4,27 +4,27 @@
             [clojure2d.color :as c]
             [fastmath.vector :as v]
             [rt4.common :as common]
-            [rt4.in-one-weekend.ch06.ray :as ray])
+            [rt4.in-one-weekend.ch06a.ray :as ray])
   (:import [fastmath.vector Vec3]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^double aspect-ratio (/ 16.0 9.0))
+(def ^:const aspect-ratio (/ 16.0 9.0))
 
-(def ^:const ^long image-width 400)
-(def ^:const ^long image-height (long (/ image-width aspect-ratio)))
+(def ^:const image-width 400)
+(def ^:const image-height (long (/ image-width aspect-ratio)))
 
 ;; precompute
-(def ^:const ^long image-width- (dec image-width))
-(def ^:const ^long image-height- (dec image-height))
+(def ^:const image-width- (dec image-width))
+(def ^:const image-height- (dec image-height))
 
 ;; camera
 
-(def ^:const ^double viewport-height 2.0)
-(def ^:const ^double viewport-width (* aspect-ratio viewport-height))
-(def ^:const ^double focal-length 1.0)
+(def ^:const viewport-height 2.0)
+(def ^:const viewport-width (* aspect-ratio viewport-height))
+(def ^:const focal-length 1.0)
 
 (def origin (v/vec3 0.0 0.0 0.0))
 (def horizontal (v/vec3 viewport-width 0.0 0.0))

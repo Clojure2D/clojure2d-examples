@@ -9,12 +9,12 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^int w 800)
-(def ^:const ^int h 800)
-(def ^:const ^int hw (/ w 2))
-(def ^:const ^Vec2 mid (Vec2. hw hw))
+(def ^:const w 800)
+(def ^:const h 800)
+(def ^:const hw (/ w 2))
+(def mid (Vec2. hw hw))
 
-(def ^:const title "Spirograph")
+(def title "Spirograph")
 
 (def cnvs (c2d/canvas w h))
 
@@ -35,7 +35,6 @@
   ([] (make-spirograph (r/drand 0.01 0.99) (r/drand 0.01 0.99))))
 
 (defn draw-spirograph
-  ""
   [canvas spirograph-fn ^long steps]
   (dotimes [x steps]
     (let [t (/ x 500.0)

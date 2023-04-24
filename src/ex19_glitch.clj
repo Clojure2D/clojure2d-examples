@@ -53,7 +53,6 @@
 ;; mirror image
 
 (defn random-mirror
-  ""
   []
   (partial p/filter-channels 
            (g/mirror (g/mirror-random-config))

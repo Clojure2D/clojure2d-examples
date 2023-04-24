@@ -1,5 +1,5 @@
-(ns examples.ex55-composing
-  (:require [clojure2d.core :refer :all]
+(ns ex55-composing
+  (:require [clojure2d.core :as c2d]
             [clojure2d.color :as c]
             [fastmath.random :as r]
             [clojure2d.extra.utils :as utils]
@@ -30,27 +30,27 @@
           e (+ b r2)
           x1 (* w (r/noise s))
           x2 (* w (r/noise e))]
-      (bezier canvas x1 0 x1 (/ l 2) x2 (/ l 2) x2 (- l 2)))))
+      (c2d/bezier canvas x1 0 x1 (/ l 2) x2 (/ l 2) x2 (- l 2)))))
 
 (defn segment
   [canvas as bs]
   (doseq [[col a b] (map vector pal as bs)]
-    (set-color canvas col 100)
+    (c2d/set-color canvas col 100)
     (thread canvas a b)))
 
 (defn draw-me
   [canvas method]
-  (set-composite canvas (p/composite method))
-  (set-stroke canvas 2.0 :square)
+  (c2d/set-composite canvas (p/composite method))
+  (c2d/set-stroke canvas 2.0 :square)
   (doseq [[as bs] (partition 2 1 positions)]
     (segment canvas as bs)
-    (translate canvas 0 l))
+    (c2d/translate canvas 0 l))
   canvas)
 
-(def img (with-canvas-> (canvas w h)
-           (set-background :white)
-           (image (with-canvas-> (canvas w h :highest) (draw-me :difference))))) ;; try `:screen`
+(def img (c2d/with-canvas-> (c2d/canvas w h)
+         (c2d/set-background :white)
+         (c2d/image (c2d/with-canvas-> (c2d/canvas w h :highest) (draw-me :difference))))) ;; try `:screen`
 
 (utils/show-image img)
 
-(comment save img "results/ex55/difference.jpg")
+(comment c2d/save img "results/ex55/difference.jpg")

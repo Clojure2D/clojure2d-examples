@@ -21,7 +21,6 @@
 (def light (c/awt-color 232 221 203))
 
 (defn draw-grid
-  ""
   [canvas]
   (let [nx (r/irand 2 200)
         ny (r/irand 2 200)

@@ -13,22 +13,20 @@
 (set! *unchecked-math* true)
 (m/use-primitive-operators)
 
-(def ^:const ^long w 800)
-(def ^:const ^long h 800)
-(def ^:const ^long border 200)
+(def ^:const w 800)
+(def ^:const h 800)
+(def ^:const border 200)
 
-(def ^:const ^double point-step 1.0)
-(def ^:const ^double point-size 0.7)
-(def ^:const ^double coord-scale 3.0)
-(def ^:const ^double angle-scale 7.0)
+(def ^:const point-step 1.0)
+(def ^:const point-size 0.7)
+(def ^:const coord-scale 3.0)
+(def ^:const angle-scale 7.0)
 
 (defn make-particle
-  ""
   []
   (Vec3. (r/drand border (- w border)) (r/drand border (- h border)) (r/drand m/TWO_PI)))
 
 (defn move-particle
-  ""
   [^Vec2 vshift fun noise canvas ^Vec3 in]
   (let [nx (+ (.x in) (* point-step (m/qcos (.z in))))
         ny (+ (.y in) (* point-step (m/qsin (.z in))))

@@ -13,14 +13,14 @@
   (hit [aabb r ray-t]))
 
 (defmacro ^:private check-axis
-  [i d o]
+  [rt-min rt-max i d o]
   `(let [invd# (/ ~d)
          m0# (double (if (neg? invd#) (:mx ~i) (:mn ~i)))
          m1# (double (if (neg? invd#) (:mn ~i) (:mx ~i)))
          t0# (* (- m0# ~o) invd#)
          t1# (* (- m1# ~o) invd#)
-         ray-tmin# (if (> t0# ~'rt-min) t0# ~'rt-min)
-         ray-tmax# (if (< t1# ~'rt-max) t1# ~'rt-max)]
+         ray-tmin# (if (> t0# ~rt-min) t0# ~rt-min)
+         ray-tmax# (if (< t1# ~rt-max) t1# ~rt-max)]
      (> ray-tmax# ray-tmin#)))
 
 (defrecord AABB [x y z]
@@ -31,9 +31,9 @@
           ^Vec3 origin (:origin r)
           ^double rt-min (:mn ray-t)
           ^double rt-max (:mx ray-t)]
-      (and (check-axis x (.x direction) (.x origin))
-           (check-axis y (.y direction) (.y origin))
-           (check-axis z (.z direction) (.z origin))))))
+      (and (check-axis rt-min rt-max x (.x direction) (.x origin))
+           (check-axis rt-min rt-max y (.y direction) (.y origin))
+           (check-axis rt-min rt-max z (.z direction) (.z origin))))))
 
 (defn aabb
   ([^Vec3 a ^Vec3 b]

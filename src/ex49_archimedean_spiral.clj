@@ -1,39 +1,38 @@
-(ns ex49-archimedean_spiral
+(ns ex49-archimedean-spiral
   "Generates an archimedean spiral with an oscillating radius"
-  (:require [clojure2d.core :refer :all]
-            [fastmath.core :as m]
-            [fastmath.vector :as v]))
+  (:require [clojure2d.core :as c2d]
+            [fastmath.core :as m]))
 
 ;; be sure everything is fast as possible
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^long w 800)
-(def ^:const ^long h 800)
+(def ^:const w 800)
+(def ^:const h 800)
 
-(def ^:const ^double x0 400)
-(def ^:const ^double y0 400)
+(def ^:const x0 400)
+(def ^:const y0 400)
 
-(def ^:const ^double tStep 0.01)
+(def ^:const tStep 0.01)
 
-(def ^:const ^double tAngleScale m/HALF_PI)
-(def ^:const ^double tRadiusScale 10.0)
+(def ^:const tAngleScale m/HALF_PI)
+(def ^:const tRadiusScale 10.0)
 
-(def ^:const ^double ampFactor 0.3)
-(def ^:const ^double periodFactor 16)
+(def ^:const ampFactor 0.3)
+(def ^:const periodFactor 16)
 
-(defn draw [canvas window ^double frame _]
+(defn draw [canvas _ ^double frame _]
   (let [t1 (/ frame 60.0)]
     (-> canvas
-        (set-background :black 50)
-        (set-color :white 80))
+        (c2d/set-background :black 50)
+        (c2d/set-color :white 80))
     (let [p (for [^double t (range 0.0 t1 tStep)]
               (let [theta (* t tAngleScale)
                     r (* (+ 1 (* ampFactor (m/sin (* periodFactor theta)))) (* t tRadiusScale))]
                 [(+ x0 (* (m/cos theta) r)) (+ y0 (* (m/sin theta) r))]))]
-      (path canvas p))))
+      (c2d/path canvas p))))
 
-(def window (show-window {:canvas (canvas w h :highest)
-                          :window-name "Archimedean spiral with an oscillating radius"
-                          :draw-fn draw}))
+(def window (c2d/show-window {:canvas (c2d/canvas w h :highest)
+                            :window-name "Archimedean spiral with an oscillating radius"
+                            :draw-fn draw}))

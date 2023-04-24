@@ -12,7 +12,7 @@
 ;; * B - draw shorten lines
 
 (ns ex37-fractal-bestiary
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :as c2d]
             [fastmath.core :as m]
             [fastmath.vector :as v]
             [fastmath.random :as r])
@@ -22,15 +22,15 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^int size 800)
+(def ^:const size 800)
 
-(def ^:const ^double s60 (m/sin (m/radians 60.0)))
-(def ^:const ^double s60- (- s60))
+(def ^:const s60 (m/sin (m/radians 60.0)))
+(def ^:const s60- (- s60))
 (def ^:const unit (Vec2. 1.0 0.0))
 
 ;; canvas
 
-(def cnvs (canvas size size :highest))
+(def cnvs (c2d/canvas size size :highest))
 
 ;; main algorithm
 
@@ -74,25 +74,25 @@
                slen (* vlen len)
                linelen (if short-line (* 0.6 slen) slen)]
            
-           (rotate canvas angle)
+           (c2d/rotate canvas angle)
 
-           (push-matrix canvas)
+           (c2d/push-matrix canvas)
            (when (neg? forward)
              (-> canvas
-                 (translate slen 0)
-                 (flip-y)
-                 (rotate m/PI)))
-           (when (neg? flip) (flip-y canvas))
+                 (c2d/translate slen 0)
+                 (c2d/flip-y)
+                 (c2d/rotate m/PI)))
+           (when (neg? flip) (c2d/flip-y canvas))
 
            (if (zero? depth)
-             (line canvas 0 0 linelen 0)
+             (c2d/line canvas 0 0 linelen 0)
              (-> canvas
-                 (rotate rot)
+                 (c2d/rotate rot)
                  (draw-beast (dec depth) (* slen scale) all)))
            
-           (pop-matrix canvas)
+           (c2d/pop-matrix canvas)
            
-           (translate canvas slen 0)) recipe)
+           (c2d/translate canvas slen 0)) recipe)
   canvas)
 
 (defn draw-recipe
@@ -101,11 +101,11 @@
    (println recipe)
    (let [{^double len :len pos :pos :as precipe} (process-recipe recipe)
          [px py] (v/mult pos size)]
-     (with-canvas-> cnvs
-       (set-background 21 20 25)
-       (set-color :lightgrey 240)
-       (set-stroke 0.8)
-       (translate px py)
+     (c2d/with-canvas-> cnvs
+       (c2d/set-background 21 20 25)
+       (c2d/set-color :lightgrey 240)
+       (c2d/set-stroke 0.8)
+       (c2d/translate px py)
        (draw-beast depth (* size len) precipe)))
    recipe)
   ([recipe] (draw-recipe recipe (or (:depth recipe) 5))))
@@ -247,16 +247,16 @@
 ;; window / events
 
 (def window-name "Fractal Bestiary - Brainfilling Curves.")
-(def window (show-window {:canvas cnvs
-                          :window-name window-name
-                          :state default-recipe}))
+(def window (c2d/show-window {:canvas cnvs
+                            :window-name window-name
+                            :state default-recipe}))
 
-(defmethod key-released [window-name virtual-key] [e {^long depth :depth ^double len :len :or {depth 5 len 0.25} :as state}]
-  (let [ndepth (condp = (key-code e)
+(defmethod c2d/key-released [window-name c2d/virtual-key] [e {^long depth :depth ^double len :len :or {depth 5 len 0.25} :as state}]
+  (let [ndepth (condp = (c2d/key-code e)
                  :right (min 20 (inc depth))
                  :left (max 0 (dec depth)) 
                  depth)
-        nlen (condp = (key-code e)
+        nlen (condp = (c2d/key-code e)
                :up (* len 1.15)
                :down (/ len 1.15)
                len)]
@@ -266,15 +266,15 @@
         (draw-recipe (assoc state :depth ndepth :len nlen)))
       state)))
 
-(defmethod key-pressed [window-name \space] [_ _]
+(defmethod c2d/key-pressed [window-name \space] [_ _]
   (let [name (rand-nth (keys recipes))]
     (println (str "Recipe: " name))
     (draw-recipe (name recipes))))
 
-(defmethod key-pressed [window-name \b] [_ {short-line :short-line :as state}]
+(defmethod c2d/key-pressed [window-name \b] [_ {short-line :short-line :as state}]
   (draw-recipe (assoc state :short-line (not short-line))))
 
-(defmethod key-pressed [window-name \r] [_ _]
+(defmethod c2d/key-pressed [window-name \r] [_ _]
   (draw-recipe {:grid (if (r/brand) :tri :sq)
                 :len 0.1
                 :pos [0.5 0.5]
@@ -285,23 +285,23 @@
                                                                                          (r/randval -1 1)
                                                                                          (r/randval -1 1))))}))
 
-(defmethod key-pressed [window-name \m] [_ {recipe :recipe :as state}]
-  (draw-recipe (assoc state :recipe (map #(let [[x y a b] %]
+(defmethod c2d/key-pressed [window-name \m] [_ {recipe :recipe :as state}]
+  (draw-recipe (assoc state :recipe (map #(let [[x y _ _] %]
                                             [x y (r/randval -1 1) (r/randval -1 1)]) recipe))))
 
-(defmethod key-pressed [window-name \w] [_ {pos :pos :or {pos [0.1 0.6]} :as state}]
+(defmethod c2d/key-pressed [window-name \w] [_ {pos :pos :or {pos [0.1 0.6]} :as state}]
   (let [[^double x ^double y] pos] (draw-recipe (assoc state :pos [x (- y 0.05)]))))
-(defmethod key-pressed [window-name \s] [_ {pos :pos :or {pos [0.1 0.6]} :as state}]
+(defmethod c2d/key-pressed [window-name \s] [_ {pos :pos :or {pos [0.1 0.6]} :as state}]
   (let [[^double x ^double y] pos] (draw-recipe (assoc state :pos [x (+ y 0.05)]))))
-(defmethod key-pressed [window-name \a] [_ {pos :pos :or {pos [0.1 0.6]} :as state}]
+(defmethod c2d/key-pressed [window-name \a] [_ {pos :pos :or {pos [0.1 0.6]} :as state}]
   (let [[^double x ^double y] pos] (draw-recipe (assoc state :pos [(- x 0.05) y]))))
-(defmethod key-pressed [window-name \d] [_ {pos :pos :or {pos [0.1 0.6]} :as state}]
+(defmethod c2d/key-pressed [window-name \d] [_ {pos :pos :or {pos [0.1 0.6]} :as state}]
   (let [[^double x ^double y] pos] (draw-recipe (assoc state :pos [(+ x 0.05) y]))))
 
-(defmethod key-pressed [window-name \f] [_ state]
-  (save cnvs (next-filename "results/ex37/" ".jpg"))
+(defmethod c2d/key-pressed [window-name \f] [_ state]
+  (c2d/save cnvs (c2d/next-filename "results/ex37/" ".jpg"))
   state)
 
-(draw-recipe (get-state window))
+(draw-recipe (c2d/get-state window))
 
 

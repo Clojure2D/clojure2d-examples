@@ -11,15 +11,15 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^long w 1200) ;; canvas size
-(def ^:const ^long h 1200)
+(def ^:const w 1200) ;; canvas size
+(def ^:const h 1200)
 
 ;; configuration
-(def ^:const ^double point-step 15.0) ;; step for next point (15 pixels)
-(def ^:const ^double rscale 25.0) ;; vector field scale down factor
-(def ^:const ^double angle-mult 16.0) ;; how much multiply angle taken from noise
-(def ^:const ^double point-size 0.9) ;; size of point
-(def ^:const ^int alpha 10) ;; alpha for point
+(def ^:const point-step 15.0) ;; step for next point (15 pixels)
+(def ^:const rscale 25.0) ;; vector field scale down factor
+(def ^:const angle-mult 16.0) ;; how much multiply angle taken from noise
+(def ^:const point-size 0.9) ;; size of point
+(def ^:const alpha 10) ;; alpha for point
 
 (defn make-particle
   "Create random particle"

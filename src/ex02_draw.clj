@@ -19,13 +19,13 @@
                (m/abs)
                (+ 0.1)) ;; math function responsible for object shape
         ^double cn (m/cnorm n 0.1 1.0 0.0 20) ;; normalize 
-        ew (* n 160.0) ;; width of ellipse
-        eh (* (- 1.0 n) 160.0)] ;; height of ellipse
+        ew (* n 160.0)                        ;; width of ellipse
+        eh (* (- 1.0 n) 160.0)]               ;; height of ellipse
 
     (-> canvas
         (c2d/set-color 45 45 41 20) ;; set color for background
         (c2d/rect 0 0 (c2d/width canvas) (c2d/height canvas)) ;; draw background with alpha, to fake motion blur
-        (p/set-canvas-pixels! (->> canvas ;; take canvas
+        (p/set-canvas-pixels! (->> canvas      ;; take canvas
                                    p/to-pixels ;; convert to pixels
                                    (p/filter-channels p/gaussian-blur-2))) ;; operate on pixels directly - blur three channels (skip alpha)
 

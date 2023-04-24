@@ -2,16 +2,15 @@
 ;; author: Jeremy Kross
 
 (ns quil.geometric-twinkle
-  (:require [clojure2d.core :refer :all]
-            [fastmath.core :as m]
-            [fastmath.vector :as v]))
+  (:require [clojure2d.core :refer [set-background set-color ellipse show-window canvas]]
+            [fastmath.core :as m]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^int w 500)
-(def ^:const ^int h 500)
+(def ^:const w 500)
+(def ^:const h 500)
 
 (defn setup [] 
   (let [r 10

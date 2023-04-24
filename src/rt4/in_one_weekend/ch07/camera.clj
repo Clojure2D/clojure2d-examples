@@ -7,7 +7,7 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^double aspect-ratio (/ 16.0 9.0))
+(def ^:const aspect-ratio (/ 16.0 9.0))
 
 (defprotocol CameraProto
   (get-ray [camera s t]))

@@ -102,7 +102,7 @@
 
 (defn draw-map
   "draw map from starting point grid"
-  [canvas [rmin rmax ^double step] [rminx rmaxx rminy rmaxy] scale f]
+  [canvas [rmin rmax ^double step] _ scale f]
   (c2d/set-background canvas 10 10 10)
   (c2d/set-color canvas 240 240 240 20)
   (doseq [o (map #(+ (* 2.0 step ^double (r/grand)) ^double %) (range rmin rmax step))]

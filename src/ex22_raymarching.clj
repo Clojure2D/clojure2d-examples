@@ -16,8 +16,8 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^long w 1000)
-(def ^:const ^long h 1000)
+(def ^:const w 1000)
+(def ^:const h 1000)
 
 (def cnvs (c2d/canvas w h :low))
 
@@ -26,8 +26,8 @@
 (defmethod c2d/key-pressed ["raymarching" \space] [_ _]
   (c2d/save cnvs "results/ex22/scene.jpg"))
 
-(def ^:const ^double mint 0.01) ;; minimum ray distance 
-(def ^:const ^double maxt 30.0) ;; maximum ray distance
+(def ^:const mint 0.01) ;; minimum ray distance 
+(def ^:const maxt 30.0) ;; maximum ray distance
 
 (def ^Vec3 sun-light (v/normalize (Vec3. -300.7 0.4 -200.0)))
 
@@ -68,7 +68,7 @@
         t
         (recur (unchecked-inc i) (+ diffh t))))))
 
-(def ^:const ^double k 16.0)
+(def ^:const k 16.0)
 
 (defn softshadow
   [pos rd f]
