@@ -1,0 +1,4 @@
+{:paths ["src" "resources"]
+ :deps {org.clojure/clojure {:mvn/version "1.11.1"}
+        sicmutils/sicmutils {:mvn/version "0.22.0"}
+        clojure2d/clojure2d {:mvn/version "1.4.5"}}}

@@ -1,4 +1,4 @@
-(defproject clojure2d-examples "1.4.5-SNAPSHOT"
+(defproject clojure2d-examples "1.4.5"
   :description "Examples for Clojure2d library"
   :url "https://github.com/Clojure2D/clojure2d-examples"
   :license {:name "The Unlicense"
