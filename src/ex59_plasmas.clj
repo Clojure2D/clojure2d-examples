@@ -17,6 +17,7 @@
 
 (defn headings ^double [p1 p2] (m/+ (v/heading p1) (v/heading p2)))
 (defn heading ^double [p1 p2] (v/heading (v/add p1 p2)))
+(defn angle ^double [p1 p2] (* 2.0 (v/angle-between p1 p2)))
 (defn magnitudes ^double [p1 p2] (m/+ (v/mag p1) (v/mag p2)))
 (defn magnitude ^double [p1 p2] (v/mag (v/add p1 p2)))
 (defn dist ^double [p1 p2] (v/dist p1 p2))
@@ -33,6 +34,7 @@
    :magnitudes magnitudes
    :heading heading
    :magnitude magnitude
+   :angle angle
    :dot dot
    :cross cross
    :dist dist
