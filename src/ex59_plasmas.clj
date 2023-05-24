@@ -16,10 +16,12 @@
 (def ^:const SIZE 800)
 
 (defn headings ^double [p1 p2] (m/+ (v/heading p1) (v/heading p2)))
-(defn heading ^double [p1 p2] (v/heading (v/add p1 p2)))
+(defn heading+ ^double [p1 p2] (v/heading (v/add p1 p2)))
+(defn heading- ^double [p1 p2] (v/heading (v/sub p1 p2)))
 (defn angle ^double [p1 p2] (* 2.0 (v/angle-between p1 p2)))
 (defn magnitudes ^double [p1 p2] (m/+ (v/mag p1) (v/mag p2)))
-(defn magnitude ^double [p1 p2] (v/mag (v/add p1 p2)))
+(defn magnitude+ ^double [p1 p2] (v/mag (v/add p1 p2)))
+(defn magnitude- ^double [p1 p2] (v/mag (v/sub p1 p2)))
 (defn dist ^double [p1 p2] (v/dist p1 p2))
 (defn dist-abs ^double [p1 p2] (v/dist-abs p1 p2))
 (defn dist-ang ^double [p1 p2] (v/dist-ang p1 p2))
@@ -32,8 +34,10 @@
 (def primitive-functions
   {:headings headings
    :magnitudes magnitudes
-   :heading heading
-   :magnitude magnitude
+   :heading+ heading+
+   :magnitude+ magnitude+
+   :heading- heading-
+   :magnitude- magnitude-
    :angle angle
    :dot dot
    :cross cross
@@ -64,16 +68,15 @@
      :fns (take 3 (shuffle (keys primitive-functions)))
      :pow1 (r/drand 0.5 5.0)
      :pow2 (r/drand 0.5 5.0)
-     :pow3 (r/drand 0.5 5.0)}))
+     :pow3 (r/drand 0.5 5.0)
+     :saturation (r/drand 0.6 1.5)}))
 
 (defn plasma->buf
   [{:keys [f1 f2 ^double scale1 ^double scale2 ^double scale3
            n1 n2 n3 ^double in-scale ^double in-rot ^double in-shift
            colorspace ^double n1-scale ^double n2-scale ^double n3-scale
            ^double pow1 ^double pow2 ^double pow3
-           fns]
-    :as config}]
-  (pp/pprint (dissoc config :n1 :n2 :n3 :f1 :f2))
+           fns]}]
   (let [-in-scale (- in-scale)
         [fn1 fn2 fn3] (map primitive-functions fns)
         field1 (f/combine f1)
@@ -82,8 +85,8 @@
         noise2 (r/random-noise-fn n2)
         noise3 (r/random-noise-fn n3)
         [_ convert-from] (c/colorspaces* colorspace)
-        buf (p/renderer SIZE SIZE :gaussian 2.05 1.0) ;; blur a little bit
-        js (cons [0.0 0.0] (take 5 (r/jittered-sequence-generator :r2 2))) ;; 6 points per pixel
+        buf (p/renderer SIZE SIZE :gaussian 1.95 1.0) ;; blur a little bit
+        js (cons [0.0 0.0] (take 3 (r/jittered-sequence-generator :r2 2))) ;; 4 points per pixel
         is (range (count js))
         xss (mapv first js)
         yss (mapv second js)]
@@ -99,6 +102,7 @@
                          (v/add in-shift)) ;; shift
                   p1 (field1 in)           ;; apply field 1
                   p2 (field2 in)           ;; apply field 2
+                  ;; individual color channels
                   c1 (* 255.0 (m/pow (m/abs (m/sin (m/* (m/+ ^double (fn1 p1 p2)
                                                              (m/* n1-scale
                                                                   ^double (noise1 (p1 0) (p1 1))))
@@ -117,14 +121,24 @@
 
 (defonce noverlay (o/noise-overlay SIZE SIZE {:alpha 90}))
 
-(defn draw-plasma [buf]
+(defn draw-plasma [buf {:keys [saturation]}]
   (o/render-noise
-   (c2d/get-image (p/to-pixels buf {:splats? true}))
+   (c2d/get-image (p/to-pixels buf {:splats? true :saturation saturation}))
    noverlay))
 
-(def config (make-config))
-(def buffer (plasma->buf config))
-(def image (draw-plasma buffer))
+(def config (let [config (make-config)]
+            (pp/pprint (dissoc config :n1 :n2 :n3 :f1 :f2))
+            config))
+
+(def buffer (->> (-> c2d/available-cores
+                   (m// 2)
+                   (m/max 1)
+                   (repeatedly #(future (plasma->buf config)))) ;; parallel rendering, use half of cores
+               (vec) ;; run tasks (lazy seq)
+               (map deref) ;; get results and combine
+               (reduce p/merge-renderers)))
+
+(def image (draw-plasma buffer config))
 (u/show-image image)
 
 (comment
