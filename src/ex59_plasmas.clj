@@ -31,6 +31,10 @@
 (defn dist-delta ^double [p1 p2] (if (< (v/dist p1 p2) 0.1) 1.0 0.1))
 (defn dot ^double [p1 p2] (v/dot p1 p2))
 (defn cross ^double [p1 p2] (v/cross p1 p2))
+(defn sum ^double [p1 p2] (v/sum (v/add p1 p2)))
+(defn lprod ^double [p1 p2] (let [r (v/emult p1 p2)]
+                           (m/+ (m/log (inc (m/abs (r 0))))
+                                (m/log (inc (m/abs (r 1)))))))
 
 (def primitive-functions
   {:headings headings
@@ -48,7 +52,9 @@
    :dist-cheb dist-cheb
    :dist-ang dist-ang
    :dist-canberra dist-canberra
-   :dist-delta dist-delta})
+   :dist-delta dist-delta
+   :sum sum
+   :lprod lprod})
 
 (defn make-config []
   (binding [f/*skip-random-fields* (r/brand 0.8)]
@@ -67,11 +73,11 @@
      :in-rot (r/drand m/TWO_PI)
      :in-shift (v/generate-vec2 #(r/drand -1.0 1.0))
      :colorspace (rand-nth c/colorspaces-list) ;; random colorspace
-     :fns (take 3 (shuffle (keys primitive-functions)))
+     :fns (repeatedly 3 #(rand-nth (keys primitive-functions)))
      :pow1 (r/drand 0.3 7.0)
      :pow2 (r/drand 0.3 7.0)
      :pow3 (r/drand 0.3 7.0)
-     :saturation (r/drand 0.6 1.5)}))
+     :saturation (r/drand 0.5 1.2)}))
 
 (defn plasma->buf
   [{:keys [f1 f2 ^double scale1 ^double scale2 ^double scale3
