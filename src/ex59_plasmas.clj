@@ -28,6 +28,7 @@
 (defn dist-emd ^double [p1 p2] (v/dist-emd p1 p2))
 (defn dist-cheb ^double [p1 p2] (v/dist-cheb p1 p2))
 (defn dist-canberra ^double [p1 p2] (v/dist-canberra p1 p2))
+(defn dist-delta ^double [p1 p2] (if (< (v/dist p1 p2) 0.1) 1.0 0.1))
 (defn dot ^double [p1 p2] (v/dot p1 p2))
 (defn cross ^double [p1 p2] (v/cross p1 p2))
 
@@ -46,7 +47,8 @@
    :dist-emd dist-emd
    :dist-cheb dist-cheb
    :dist-ang dist-ang
-   :dist-canberra dist-canberra})
+   :dist-canberra dist-canberra
+   :dist-delta dist-delta})
 
 (defn make-config []
   (binding [f/*skip-random-fields* (r/brand 0.8)]
@@ -66,9 +68,9 @@
      :in-shift (v/generate-vec2 #(r/drand -1.0 1.0))
      :colorspace (rand-nth c/colorspaces-list) ;; random colorspace
      :fns (take 3 (shuffle (keys primitive-functions)))
-     :pow1 (r/drand 0.5 5.0)
-     :pow2 (r/drand 0.5 5.0)
-     :pow3 (r/drand 0.5 5.0)
+     :pow1 (r/drand 0.3 7.0)
+     :pow2 (r/drand 0.3 7.0)
+     :pow3 (r/drand 0.3 7.0)
      :saturation (r/drand 0.6 1.5)}))
 
 (defn plasma->buf
@@ -85,8 +87,8 @@
         noise2 (r/random-noise-fn n2)
         noise3 (r/random-noise-fn n3)
         [_ convert-from] (c/colorspaces* colorspace)
-        buf (p/renderer SIZE SIZE :gaussian 1.95 1.0) ;; blur a little bit
-        js (cons [0.0 0.0] (take 3 (r/jittered-sequence-generator :r2 2))) ;; 4 points per pixel
+        buf (p/renderer SIZE SIZE :gaussian 1.45 1.0) ;; blur a little bit
+        js (take 4 (drop (r/irand 100) (r/jittered-sequence-generator :r2 2))) ;; 4 points per pixel
         is (range (count js))
         xss (mapv first js)
         yss (mapv second js)]
@@ -95,28 +97,30 @@
             i is
             :let [^double xs (xss i) ;; shift x
                   ^double ys (yss i) ;; shift y
-                  xx (m/norm (m/+ x xs -0.5) 0 SIZE -in-scale in-scale) ;; scale screen to field coords
-                  yy (m/norm (m/+ y ys -0.5) 0 SIZE -in-scale in-scale)
+                  x1 (m/+ x xs)
+                  y1 (m/+ y ys)
+                  xx (m/norm x1 0 SIZE -in-scale in-scale) ;; scale screen to field coords
+                  yy (m/norm y1 0 SIZE -in-scale in-scale)
                   in (-> (v/vec2 xx yy)    ;; input
                          (v/rotate in-rot) ;; rotate
                          (v/add in-shift)) ;; shift
                   p1 (field1 in)           ;; apply field 1
                   p2 (field2 in)           ;; apply field 2
                   ;; individual color channels
-                  c1 (* 255.0 (m/pow (m/abs (m/sin (m/* (m/+ ^double (fn1 p1 p2)
-                                                             (m/* n1-scale
-                                                                  ^double (noise1 (p1 0) (p1 1))))
-                                                        scale1))) pow1))
-                  c2 (* 255.0 (m/pow (m/abs (m/sin (m/* (m/+ ^double (fn2 p1 p2)
-                                                             (m/* n2-scale
-                                                                  ^double (noise2 (p2 0) (p2 1))))
-                                                        scale2))) pow2))
-                  c3 (* 255.0 (m/pow (m/abs (m/sin (m/* (m/+ ^double (fn3 p1 p2)
-                                                             (m/* n3-scale
-                                                                  ^double (noise3 (p1 1) (p2 0) 0.3456)))
-                                                        scale3))) pow3))
-                  col (-> (v/vec3 c1 c2 c3) convert-from)]]
-      (p/set-color! buf x y col))
+                  c1 (m/pow (m/abs (m/sin (m/* (m/+ ^double (fn1 p1 p2)
+                                                    (m/* n1-scale
+                                                         ^double (noise1 (p1 0) (p1 1))))
+                                               scale1))) pow1)
+                  c2 (m/pow (m/abs (m/sin (m/* (m/+ ^double (fn2 p1 p2)
+                                                    (m/* n2-scale
+                                                         ^double (noise2 (p2 0) (p2 1))))
+                                               scale2))) pow2)
+                  c3 (m/pow (m/abs (m/sin (m/* (m/+ ^double (fn3 p1 p2)
+                                                    (m/* n3-scale
+                                                         ^double (noise3 (p1 1) (p2 0) 0.3456)))
+                                               scale3))) pow3)
+                  col (-> (v/vec3 c1 c2 c3) (v/mult 255.0) convert-from)]]
+      (p/set-color! buf x1 y1 col))
     buf))
 
 (defonce noverlay (o/noise-overlay SIZE SIZE {:alpha 90}))
@@ -134,7 +138,7 @@
                    (m// 2)
                    (m/max 1)
                    (repeatedly #(future (plasma->buf config)))) ;; parallel rendering, use half of cores
-               (vec) ;; run tasks (lazy seq)
+               (vec)       ;; run tasks (lazy seq)
                (map deref) ;; get results and combine
                (reduce p/merge-renderers)))
 
