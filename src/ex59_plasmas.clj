@@ -170,3 +170,4 @@
     (spit (str file-name ".edn") config) ;; save configuration
     (c2d/save image (str file-name ".jpg"))) ;; save the result
   )
+
