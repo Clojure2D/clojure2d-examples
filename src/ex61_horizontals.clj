@@ -22,7 +22,7 @@
              (c2d/set-background c (c/gray 240))
              (doseq [y (range 600) ;; traverse vertically, line by line
                      :let [yy (m/norm y 0.0 600.0 b1 b2) ;; screen to field coords
-                           ;; calculate line width (horizontal step) as some value based in field vector magnitude
+                           ;; calculate line width (horizontal step) as some value based on field vector (at the left boundary) magnitude
                            step (-> (v/vec2 b1 yy) field v/mag m/sin m/sq inc (* 0.5))]]
                (loop [xx (double b1)] ;; traverse horizontally, step-size
                  (when (< xx b2)
