@@ -1,5 +1,6 @@
 (ns GG.M.M-6-1-02
-  (:require [clojure2d.core :refer :all]
+  (:require [clojure2d.core :refer [mouse-pressed? mouse-x mouse-y mouse-pos canvas ellipse
+                                    set-background set-color set-stroke line show-window]]
             [fastmath.core :as m]
             [fastmath.vector :as v]
             [fastmath.random :as r]))
@@ -8,8 +9,8 @@
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def ^:const ^int w 600)
-(def ^:const ^int h 600)
+(def ^:const w 600)
+(def ^:const h 600)
 (def ^:const node-damping 0.1)
 (def ^:const spring-damping 0.3)
 (def ^:const stiffness 0.6)
@@ -18,7 +19,6 @@
 (defrecord Node [pos velocity])
 
 (defn update-node
-  ""
   [node]
   (let [velocity (v/limit (:velocity node) 10.0)
         npos (v/add (:pos node) velocity)]
@@ -27,7 +27,6 @@
 (defrecord Spring [from-node to-node])
 
 (defn update-spring
-  ""
   [{:keys [from-node to-node]}]
   (let [diff (-> (v/sub (:pos to-node) (:pos from-node))
                  (v/normalize)
@@ -40,7 +39,6 @@
      (update-node (Node. (:pos to-node) (v/add (:velocity to-node) force))))))
 
 (defn draw
-  ""
   [canvas window _ spring]
   (let [{:keys [from-node to-node]} (or spring (Spring. (Node. (v/vec2 (+ (r/drand -50 50) (/ w 2))
                                                                        (+ (r/drand -50 50) (/ h 2)))
@@ -72,4 +70,4 @@
     (update-spring (Spring. from-node to-node))))
 
 (def window (show-window {:canvas (canvas w h)
-                          :draw-fn draw}))
+                        :draw-fn draw}))

@@ -14,9 +14,9 @@
          (let [b1 (r/drand -12.0 -3.0) ;; left vector field boundary
                b2 (- b1) ;; right boundary
                field (f/random-field) ;; random vector field
-               #_#_pal (c/palette)  
+               pal (c/palette)  
                #_#_pal [:black (c/gray 100) :white (c/gray 127.5) :black (c/gray 155) :white]
-               pal [:black (c/gray 100) (c/gray 155) :white] ;; some palette
+               #_#_pal [:black (c/gray 100) (c/gray 155) :white] ;; some palette
                palcnt (dec (count pal))] ;; palette count
            (c2d/with-canvas [c (c2d/canvas 600 600)]
              (c2d/set-background c (c/gray 240))
