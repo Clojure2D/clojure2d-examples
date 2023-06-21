@@ -6,6 +6,24 @@ The game was originally created for [FC_Jam#2](https://itch.io/jam/fantasy-conso
 ![Game](/results/games/the_king/DE5FE9FA_000012.jpg "Game")
 ![Game over](/results/games/the_king/DE5FE9FA_000027.jpg "Game over")
 
+## Run
+
+```
+ clj -Sdeps '{:deps {io.github.Clojure2D/clojure2d-examples {:git/sha "e7d3fa73bab1bc3e27dba30f2b5b7b40b5622ef1"}}}' -X games.the-king.the-king/run-game
+```
+
+or load the `games.the-king.the-king` namespace and call `run-game`
+
+## Controls
+
+* `z` or `x` to start a game
+
+In game:
+
+* `left` or `right` to rotate player
+* `z` or `x` or `up` to push
+* `down` to move backward
+
 ## The goal
 
 You have to push your lazy King through the map to marked target. You have to avoid: mud, water, snakes and hard pushing. The level of happiness of your king drops then. He's also bored when you stay too much time on the map.
