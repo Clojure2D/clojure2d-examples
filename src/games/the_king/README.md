@@ -1,6 +1,6 @@
 # The King
 
-The game was originally created for [FC_Jam#2](https://itch.io/jam/fantasy-console-game-jam-2) on [PICO-8](https://www.lexaloffle.com/pico-8.php) fantasy console and published in [itch.io](https://generateme.itch.io/the-king) 
+The game was originally created for [FC_Jam#2](https://itch.io/jam/fantasy-console-game-jam-2) on [PICO-8](https://www.lexaloffle.com/pico-8.php) fantasy console and published on [itch.io](https://generateme.itch.io/the-king) 
 
 ![Welcome](/results/games/the_king/DE5FE9FA_000000.jpg "Welcome")
 ![Game](/results/games/the_king/DE5FE9FA_000012.jpg "Game")
