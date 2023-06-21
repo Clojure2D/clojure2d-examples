@@ -1,13 +1,14 @@
 (ns games.the-king.gfx
   (:require [clojure2d.core :as c2d]
-            [clojure2d.extra.utils :as u]))
+            [clojure2d.extra.utils :as u]
+            [clojure.java.io :as io]))
 
 (def ^:const point-size 4)
 (def ^:const sprite-size (* point-size 8))
 (def ^:const canvas-size (* sprite-size 16))
 
-(def pico-8-mono-font (c2d/load-font "src/games/the_king/font/pico-8-mono-reversed.ttf"))
-(def pico-8-font (c2d/load-font "src/games/the_king/font/pico-8.ttf"))
+(def pico-8-mono-font (c2d/load-font (io/resource "pico8/pico-8-mono-reversed.ttf")))
+(def pico-8-font (c2d/load-font (io/resource "pico8/pico-8.ttf")))
 
 (def pico-8-palette [0x000000 0x1D2B53 0x7E2553 0x008751
                    0xAB5236 0x5F574F 0xC2C3C7 0xFFF1E8
