@@ -94,6 +94,8 @@ In Emacs/Cider: C-c C-k
   * In One Weekend (done)
   * The Next Week (done)
   * The Rest Of Your Life (WIP)
+* Games
+  * [The King](https://generateme.itch.io/the-king) (port of the game made for PICO-8)
 
 ### Other examples
 
