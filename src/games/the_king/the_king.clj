@@ -346,6 +346,7 @@
       (* 2.0)))
 
 (defn player-sprite
+  "Plater sprite, animation (8 frames)"
   [angle]
   (->> (-> (+ 0.3125 angle)
            (mod 1.0)
@@ -355,6 +356,7 @@
        (gfx/sprite :boy)))
 
 (defn king-sprite
+  "Two frames of king"
   [time]
   (->> (time-step time 30 2) 
        (gfx/sprite :king)))
@@ -451,6 +453,9 @@
 
 (defn draw-frame
   [canvas window _frame_id state]
+  (when (and (c2d/key-pressed? window)
+             (= \0 (c2d/key-char window)))
+    (c2d/save canvas (c2d/next-filename "results/games/the_king/" ".jpg")))
   (-> canvas
       (c2d/set-background :black)
       (c2d/set-stroke gfx/point-size :square :miter)

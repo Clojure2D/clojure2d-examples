@@ -16,7 +16,9 @@
   gradient noise gives easier levels and is selected more often at the beginning of the game"
   ([level] (calculate-grid level 0.25))
   ([level step]
-   (let [noise-type (r/randval (m/norm level 1 100 0.95 0.05) :gradient :value)
+   (let [noise-type (if (zero? (mod level 10))
+                      :simplex
+                      (r/randval (m/norm level 1 100 0.6 0.01) :gradient :value))
          noise (r/single-noise {:noise-type noise-type}) ;; create random value or gradient noise, one octave
          offset-x (r/grand 5) ;; random noise offset
          offset-y (r/grand 5)
