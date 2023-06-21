@@ -467,9 +467,13 @@
 (def ^:const window-width (+ gfx/canvas-size 100))
 (def ^:const window-height (+ gfx/canvas-size 50))
 
-(def window (c2d/show-window {:canvas (c2d/canvas window-width window-height :low)
-                            :window-name "The King"
-                            :draw-fn draw-frame
-                            :fps 30
-                            :draw-state (init-state)}))
+(defn run-game
+  []
+  (c2d/show-window {:canvas (c2d/canvas window-width window-height :low)
+                    :window-name "The King"
+                    :draw-fn draw-frame
+                    :fps 30
+                    :draw-state (init-state)}))
 
+(comment
+  (run-game))
