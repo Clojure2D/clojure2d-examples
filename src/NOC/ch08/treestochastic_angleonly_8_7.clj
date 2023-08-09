@@ -1,4 +1,4 @@
-(ns examples.NOC.ch08.treestochastic-angleonly-8-7
+(ns NOC.ch08.treestochastic-angleonly-8-7
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]))

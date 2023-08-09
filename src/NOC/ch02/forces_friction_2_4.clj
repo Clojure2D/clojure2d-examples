@@ -1,4 +1,4 @@
-(ns examples.NOC.ch02.forces-friction-2-4
+(ns NOC.ch02.forces-friction-2-4
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]

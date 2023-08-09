@@ -1,4 +1,4 @@
-(ns example.NOC.introduction.gaussian2
+(ns NOC.introduction.gaussian2
   (:require [clojure2d.core :refer :all]
             [fastmath.random :as r]
             [fastmath.core :as m]))

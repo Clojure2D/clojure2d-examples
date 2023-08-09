@@ -1,4 +1,4 @@
-(ns NOC.ch02.forces_many_mutual_boundaries
+(ns NOC.ch02.forces-mutual-attraction-boundaries
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]

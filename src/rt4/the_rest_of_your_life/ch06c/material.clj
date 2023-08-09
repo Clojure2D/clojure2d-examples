@@ -25,9 +25,11 @@
 (defrecord Lambertian [albedo]
   MaterialProto
   (emitted [_ _ _ _] black)
-  (scattering-pdf [_ _ray-in _rec _scattered] m/INV_TWO_PI)
+  (scattering-pdf [_ _ray-in rec scattered]
+    (let [cos-theta (v/dot (.normal ^HitData rec) (v/normalize (.direction ^Ray scattered)))]
+      (max 0.0 (/ cos-theta m/PI))))
   (scatter [_ ray-in rec]
-    (let [scatter-direction (common/random-on-hemisphere (.normal ^HitData rec))
+    (let [scatter-direction (v/add (.normal ^HitData rec) (common/random-unit-vector))
           attenuation (texture/value albedo (.u ^HitData rec) (.v ^HitData rec) (.p ^HitData rec))]
       (if (v/is-near-zero? scatter-direction)
         (->MaterialData attenuation (ray/ray (.p ^HitData rec) (.normal ^HitData rec) (.time ^Ray ray-in)))

@@ -1,4 +1,4 @@
-(ns examples.NOC.ch07.gameoflifesimple-7-2
+(ns NOC.ch07.gameoflifesimple-7-2
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]))

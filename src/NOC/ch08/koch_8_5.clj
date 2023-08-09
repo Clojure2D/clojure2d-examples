@@ -1,4 +1,4 @@
-(ns examples.NOC.ch08.koch-8-5
+(ns NOC.ch08.koch-8-5
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.vector :as v])

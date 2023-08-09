@@ -1,4 +1,4 @@
-(ns examples.NOC.ch06.staywithincircle
+(ns NOC.ch06.staywithincircle
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.vector :as v])

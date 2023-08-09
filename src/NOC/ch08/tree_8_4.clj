@@ -1,4 +1,4 @@
-(ns examples.NOC.ch08.tree-8-4
+(ns NOC.ch08.tree-8-4
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]))
 

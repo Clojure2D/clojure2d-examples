@@ -75,10 +75,21 @@
   (let [on-unit-sphere (random-unit-vector)]
     (if (pos? (v/dot on-unit-sphere normal))
       on-unit-sphere (v/sub on-unit-sphere))))
+(defn random-in-hemisphere ^Vec3 [normal]
+  (let [in-unit-sphere (random-in-unit-sphere)]
+    (if (pos? (v/dot in-unit-sphere normal))
+      in-unit-sphere (v/sub in-unit-sphere))))
 (defn random-vec3
   (^Vec3 [] (v/generate-vec3 r/drand))
   (^Vec3 [^double mn ^double mx] (v/generate-vec3 #(r/drand mn mx))))
-
+(defn random-cosine-direction ^Vec3 []
+  (let [r2 (r/drand)
+        sqrt-r2 (m/sqrt r2)
+        phi (r/drand m/TWO_PI)
+        x (* (m/cos phi) sqrt-r2)
+        y (* (m/sin phi) sqrt-r2)
+        z (m/sqrt (- 1.0 r2))]
+    (Vec3. x y z)))
 
 ;;
 

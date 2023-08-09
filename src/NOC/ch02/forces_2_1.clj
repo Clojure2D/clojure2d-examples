@@ -1,4 +1,4 @@
-(ns examples.NOC.ch02.forces-2-1
+(ns NOC.ch02.forces-2-1
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.vector :as v])

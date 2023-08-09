@@ -1,4 +1,4 @@
-(ns examples.NOC.introduction.acceptreject-I-5
+(ns NOC.introduction.acceptreject-I-5
   (:require [clojure2d.core :refer :all]
             [fastmath.random :as r]
             [fastmath.core :as m]))

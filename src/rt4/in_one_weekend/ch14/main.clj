@@ -21,6 +21,15 @@
                           :aperture 0.1
                           :focus-dist 10.0}))
 
+(def camera-low (camera/camera {:vfov 21.0
+                              :lookfrom (v/vec3 13.0 5.0 5.0)
+                              :lookat (v/vec3 0.0 0.0 0.0)
+                              :vup (v/vec3 0.0 1.0 0.0)
+                              :aperture 0.1
+                              :aspect-ratio 1.5
+                              :focus-dist 10.0}))
+
+
 (def ground-material (material/lambertian (v/vec3 0.5 0.5 0.5)))
 (def material1 (material/dielectric 1.5))
 (def material2 (material/lambertian (v/vec3 0.4 0.2 0.1)))
@@ -49,15 +58,22 @@
                 w)))
           world (for [a (range -11 11) b (range -11 11)] [a b])))
 
-(def scene (scene/scene camera (make-balls world) {:image-width 1200
-                                                 :samples-per-pixel 200}))
+#_(def scene (scene/scene camera (make-balls world) {:image-width 1200
+                                                   :samples-per-pixel 200}))
+
+(def scene-low (scene/scene camera-low (make-balls world) {:image-width 400
+                                                         :samples-per-pixel 10
+                                                         :max-depth 10
+                                                         :aspect-ratio 1.5}))
+
 
 #_(def scene-mid (scene/scene camera (make-balls world) {:image-width 800
                                                        :samples-per-pixel 200}))
 
 
-(def image (time (scene/render scene)))
+#_(def image (time (scene/render scene)))
 #_(def image (time (scene/render scene-mid)))
+(def image-low (time (scene/render scene-low)))
 
 (comment
   (common/save image "results/rt4/in_one_weekend/ch14.jpg")

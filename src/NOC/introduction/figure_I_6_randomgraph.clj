@@ -1,4 +1,4 @@
-(ns example.NOC.introduction.figure-I-6-randomgraph
+(ns NOC.introduction.figure-I-6-randomgraph
   (:require [clojure2d.core :refer :all]
             [fastmath.random :as r]
             [fastmath.vector :as v]))

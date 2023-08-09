@@ -25,9 +25,12 @@
       (let [color-from-emission (material/emitted (.mat rec) (.u rec) (.v rec) (.p rec))]
         (if-let [^MaterialData scatter (material/scatter (.mat rec) r rec)]
           (let [^double scattering-pdf (material/scattering-pdf (.mat rec) r rec (.scattered scatter))
-                pdf scattering-pdf]
+                color-from-scatter (-> (.attenuation scatter)
+                                       (v/emult (ray-color (.scattered scatter) world background (dec depth)))
+                                       (v/mult scattering-pdf)
+                                       (v/div m/INV_TWO_PI))]
             (v/add color-from-emission
-                   (v/div (v/emult (.attenuation scatter) (v/mult (ray-color (.scattered scatter) world background (dec depth)) scattering-pdf)) pdf)))
+                   color-from-scatter))
           color-from-emission))
       background)))
 

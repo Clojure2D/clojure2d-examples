@@ -1,4 +1,4 @@
-(ns examples.NOC.ch08.recursion-8-1
+(ns NOC.ch08.recursion-8-1
   (:require [clojure2d.core :refer :all]))
 
 (def cnvs (canvas 640 360))

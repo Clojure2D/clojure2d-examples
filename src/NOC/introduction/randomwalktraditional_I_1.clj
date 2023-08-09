@@ -1,4 +1,4 @@
-(ns examples.NOC.introduction.randomwalktraditional_I_1
+(ns NOC.introduction.randomwalktraditional_I_1
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]))

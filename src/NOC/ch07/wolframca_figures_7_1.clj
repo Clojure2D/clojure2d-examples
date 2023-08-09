@@ -1,4 +1,4 @@
-(ns examples.NOC.ch07.wolframca-figures-7-1
+(ns NOC.ch07.wolframca-figures-7-1
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]))

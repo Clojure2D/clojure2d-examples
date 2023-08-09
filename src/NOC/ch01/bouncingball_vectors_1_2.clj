@@ -1,4 +1,4 @@
-(ns examples.NOC.ch01.bouncingball-vectors-1-2
+(ns NOC.ch01.bouncingball-vectors-1-2
   (:require [clojure2d.core :refer :all]
             [fastmath.vector :as v])
   (:import fastmath.vector.Vec2))

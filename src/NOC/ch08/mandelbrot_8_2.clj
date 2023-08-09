@@ -1,4 +1,4 @@
-(ns examples.NOC.ch08.mandelbrot-8-2
+(ns NOC.ch08.mandelbrot-8-2
   (:require [clojure2d.core :refer :all]
             [clojure2d.pixels :as p]
             [fastmath.core :as m]

@@ -1,4 +1,4 @@
-(ns examples.NOC.introduction.simpleprobability
+(ns NOC.introduction.simpleprobability
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r])

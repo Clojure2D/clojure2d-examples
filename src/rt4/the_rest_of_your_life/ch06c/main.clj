@@ -70,9 +70,9 @@
 (def image (time (scene/render (main {:background (v/vec3 0.0 0.0 0.0)
                                     :samples-per-pixel 100
                                     :aspect-ratio 1.0
-                                    :shuffle? false
+                                    :shuffle? true
                                     :max-depth 50
-                                    :image-width 500}))))
+                                    :image-width 600}))))
 
 (comment
   (common/save image "results/rt4/the_rest_of_your_life/ch06c.jpg"))

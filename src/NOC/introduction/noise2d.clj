@@ -1,4 +1,4 @@
-(ns examples.NOC.introduction.noise2d
+(ns NOC.introduction.noise2d
   (:require [clojure2d.color :as c]
             [clojure2d.core :refer :all]
             [fastmath.core :as m]

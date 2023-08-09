@@ -1,4 +1,4 @@
-(ns examples.NOC.ch02.fluidresistance-2-5
+(ns NOC.ch02.fluidresistance-2-5
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]

@@ -1,4 +1,4 @@
-(ns example.NOC.introduction.figure-I-5-noise1dgraph
+(ns NOC.introduction.figure-I-5-noise1dgraph
   (:require [clojure2d.core :refer :all]
             [fastmath.random :as r]
             [fastmath.vector :as v]

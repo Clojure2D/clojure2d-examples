@@ -1,4 +1,4 @@
-(ns examples.NOC.ch01.vector-normalize-1-6
+(ns NOC.ch01.vector-normalize-1-6
   (:require [clojure2d.core :refer :all]
             [fastmath.vector :as v])
   (:import fastmath.vector.Vec2))

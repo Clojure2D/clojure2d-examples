@@ -1,4 +1,4 @@
-(ns examples.NOC.introduction.noisewalk-acceleration
+(ns NOC.introduction.noisewalk-acceleration
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]

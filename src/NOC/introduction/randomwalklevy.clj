@@ -1,4 +1,4 @@
-(ns examples.NOC.introduction.randomwalklevy
+(ns NOC.introduction.randomwalklevy
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]))

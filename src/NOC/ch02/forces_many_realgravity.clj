@@ -1,4 +1,4 @@
-(ns examples.NOC.ch02.forces-many-realgravity-2-3
+(ns NOC.ch02.forces-many-realgravity
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]

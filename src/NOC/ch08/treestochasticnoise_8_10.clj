@@ -1,4 +1,4 @@
-(ns examples.NOC.ch08.treestochasticnoise-8-10
+(ns NOC.ch08.treestochasticnoise-8-10
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]))

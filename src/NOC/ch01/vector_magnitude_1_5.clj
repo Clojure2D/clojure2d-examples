@@ -1,4 +1,4 @@
-(ns examples.NOC.ch01.vector-magnitude-1-5
+(ns NOC.ch01.vector-magnitude-1-5
   (:require [clojure2d.core :refer :all]
             [fastmath.vector :as v])
   (:import fastmath.vector.Vec2))

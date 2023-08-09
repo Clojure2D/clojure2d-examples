@@ -1,4 +1,4 @@
-(ns examples.NOC.ch01.motion101-acceleration-1-9
+(ns NOC.ch01.motion101-acceleration-1-9
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]

@@ -1,4 +1,4 @@
-(ns examples.NOC.introduction.noisedistribution
+(ns NOC.introduction.noisedistribution
   (:require [clojure2d.core :refer :all]
             [fastmath.random :as r]
             [fastmath.vector :as v]

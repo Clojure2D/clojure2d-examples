@@ -15,7 +15,6 @@
 
 (defprotocol MaterialProto
   (scatter [material ray-in rec])
-  (scattering-pdf [material ray-in rec scattered])
   (emitted [material u v p]))
 
 (defrecord MaterialData [attenuation scattered])
@@ -25,9 +24,6 @@
 (defrecord Lambertian [albedo]
   MaterialProto
   (emitted [_ _ _ _] black)
-  (scattering-pdf [_ _ray-in rec scattered]
-    (let [cos-theta (v/dot (.normal ^HitData rec) (v/normalize (.direction ^Ray scattered)))]
-      (max 0.0 (/ cos-theta m/PI))))
   (scatter [_ ray-in rec]
     (let [scatter-direction (v/add (.normal ^HitData rec) (common/random-unit-vector))
           attenuation (texture/value albedo (.u ^HitData rec) (.v ^HitData rec) (.p ^HitData rec))]

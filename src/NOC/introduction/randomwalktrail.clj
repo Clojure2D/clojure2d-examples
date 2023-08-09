@@ -1,4 +1,4 @@
-(ns examples.NOC.introduction.randomwalktrail
+(ns NOC.introduction.randomwalktrail
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]

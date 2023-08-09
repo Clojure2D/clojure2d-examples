@@ -1,4 +1,4 @@
-(ns rt4.the-rest-of-your-life.ch06a.pi
+(ns rt4.the-rest-of-your-life.ch02.pi
   (:require [fastmath.random :as r]
             [fastmath.core :as m]))
 
@@ -38,16 +38,20 @@ m/PI
   ([^long step]
    (map-indexed (fn [^long id ^long inside-circle]
                   (/ (* 4.0 inside-circle)
-                     (* step (inc id)))) (rest (take-nth step (rest (iterate listing-3-iter 0)))))))
+                     (* step (inc id)))) (->> (iterate listing-3-iter 0)
+                                              (rest)
+                                              (take-nth step)
+                                              (rest)))))
 
-
+;; take every 100000 calculation
 (take 20 (listing-3))
 ;; => (3.12948 3.13724 3.13696 3.13978 3.142352 3.1431066666666667 3.142594285714286 3.14311 3.1428755555555554 3.1427 3.142450909090909 3.14202 3.1412184615384615 3.1412085714285714 3.14108 3.1409975 3.1404635294117647 3.1400888888888887 3.140254736842105 3.140258)
 
 ;;;;
 
+;; stratified sampling
 (defn listing-4
-  ([] (listing-4 100000))
+  ([] (listing-4 1000000))
   ([^long iters] (let [sqrt-iters (long (m/sqrt iters))
                        sqrt-iters- (dec sqrt-iters)
                        calc-fn (fn ^long [^long i ^long j ^long accum]
@@ -64,4 +68,5 @@ m/PI
 
 {:regular (listing-2)
  :stratified (listing-4)}
-;; => {:regular 3.14372, :stratified 3.142004486460503}
+;; => {:regular 3.13988, :stratified 3.141568}
+

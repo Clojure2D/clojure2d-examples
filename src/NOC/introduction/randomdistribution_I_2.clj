@@ -1,4 +1,4 @@
-(ns examples.NOC.introduction.randomdistribution-I-2
+(ns NOC.introduction.randomdistribution-I-2
   (:require [clojure2d.core :refer :all]
             [fastmath.random :as r]
             [fastmath.core :as m]))

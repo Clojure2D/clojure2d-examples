@@ -1,4 +1,4 @@
-(ns examples.NOC.ch01.motion101-acceleration-list-1-11
+(ns NOC.ch01.motion101-acceleration-list-1-11
   (:require [clojure2d.core :refer :all]
             [fastmath.random :as r]
             [fastmath.vector :as v]

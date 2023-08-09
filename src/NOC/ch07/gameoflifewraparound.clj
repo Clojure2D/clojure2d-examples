@@ -1,4 +1,4 @@
-(ns examples.NOC.ch07.gameoflifewraparound
+(ns NOC.ch07.gameoflifewraparound
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]))

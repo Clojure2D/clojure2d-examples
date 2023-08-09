@@ -1,4 +1,4 @@
-(ns example.NOC.introduction.figure-I-2-bellcurve
+(ns NOC.introduction.figure-I-2-bellcurve
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.vector :as v]))

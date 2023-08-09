@@ -1,4 +1,4 @@
-(ns examples.NOC.ch06.staywithinwalls-trail-6-3
+(ns NOC.ch06.staywithinwalls-6-3
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.vector :as v])

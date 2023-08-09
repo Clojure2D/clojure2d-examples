@@ -1,4 +1,4 @@
-(ns examples.NOC.introduction.noisewalk-many
+(ns NOC.introduction.noisewalk-many
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]

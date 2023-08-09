@@ -1,4 +1,4 @@
-(ns examples.NOC.ch04.particlesystemsmoke-4-8
+(ns NOC.ch04.particlesystemsmoke-4-8
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [clojure2d.pixels :as p]

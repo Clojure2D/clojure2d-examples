@@ -1,4 +1,4 @@
-(ns examples.NOC.ch02.forces-many-2-2
+(ns NOC.ch02.forces-many-2-2
   (:require [clojure2d.core :refer :all]
             [fastmath.core :as m]
             [fastmath.random :as r]

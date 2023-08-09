@@ -1,4 +1,4 @@
-(ns examples.NOC.ch01.bouncingball-novectors-1-1
+(ns NOC.ch01.bouncingball-novectors-1-1
   (:require [clojure2d.core :refer :all]
             [clojure2d.color :as c]))
 

@@ -72,7 +72,7 @@
                                     :aspect-ratio 1.0
                                     :shuffle? true
                                     :max-depth 50
-                                    :image-width 200}))))
+                                    :image-width 600}))))
 
 (comment
   (common/save image "results/rt4/the_rest_of_your_life/ch02b.jpg"))
