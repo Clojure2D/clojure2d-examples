@@ -20,7 +20,7 @@
 (def ^:const csize (* scaling size))
 (def rand-size #(r/drand (* 0.2 size) (* 0.8 size)))
 #_(def pal (vec (c/palette (reverse (c/palette :spectral-11)) 35)))
-(def pal (vec (c/palette [:green :yellow :red] 35)))
+(def pal (vec (c/palette [:green :yellow :yellow :red :red :blue] 100)))
 (def ^:const lim (dec (count pal)))
 
 (defrecord Spore [^long id ^Vec2 pos ^double phi ^Vec2 vvec
@@ -37,6 +37,10 @@
   ([^long x] x)
   ([^long x ^long y] (+ x y)))
 
+(defn torus
+  [^Vec2 v]
+  (Vec2. (m/mod (.x v) csize) (m/mod (.y v) csize)))
+
 (defn change-move
   [{:keys [^long id pos ^double phi vvec ^double v ^double r ^double alpha ^double beta _col]} spores]
   (let [in-radius (filterv #(and (not= id (:id %)) 
@@ -46,12 +50,17 @@
         ^double delta (if (pos? cnt) (* cnt beta (m/sgn (reduce prim+ 0 neighbours))) 0) ;; calc delta
         nphi (rem (+ m/TWO_PI phi alpha delta) m/TWO_PI) ;; change angle
         nvvec (v/from-polar (v/vec2 v nphi))] ;; speed vector
-    (->Spore id (v/add pos nvvec) nphi nvvec v r alpha beta (pal (m/constrain cnt 0 lim))))) ;; move
+    (->Spore id (v/add pos nvvec) nphi nvvec v r alpha beta (pal (m/min cnt lim))))) ;; move
 
 (defn next-spore
   "Make next spore"
   ([id] (next-spore id nil))
-  ([id pos] (spore id pos 0.67 (m/sq 11.0) (m/radians 180) (m/radians 17) (first pal))))
+  ([id pos]
+   ;; a 180 b -5 !!! -10, 17 (default)
+   ;; a -69 b -1
+   ;; 42 9
+   ;; 79.6 -1.8
+   (spore id pos 0.67 (m/sq 11.0) (m/radians 181) (m/radians -7) (first pal))))
 
 (defn draw
   [canvas window _ spores]
