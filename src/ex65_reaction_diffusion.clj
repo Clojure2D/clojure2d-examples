@@ -1,4 +1,9 @@
 ;; https://www.karlsims.com/rd.html
+
+;; press space to select k and f
+;; press m to back to a map
+;; left click to seed B
+
 (ns ex65-reaction-diffusion
   (:require [fastmath.core :as m]
             [fastmath.random :as r]
@@ -116,3 +121,4 @@
                             :background :black
                             :draw-state (step (setup))}))
 
+(comment (c2d/save window "results/ex65/rd.jpg"))

@@ -98,7 +98,7 @@
             (Particle. (fix-pos np) (fix-vel np nv) ptype))) particles))
 
 (defn draw
-  [canvas window _ [setup particles]]
+  [canvas window frame [setup particles]]
   (let [particles (if (c2d/mouse-pressed? window)
                     (conj particles (Particle. (c2d/mouse-pos window)
                                                (Vec2. 0.0 0.0)
@@ -110,12 +110,13 @@
                   ^ParticleType ptype (.ptype s)]]
       (c2d/set-color canvas (.color ptype))
       (c2d/ellipse canvas (.x p) (.y p) 4 4))
+    #_(when (= frame 200) (c2d/save canvas "results/ex63/plife.jpg"))
     [setup (move setup particles 0.1)]))
 
 (def window (c2d/show-window {:canvas (c2d/black-canvas csize csize :highest)
                             :draw-fn draw
                             :background :black
-                            :draw-state (let [setup (random-setup (r/irand 2 5))]
+                            :draw-state (let [setup (random-setup (r/irand 2 6))]
                                           (pp/pprint setup)
-                                          [setup (random-particles setup 1000)])}))
+                                          [setup (random-particles setup 1200)])}))
 

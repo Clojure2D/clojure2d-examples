@@ -73,3 +73,5 @@
                             :background :black
                             :draw-state (repeatedly 350 #(Vec2. (r/grand 3.5)
                                                                 (r/grand 3.5)))}))
+
+(comment (c2d/save window "results/ex64/lenia.jpg"))
