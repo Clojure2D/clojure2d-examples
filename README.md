@@ -75,6 +75,7 @@ In Emacs/Cider: C-c C-k
 * ex62 - Eigenvalues
 * ex63 - Particle life
 * ex64 - Particle lenia
+* ex65 - Reaction-Diffusion
 * NOC - [Nature of Code](https://github.com/shiffman/The-Nature-of-Code-Examples/) Clojure2d version. Most interesting:
   * ch02/attraction-many-2-7.clj
   * ch02/fluidresistance-2-5.clj
