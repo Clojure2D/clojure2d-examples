@@ -1,4 +1,4 @@
-(ns ex65-spinning-flower-mandala
+(ns ex66-spinning-flower-mandala
   (:require [clojure2d.core :as c2d]
             [clojure2d.pixels :as p]
             [clojure2d.extra.overlays :as o]
@@ -18,13 +18,13 @@
         frame-rate (m// (m/* frameno 1000000000.0) elapsed-time)
         o-r (m/* 2 (m/+ outer-radius (m/* 5 (m/sin (m// frameno m/TWO_PI 5)))))
         rot-angle (m/mod (m// frameno m/TWO_PI 60) m/TWO_PI)]
-    ;;ඛණ්ඩාංක පද්ධතිය සෙටප් කිරීම
+    ;;Translate and setup coords
     (-> canvas
         (c2d/scale 2)
         (c2d/translate 150 150)
         (c2d/rotate rot-angle)
         (c2d/flip-y))
-    ;;කහ පැහැ පල්ස් වෙන රැස් මාලාව
+    ;;Back halo
     (-> canvas
         (c2d/set-color 116 88 20 120)
         (c2d/ellipse 0 0 o-r o-r)
@@ -34,12 +34,12 @@
         (c2d/ellipse 0 0 (m/- o-r 8) (m/- o-r 8))
         (c2d/set-color 232 177 40 120)
         (c2d/ellipse 0 0 (m/- o-r 8) (m/- o-r 8)))
-    ;;රැස් බොඳ
+    ;;Blur halo
     (p/set-canvas-pixels! canvas
      (->> canvas
              p/to-pixels
              (p/filter-channels p/gaussian-blur-5)))
-    ;;මැද ඉද්ද මල
+    ;;Idda flower at the center https://en.wikipedia.org/wiki/Wrightia_antidysenterica
     (dotimes [_ 5]
       (c2d/set-color canvas
                      240 240 240
@@ -48,39 +48,39 @@
       (c2d/set-color canvas 240 180 40 (abs (m/* 180 (m/sin (m/* 1.5 rot-angle)))))
       ;(c2d/ellipse canvas 0 0 16 16)
       (c2d/rotate canvas (m// m/TWO_PI 5)))
-    ;;බොඳ
+    ;;Blur it a bit
     (p/set-canvas-pixels! canvas
      (->> canvas
           p/to-pixels
           (p/filter-channels p/gaussian-blur-2)))
-    ;;අනෙක් පැත්තට කරකැවීම
+    ;;Rotate lotus other way
     (c2d/rotate canvas (m/- m/TWO_PI))
     (c2d/rotate canvas (m/* 4 rot-angle))
-    ;;බාහිර රතු නෙළුම
+    ;;Outer red lotus petals
     (dotimes [_ 6]
       (c2d/set-color canvas (m/+ 90 (m/* (m/sin (m// frameno m/TWO_PI 60)) 40)) 0 0 220)
       (c2d/shape canvas (:lotus-petal state))
       (c2d/rotate canvas (m// m/TWO_PI 6)))
-    ;;බොඳ
+    ;;Blur a bit
     (p/set-canvas-pixels! canvas
          (->> canvas
               p/to-pixels
               (p/filter-channels (p/gaussian-blur 1))))
     ;;Reset all translations
     (c2d/reset-matrix canvas)
-    ;;තිත් (noise)
+    ;;noise
     (-> canvas
       (c2d/image ((:noises state) (mod frameno 20))))
     ;;Framerate display
     (-> canvas
         (c2d/set-color 0 0 0)
         (c2d/set-stroke 1)
-        (c2d/text (format "%f" frame-rate) 20 20 :left))
+        (c2d/text (str frame-rate) 20 20 :left))
     ;;Title
     #_(-> canvas
           (c2d/scale 2)
           (c2d/set-color 180 160 80 220)
-          (c2d/text "මණ්ඩල" 40 40 :center))
+          (c2d/text "Mandala" 40 40 :center))
     ;;Output images
     #_(when (:to-video? state)
         (c2d/save canvas (str "out/petals" frameno ".jpg"))
@@ -93,7 +93,7 @@
 
 (def window
   (c2d/show-window {:canvas (c2d/canvas 600 600 :high)
-                    :window-name "මණ්ඩල"
+                    :window-name "mandala"
                     :hint :mid
                     :always-on-top? true
                     :position [0 0]
@@ -106,7 +106,6 @@
                               :outer-radius 116
                               :noises (vec (repeatedly 20 #(o/noise-overlay 300 300 {:alpha 25})))
                               :spots (o/spots-overlay 50 50 {:alpha 100 :intensities [10 20 30 40 50]})
-                              ;;නෙලුම් පෙත්ත
                               :lotus-petal (c2d/path-def->shape
                                                  [[:move [0 50]]
                                                   [:cubic [-8 50 -16 44 -25 44]]
@@ -116,7 +115,6 @@
                                                   [:line [25 44]]
                                                   [:cubic [16 44 8 50 0 50]]
                                                   [:close]])
-                              ;;ඉද්ද පෙත්ත
                               :idda-petal (c2d/path-def->shape
                                               [[:move [0 0]]
                                                [:cubic [-16 20 -35 45 0 50]]
