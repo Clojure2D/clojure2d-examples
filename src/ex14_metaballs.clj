@@ -79,4 +79,3 @@
 (comment c2d/save window "results/ex14/metaballs.jpg")
 
 ;; [[../results/ex14/metaballs.jpg]]
-
