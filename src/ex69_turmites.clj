@@ -33,9 +33,10 @@
                         (mod (+ y dy) size)])
 
 (defn ->arena []
-  (let [colors (r/irand 2 6)
-        states (r/irand 2 6)]
-    {:pal (c/palette :category10)
+  (let [colors (r/irand 2 10)
+        states (r/irand 3 10)]
+    (println "colors =" colors ", states =" states)
+    {:pal (c/palette (c/random-palette) colors)
      :rules (random-rules states colors)
      :arena (int-array (* size size))
      :pixels (p/pixels size size)
