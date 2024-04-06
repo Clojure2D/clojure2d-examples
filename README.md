@@ -59,7 +59,7 @@ In Emacs/Cider: C-c C-k
 * ex46 - distributions
 * ex47 - nebula (https://generateme.wordpress.com/2018/10/24/smooth-rendering-log-density-mapping/)
 * ex48 - visualization of reconstruction filters used in log density renderer
-* ex49 - archimedian spiral with an oscillating radius
+* ex49 - archimedian spiral with an oscillating radius by @jakeashdown
 * ex50 - grid visualization
 * ex51 - image on grid
 * ~~ex52 - Machine Learning algorithms used to glitch image~~ ML Classification removed from `fastmath`
@@ -67,7 +67,7 @@ In Emacs/Cider: C-c C-k
 * ex54 - Random walk
 * ex55 - Composing
 * ex56 - Splats
-* ex57 - Flocking
+* ex57 - Flocking by @adicirstei
 * ex58 - Circle Inversion art
 * ex59 - Plasmas
 * ex60 - Metal sheets
@@ -76,7 +76,10 @@ In Emacs/Cider: C-c C-k
 * ex63 - Particle life
 * ex64 - Particle lenia
 * ex65 - Reaction-Diffusion
-* ex66 - Flower mandala
+* ex66 - Flower mandala by @dumrat22
+* ex67 - Elementary Cellular Automaton
+* ex68 - Langton's Ant
+* ex69 - Turmites
 * NOC - [Nature of Code](https://github.com/shiffman/The-Nature-of-Code-Examples/) Clojure2d version. Most interesting:
   * ch02/attraction-many-2-7.clj
   * ch02/fluidresistance-2-5.clj
