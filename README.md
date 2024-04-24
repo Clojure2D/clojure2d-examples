@@ -80,6 +80,7 @@ In Emacs/Cider: C-c C-k
 * ex67 - Elementary Cellular Automaton
 * ex68 - Langton's Ant
 * ex69 - Turmites
+* ex70 - Bitfields, code by [georgemsavva](https://gist.github.com/georgemsavva/6f37d263833385f618e71c40a292c707)
 * NOC - [Nature of Code](https://github.com/shiffman/The-Nature-of-Code-Examples/) Clojure2d version. Most interesting:
   * ch02/attraction-many-2-7.clj
   * ch02/fluidresistance-2-5.clj
