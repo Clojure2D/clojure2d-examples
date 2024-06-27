@@ -9,7 +9,7 @@ The game was originally created for [FC_Jam#2](https://itch.io/jam/fantasy-conso
 ## Run
 
 ```
-clj -Sdeps '{:deps {io.github.Clojure2D/clojure2d-examples {:git/sha "de93d39e9ef43e269d14381f066c85de7207dab7"}}}' -X games.the-king.the-king/run-game
+clj -Sdeps '{:deps {io.github.Clojure2D/clojure2d-examples {:git/sha "81f7c8bd409e6328faa9f70e50c86217ecde174b"}}}' -X games.the-king.the-king/run-game
 ```
 
 or load the `games.the-king.the-king` namespace and call `run-game`
