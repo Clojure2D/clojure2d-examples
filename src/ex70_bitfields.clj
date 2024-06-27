@@ -22,11 +22,12 @@
 (defn bnxor ^long [^long x ^long y] (m/bit-not (m/bit-xor x y)))
 
 (def optional-ops
-  (vec (for [n [:add :madd :subtract :msubtract :linearburn :mlinearburn :darken :lighten
-                :hardmix :stamp :mstamp :difference :or :xor :and :pinlight :average
-                :negation :normal]
-             :let [f (bl/blends n)]]
-         (fn [^long x ^long y] (c/pack (bl/blend-colors f x y))))))
+  (for [n [:add :madd :subtract :msubtract :linearburn :mlinearburn :darken :lighten
+           :hardmix :or :xor :and :average :negation :normal]
+        :let [f (bl/blends n)]]
+    (fn [^long x ^long y] (c/pack (bl/blend-colors f x y)))))
+
+#_(defn zzz [^long x ^long y] (c/pack (bl/blend-colors bl/pinlight x y)))
 
 (def noise-ovl (o/noise-overlay 800 800 {:alpha 60}))
 
@@ -36,20 +37,22 @@
     (c2d/push-matrix c)
     (c2d/translate c 16 16)
     (dotimes [layer (r/irand 3 15)]
-      (let [t (r/irand 1 (* (inc layer) 25)) ;; modulus base
-            N (int (* 1 (m/fpow 2 (r/irand 5)))) ;; size of the pixel
+      (let [t (r/drand 1 (* (inc layer) 25)) ;; modulus base
+            N (m/fpow 2 (r/irand 5)) ;; size of the pixel
             f (r/randval 0.8 (rand-nth [bor band bxor bnor bnand bnxor])
                          (rand-nth optional-ops)) ;; which function to use
-            t' (int (/ t (r/irand 2 5))) ;; which part of the values we should draw
+            t' (int (/ t (r/drand 2 5))) ;; which part of the values we should draw
             pal (c/palette (c/random-palette) t') ;; palette
-            div (r/irand 1 20) ;; modulus offset denominator
+            div (r/drand 1 20) ;; modulus offset denominator
             offx (r/irand 256) ;; x offset
             offy (r/irand 256)] ;; y offset
         (doseq [^long x (range 768)
                 ^long y (range 768)
                 :let [nx (/ x N)
                       ny (/ y N)
-                      z (mod ^long (f (+ nx ny offx) (+ (- ny nx) offy)) (+ t (int (/ ny div))))]
+                      z (mod ^long (f (+ nx ny offx)
+                                      (+ (- ny nx) offy))
+                             (int (+ t (/ ny div))))]
                 :when (< z t')]
           (c2d/set-color c (pal z) 220)
           (c2d/rect c x y 1 1))))

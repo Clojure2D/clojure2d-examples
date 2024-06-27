@@ -58,7 +58,9 @@
          :game-over (assoc state :time 0))
        (assoc :game-state game-state))))
 
-(defn init-state [] (change-state nil :welcome))
+(defn init-state
+  ([] (init-state false))
+  ([fps?] (change-state (when fps? {:start-time (System/currentTimeMillis)}) :welcome)))
 
 ;; game state dispatch
 
@@ -452,7 +454,7 @@
   state)
 
 (defn draw-frame
-  [canvas window _frame_id state]
+  [canvas window ^long frame_id state]
   (when (and (c2d/key-pressed? window)
              (= \0 (c2d/key-char window)))
     (c2d/save canvas (c2d/next-filename "results/games/the_king/" ".jpg")))
@@ -460,9 +462,19 @@
       (c2d/set-background :black)
       (c2d/set-stroke gfx/point-size :square :miter)
       (c2d/translate 50 25))
-  (-> (assoc state :window window :canvas canvas)
-      (update-state)
-      (draw)))
+  (let [nstate (-> (assoc state :window window :canvas canvas)
+                   (update-state)
+                   (draw))]
+    (when-let [start-time (:start-time state)]
+      (-> canvas
+          (c2d/set-color :gray)
+          (c2d/reset-matrix)
+          (c2d/set-font-attributes 12)
+          (c2d/text (format "fps: %.2f" (/ (inc frame_id)
+                                           (/ (- (System/currentTimeMillis)
+                                                 (long start-time))
+                                              1.0e3))) 15 15)))
+    nstate))
 
 (def ^:const window-width (+ gfx/canvas-size 100))
 (def ^:const window-height (+ gfx/canvas-size 50))
@@ -474,7 +486,7 @@
                      :window-name "The King"
                      :draw-fn draw-frame
                      :fps 30
-                     :draw-state (init-state)})))
+                     :draw-state (init-state true)})))
 
 (comment
   (run-game))
