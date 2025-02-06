@@ -61,3 +61,5 @@
     (utils/show-image c)))
 
 (bitfield)
+
+(m/unuse-primitive-operators)

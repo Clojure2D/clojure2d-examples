@@ -1,6 +1,11 @@
 ;; https://www.youtube.com/watch?v=makaJpLvbow
 ;; http://zool33.uni-graz.at/artlife/PPS
 
+;; * particle moves with constant velocity 'v'
+;; * particle rotates with constant angle 'alpha'
+;; * neighbourhood within radius 'r'
+;; * rotate 'beta' times number of neighbours count left or right depending where the number of neighbours is higher
+
 ;; press mouse to add spores
 
 (ns ex53-ppl
@@ -60,7 +65,7 @@
    ;; a -69 b -1
    ;; 42 9
    ;; 79.6 -1.8
-   (spore id pos 0.67 (m/sq 11.0) (m/radians 181) (m/radians -7) (first pal))))
+   (spore id pos 0.67 (m/sq 11.0) (m/radians 180) (m/radians 17) (first pal))))
 
 (defn draw
   [canvas window _ spores]
@@ -77,7 +82,7 @@
 (def window (c2d/show-window {:canvas (c2d/black-canvas csize csize)
                             :draw-fn draw
                             :background :black
-                            :draw-state (take 400 (map next-spore (range)))}))
+                            :draw-state (take 100 (map next-spore (range)))}))
 
 
 (comment c2d/save window "results/ex53/spores.jpg")
