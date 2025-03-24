@@ -61,11 +61,14 @@
   "Make next spore"
   ([id] (next-spore id nil))
   ([id pos]
+   ;; 180 17
    ;; a 180 b -5 !!! -10, 17 (default)
    ;; a -69 b -1
    ;; 42 9
    ;; 79.6 -1.8
-   (spore id pos 0.67 (m/sq 11.0) (m/radians 180) (m/radians 17) (first pal))))
+   ;; 0 5
+   ;; 180 179
+   (spore id pos 0.67 (m/sq 11.0) (m/radians 42) (m/radians 9) (first pal))))
 
 (defn draw
   [canvas window _ spores]
@@ -86,3 +89,5 @@
 
 
 (comment c2d/save window "results/ex53/spores.jpg")
+
+(m/unuse-primitive-operators)

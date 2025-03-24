@@ -1,11 +1,9 @@
 (ns neuroevolution.simulate
   (:require [neuroevolution.chromosome :as chromosome]
             [neuroevolution.environment :as environment]
-            [neuroevolution.draw :as draw]
             [neuroevolution.car]
             [fastmath.vector :as v]
             [neuroevolution.nn :as nn]
-            [clojure2d.core :as c2d]
             [fastmath.stats :as stats]
             [fastmath.core :as m])
   (:import [neuroevolution.environment Environment Dot]
@@ -16,24 +14,12 @@
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
 
-;; 3 4 4 2 - works for both cases
-
-(def profile [3 4 4 2])
-(def profile-eval (vec (rest profile)))
-
-(def ^:const POPULATION-SIZE 1000)
-(def ^:const ELITE-SIZE (unchecked-int (* 0.1 POPULATION-SIZE)))
-(def ^:const ENVIRONMENTS 1)
-
-(def env1 (environment/environment))
-(def env2 (environment/environment))
-
-(defn population
+(defn random-population
   [population-size profile]
   (repeatedly population-size #(chromosome/random-net profile)))
 
 (defn step
-  [^Environment env chr]
+  [^Environment env profile-eval chromosome]
   (let [^Car car (.car env)
         ^Dot dot (.dot env)        
         ^Vec2 dir (.direction car)
@@ -41,74 +27,89 @@
         dist (v/mag to-dot)
         cang (m/cos (v/angle-between to-dot dir))
         in? (or (m/< dist 100.0) (m/> cang 0.99))
-        ^doubles res (nn/evaluate profile-eval chr (double-array [(if in? dist -10.0) 
-                                                                  cang
-                                                                  (condp = (.col dot)
-                                                                    :orange 10.0
-                                                                    :violet -10.0
-                                                                    0.0)
-                                                                  1]))]
+        ^doubles res (nn/evaluate profile-eval chromosome
+                                  (double-array [(if in? dist -10.0) 
+                                                 cang
+                                                 (condp = (.col dot)
+                                                   :orange 10.0
+                                                   :violet -10.0
+                                                   0.0)
+                                                 1]))]
     (environment/step env (Array/aget res 0) (Array/aget res 1))))
 
 (defn run-game
-  ([chromosome] (run-game env1 #_(environment/environment) chromosome))
-  ([^Environment env chr]
-   (if (.game-over? env)
-     (.score env)
-     (recur (step env chr) chr))))
+  [^Environment env profile-eval chromosome]
+  (if (.game-over? env)
+    (.score env)
+    (recur (step env profile-eval chromosome) profile-eval chromosome)))
 
 (defn run-game-multiple-envs
-  [n chromosome]
-  [(stats/sum (repeatedly n #(run-game chromosome))) chromosome])
+  [environments profile-eval chromosome]
+  [(stats/sum (map #(run-game % profile-eval chromosome) environments)) chromosome])
 
 (defn crossover-and-mutate
-  [pop size]
-  (->> (shuffle (concat pop pop (population ELITE-SIZE profile)))
+  [population size elite-size profile]
+  (->> (shuffle (concat population population (random-population elite-size profile)))
        (partition 2 1)
        (mapcat chromosome/crossover)
        (map (partial chromosome/mutate 0.2))
        (take size)))
 
 (defn evolve
-  [pop]
-  (let [elite (take ELITE-SIZE pop)]
-    (concat elite
-            (map (partial chromosome/mutate 0.4) elite)
-            (crossover-and-mutate (take (m// POPULATION-SIZE 2) pop)
-                                  (m/- POPULATION-SIZE (m/* 2 ELITE-SIZE))))))
+  [{:keys [population ^long elite-size ^long population-size profile]
+    :as state}]
+  (let [elite (take elite-size population)]
+    (assoc state :population (concat elite
+                                     (map (partial chromosome/mutate 0.4) elite)
+                                     (crossover-and-mutate (take (m// population-size 2) population)
+                                                           (m/- population-size (m/* 2 elite-size))
+                                                           elite-size profile)))))
+
+(defn init-state
+  ([] (init-state {}))
+  ([{:keys [^long population-size ^double elite-percent environments-count profile
+            environment-config car-config]
+     :or {population-size 600 elite-percent 0.1 environments-count 1 profile [3 3 2]}}]
+   {:generation 0
+    :population (random-population population-size profile)
+    :population-size population-size
+    :elite-size (unchecked-int (* elite-percent population-size))
+    :environments-count environments-count
+    :environments (repeatedly environments-count
+                              #(environment/environment 800.0 environment-config car-config))
+    :profile profile
+    :profile-eval (vec (rest profile))}))
 
 (defn run-all-games
-  ([] (run-all-games [0 (population POPULATION-SIZE profile)]))
-  ([[^long generation pop]]
-   (let [stage1 (->> (pmap (partial run-game-multiple-envs ENVIRONMENTS) pop)
-                     (sort-by first >))
-         scores (map first stage1)]
-     (println "Generation:" generation
-              "| best score:" (m// (double (first scores)) ENVIRONMENTS)
-              "| average:" (m// (stats/mean scores) ENVIRONMENTS))
-     [(m/inc generation) (evolve (map second stage1))])))
+  [{:keys [^long generation population environments ^long environments-count profile-eval]
+    :as state}]
+  (let [stage1 (->> (pmap (partial run-game-multiple-envs environments profile-eval) population)
+                    (sort-by first >))
+        scores (map first stage1)]
+    (println "Generation:" generation
+             "| avg. best:" (m// (double (first scores)) environments-count)
+             "| avg. pop.:" (m// (stats/mean scores) environments-count))
+    (-> state
+        (assoc :generation (m/inc generation)
+               :population (map second stage1))
+        (evolve))))
+
+(defn reset-envs
+  [state]
+  (assoc state :environments (repeatedly (:environments-count state) environment/environment)))
 
 (defn run-all-games-n
-  ([n] (run-all-games-n [0 (population POPULATION-SIZE profile)] n))
-  ([pop ^long n]
+  ([state ^long n reset-envs?]
+   (run-all-games-n (if reset-envs? (reset-envs state) state) n))
+  ([state ^long n]
    (if (m/zero? n)
-     pop
-     (recur (run-all-games pop) (m/dec n)))))
+     state
+     (recur (run-all-games state) (m/dec n)))))
 
-(def e1 (run-all-games-n 50))
-(def e1 (run-all-games-n e1 50))
+(defn mix-runs
+  [state1 state2]
+  (assoc state1
+         :generations (/ (+ (long (:generations state1)) (long (:generations state2))) 2)
+         :population (take (:population-size state1) (interleave (:population state1) (:population state2)))))
 
-(defn draw-frame
-  [canvas _ _ [env chr :as state]]
-  (draw/draw canvas env)
-  (if (:game-over? env)
-    state
-    [(step env chr) chr]))
 
-(def window (c2d/show-window {:canvas (c2d/canvas 800 800 :high "Andale Mono")
-                            :window-name "Car - chromosome"
-                            :draw-fn draw-frame
-                            :draw-state [env1 (nth (second e1) 0)]
-                            :state #{}}))
-
-#_(seq (first (second e1)))

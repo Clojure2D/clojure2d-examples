@@ -43,7 +43,8 @@
      :Da 1.0 :Db m/THIRD
      :f 0.055 :k 0.062
      :dt 1.0
-     :show-map? true}))
+     :show-map? true
+     :color-a? true}))
 
 (defn diffuse! [^double d ^doubles source ^doubles target]
   (doseq [^long x rsize ^long y rsize
@@ -80,6 +81,10 @@
                                                              (m/- abb (m/* (m/+ f k) b))))) 0.0 1.0)))
   data)
 
+(defn color-a [^double a ^double b]  (v/vec3 (m/- 1.0 a) b (m/sqrt (m/* a b))))
+(defn color-b [^double a ^double b]  (v/vec3 (m/- 1.0 b) a (m/sqrt (m/* b a))))
+
+
 (defn draw
   [canvas window _ {:keys [^doubles A ^doubles B show-map? f k] :as curr}]
   (when (c2d/mouse-pressed? window)
@@ -96,14 +101,16 @@
                                   :k (norm-k mx)
                                   :show-map? false))
                  :m (assoc curr :show-map? true)
+                 :z (update curr :color-a? not)
                  curr)
-               curr)]
+               curr)
+        color-fn (if (:color-a? curr) color-a color-b)]
     
     (c2d/set-background canvas (c/color 10 10 20) 100)
     (doseq [^long x rsize ^long y rsize
             :let [a (Array/get2d A size x y)
                   b (Array/get2d B size x y)]]
-      (c2d/set-color canvas (v/mult (v/vec3 (m/- 1.0 a) b (m/sqrt (m/* a b))) 255.0))
+      (c2d/set-color canvas (v/mult (color-fn a b) 255.0))
       (c2d/rect canvas (m/* x scale) (m/* y scale) scale scale))
     (let [f (m/approx (if show-map? (norm-f my) f) 6)
           k (m/approx (if show-map? (norm-k mx) k) 6)]

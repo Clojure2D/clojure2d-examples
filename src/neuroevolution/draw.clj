@@ -3,9 +3,7 @@
             [clojure2d.core :as c2d]
             [clojure2d.color :as c]
             [fastmath.vector :as v]
-            [fastmath.core :as m]
-            [neuroevolution.noise :as n]
-            [neuroevolution.car :as car]))
+            [fastmath.core :as m]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
@@ -53,7 +51,7 @@
   [canvas dot]
   (-> canvas
       (c2d/set-color (:col dot))
-      (c2d/ellipse (:dot dot) 10.0 10.0)))
+      (c2d/ellipse (:dot dot) 13.0 13.0)))
 
 (defn print-state
   [canvas env]
@@ -78,27 +76,8 @@
         (c2d/set-color :red)
         (c2d/text (str "Final score: " (format "%.2f" (:score env))) 0.0 0.0 :center))
     (-> canvas
-        (c2d/set-background (c/gray 20))
-        #_(c2d/image n/background 0 0)
+        (c2d/set-background (c/gray 20))        
         (print-state env)
         (draw-dot (:dot env))
         (draw-car (:car env)))))
 
-(defn draw-frame
-  [canvas window _ env]
-  (draw canvas env)
-  (if (:game-over? env)
-    env
-    (update-env env (c2d/get-state window))))
-
-(defmethod c2d/key-event ["Car" :key-pressed] [event state]
-  (conj state (c2d/key-char event)))
-
-(defmethod c2d/key-event ["Car" :key-released] [event state]
-  (disj state (c2d/key-char event)))
-
-(def window (c2d/show-window {:canvas (c2d/canvas 800 800 :high "Andale Mono")
-                            :window-name "Car"
-                            :draw-fn draw-frame
-                            :draw-state (env/environment 800.0)
-                            :state #{}}))
