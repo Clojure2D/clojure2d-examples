@@ -125,4 +125,4 @@ Visualize the best car on fresh environement
  
 `(nn-play sim some-env)`
 
-![](results/neuroevolution/success.png)
+![neuroevolution](../../results/neuroevolution/success.png "Neuroevolution game")

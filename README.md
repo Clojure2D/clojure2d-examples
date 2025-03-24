@@ -81,6 +81,9 @@ In Emacs/Cider: C-c C-k
 * ex68 - Langton's Ant
 * ex69 - Turmites
 * ex70 - Bitfields, code by [georgemsavva](https://gist.github.com/georgemsavva/6f37d263833385f618e71c40a292c707)
+* ex71 - Ince Beams, https://youtu.be/_D5d6Ls6pBw?t=1951
+* ex72 - Physarium
+* neuroevolution - train a neural network to play a game using genetic algorithm
 * NOC - [Nature of Code](https://github.com/shiffman/The-Nature-of-Code-Examples/) Clojure2d version. Most interesting:
   * ch02/attraction-many-2-7.clj
   * ch02/fluidresistance-2-5.clj
